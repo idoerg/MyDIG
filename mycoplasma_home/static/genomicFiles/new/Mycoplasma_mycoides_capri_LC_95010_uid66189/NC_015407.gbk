@@ -1,0 +1,74 @@
+LOCUS       NC_015407               1840 bp    DNA     circular BCT 25-APR-2011
+DEFINITION  Mycoplasma mycoides subsp. capri LC str. 95010 plasmid pMmc-95010,
+            complete sequence.
+ACCESSION   NC_015407
+VERSION     NC_015407.1  GI:330370665
+DBLINK      Project: 66189
+            BioProject: PRJNA66189
+KEYWORDS    .
+SOURCE      Mycoplasma mycoides subsp. capri LC str. 95010
+  ORGANISM  Mycoplasma mycoides subsp. capri LC str. 95010
+            Bacteria; Tenericutes; Mollicutes; Mycoplasmataceae; Mycoplasma.
+REFERENCE   1
+  AUTHORS   Thiaucourt,F., Manso-Silvan,L., Salah,W., Barbe,V., Berger,A.,
+            Jacob,D., Breton,M., Dupuy,V., Lomenech,A.M., Blanchard,A. and
+            Sirand-Pugnet,P.
+  TITLE     Mycoplasma mycoides, from 'mycoides Small Colony' to 'capri'. A
+            microevolutionary perspective
+  JOURNAL   BMC Genomics 12, 114 (2011)
+   PUBMED   21324191
+  REMARK    Publication Status: Online-Only
+REFERENCE   2  (bases 1 to 1840)
+  CONSRTM   NCBI Genome Project
+  TITLE     Direct Submission
+  JOURNAL   Submitted (22-APR-2011) National Center for Biotechnology
+            Information, NIH, Bethesda, MD 20894, USA
+REFERENCE   3  (bases 1 to 1840)
+  AUTHORS   Genoscope -,C.E.A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (18-JAN-2011) Genoscope - Centre National de Sequencage :
+            BP 191 91006 EVRY cedex - FRANCE (E-mail : seqref@genoscope.cns.fr
+            - Web : www.genoscope.cns.fr)
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence is identical to FQ790215.
+            COMPLETENESS: full length.
+FEATURES             Location/Qualifiers
+     source          1..1840
+                     /organism="Mycoplasma mycoides subsp. capri LC str. 95010"
+                     /mol_type="genomic DNA"
+                     /strain="95010"
+                     /db_xref="taxon:862259"
+                     /plasmid="pMmc-95010"
+ORIGIN      
+        1 aatttctctt ttagggcgct tccccctgac ccccttttta ggggggcacc ccctttcccc
+       61 ccgtttgata ggaattccgc tcatacttcg ctcggcttgc ttttggttaa gttaccttta
+      121 caggtggaac tcaatatcag taaaccttgc tgatattctt taaagacatt tttaaaatgc
+      181 tcaacaaaaa gaaattaggt cgatataaat ttcaaggaaa ataataaaat cagtataacg
+      241 acctaaaaat ggtcttatag agcattttaa ctaaataacc ccagttcctt ttaaactcaa
+      301 ctaacccata tttaaaaatt gaaaaaatta atttctaaaa cttaaaattt tggtactgtt
+      361 acaaactcgg tttttttact ctctcgtgcg cgcgcatcct ttaaaggcaa gataaggcgt
+      421 tgtaacaccc cctaaccggg ggcaactttt ccttatcttt tacatttact ttagtaaatg
+      481 tacttgctta aaaaataagc attttaaact gttacaaagt gtaacactat agttaaattt
+      541 gttacaaaag tgtaacaaaa ctgtaacacc taaaaaacta tttactttag taaataggaa
+      601 tagtccaaaa ctgttacact tctgttatga atttgtaaca gtactatttt ttacctaatt
+      661 tagaaagtat agataaagta aataaaaagg tgtcaattta aataaaaaaa aagacactat
+      721 ttagtgtact tttgtttttc tttttctagt aattctataa catcatcaat atgcatatat
+      781 tcatctttta aatattctct tatttgctct tttagttcag cttgtctatg aaaaatataa
+      841 gttttatttt tagttatttc ggtgaaataa aatgtatatt taactagtgt ttcatattca
+      901 aatttttgtc catttgctct aaaatgactt gctaattcag agaaatgcaa aacgttatta
+      961 tcatctatat gtttatgaat gatattgata atatcaattg gatcataact ttcagttctg
+     1021 cttaggaaat taactatatt aaatccattt acaaaacatc tttccctttc atcatattga
+     1081 tatttatctt tatcgttttt atgaatatga tattcatatt tcccttttag actttcaata
+     1141 ggtttaggta ataatgatga accaaaaatt ctatcaacta cttcacaaac atttttataa
+     1201 gtagttggat tttctcaagc taatataaaa tgataatgcg gtttttttgg ttctccattt
+     1261 tcgtctatat ccttatcatg taaaatgaat gttgcttgca accctgatga taccaattcg
+     1321 tcatatcaat cttggttcat actttcaggt caagtgatga ctgcccaata tctttttttt
+     1381 acaatttgtt tcatattctg atacaatata aaggacaaga aaatttaaaa aattaaaaat
+     1441 tcatcatctt agaaactctt attcgggttt cttttttttg tttcctttaa cctttaattc
+     1501 agaactttta agaacaagat aacgaacata accccccata gtcattccaa gttcgttacc
+     1561 tttttctttt attctttcga agtgttcttc atcaatttta aaagtaattt tcttgtccat
+     1621 tacatccttt ttcctttcta tagaacatta tatcacttta taaacaaaaa taaaacaaaa
+     1681 caaaactaag gaacgttttt tgttacttaa agtgtcaaaa tgtaccaaaa agggggggtt
+     1741 aaaaatggtt gttgtcacac atccccttta ctttattcgg tagtatgacc cgaataaagt
+     1801 tgcaggacga acaatctaaa agtaataaaa aacacccccc
+//

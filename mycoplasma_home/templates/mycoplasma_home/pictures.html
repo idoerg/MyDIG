@@ -1,0 +1,69 @@
+{% load template_tags %}
+
+<head>
+    <title>DOME Pictures</title>
+    
+    <style>
+        body {
+            background-color: lightgray;
+        }        
+        img.imageDisplay {
+            border: 1px solid black;
+        }
+        
+        img.imageDisplay:hover {
+            border: 1px solid blue;
+        }
+
+        div.description {
+            text-align: center;
+            color: white;
+        }
+        
+        td.table_cell {
+            vertical-align: top;
+            width: 180px;
+            border: 2px solid black;
+            background-image: url({{ STATIC_URL }}images/gradient.png);
+            background-repeat: repeat-vertical;
+        }
+        
+        img#left_arrow {
+            border: 0;
+        }
+        
+        img#right_arrow {
+            border: 0;
+        }
+        
+        a.pager {
+            margin-left: 5px;
+            margin-right: 5px;
+            font-family:"Times New Roman", Times, serif;
+            font-size: 20px;
+        }
+        
+        a.pager:hover {
+            border: 1px solid black;
+            padding: 1px;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>    
+        {% for picture in picture_list %}
+            <td class="table_cell">
+                <div><a href= "{{ SITE_URL }}picture_editor/{{picture.pk}}/" >                
+                    <img class = "imageDisplay" src= "{{MEDIA_URL}}{{picture.imageName}}" width=180px height=130px></img>
+                    </a>
+                </div>
+                <div class = "description"><span> {{picture.description}} </span></div>
+            </td>
+            {% if forloop.counter|mod:num_items_per_row %}
+                </tr><tr class = "table_row">
+            {% endif %}
+        {% endfor %}
+        </tr>
+    </table>
+</body>

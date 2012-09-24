@@ -1,0 +1,27 @@
+{% load template_tags %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/zoomable.css"></link>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/taggable.css"></link>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/kineticjs/kinetic-v3.10.0.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/zoomable/zoomable.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/taggable/taggable.js"></script>
+</head>
+<body>
+    <div id="image_container">
+        <div class="zoomable-left">
+            <img id="main_image" src="{{ MEDIA_URL }}{{image.imageName}}" alt="{{ image.altText }}"></img>
+        </div>
+        <div class="zoomable-right">
+            <div class="info-container">
+            </div>
+        </div>
+        <input id="tagPoints" value="{{ tags }}" type="hidden" />
+    </div>
+</body>
+<script type="text/javascript">
+    $('#main_image').taggable({
+        originalData : $.parseJSON(unescape($.trim($('#tagPoints').val()))),
+        parent: $('#image_container'),
+        imagesUrl: '{{ STATIC_URL }}images/'
+    });
+</script>

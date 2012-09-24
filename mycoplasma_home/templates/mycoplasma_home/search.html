@@ -1,0 +1,228 @@
+{% load template_tags %}
+
+<head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <title>DOME Search: {{candidate_info|getCommonNames}}</title>
+    <style>
+        body {
+            background-color: lightgray;
+        }
+        
+        div#body_holder {
+            width: 100%;
+	    height: 100%;
+        }
+        
+        div#body_div {
+            background-color: white;
+            box-shadow: 0px 0px 11px 4px #555555;
+	    margin: 0 auto;
+            width: 960px;
+	    min-height: 100%;
+        }
+        
+        #title {
+            background-color: CornFlowerBlue;
+            border: 1px solid black;
+            color: white;
+            font-size: 27px;
+            font-weight: bold;
+            padding-bottom: 22px;
+            padding-top: 17px;
+            text-align: center;
+	    box-shadow: 1px 8px 6px -5px #666666;
+        }
+
+        #genome_tabs ul {
+            list-style-type: none;
+            margin: 38px 0 0;
+            padding: 0;
+        }
+
+        #genome_tabs ul li {
+            background-color: LightSlateGray;
+            border: 1px solid black;
+            border-radius: 11px 11px 0 0;
+            padding: 4px;
+            width: 170px;
+            font-size: 15px;
+            display: inline;
+            cursor: pointer;
+        }
+
+        #picture_tabs ul {
+            list-style-type: none;
+            margin: 38px 0 0;
+            padding: 0;
+        }
+
+        #picture_tabs ul li {
+            background-color: LightSlateGray;
+            border: 1px solid black;
+            border-radius: 11px 11px 0 0;
+            padding: 4px 4px 0;
+            width: 170px;
+            font-size: 15px;
+            display: inline;
+            cursor: pointer;
+        }
+
+        #picture_search_holder {
+            border: 1px solid #CCCCCC;
+            background-color: white;
+            z-index: 1;
+        }
+
+        .collapse {
+            cursor: pointer;
+	    height: 5px;
+	    width: 7px;
+	    display: block;
+	}
+
+	.genome_browser {
+	   border-top: 1px solid #CCCCCC;
+	   border-right: none;
+	   border-left: none; 
+	   border-bottom: none;
+	}
+
+	#pictures_div {
+	   height: auto !important;
+	}
+
+	.collapse_holder {
+	    height: 7px;
+	    padding: 10px 10px 5px;
+	    display: inline-block;
+	}
+
+	.results_title {
+	    border-bottom: 1px solid black;
+	    color: cornflowerblue;
+	}
+    </style>
+</head>
+
+<body>
+    <div id="body_holder">
+        <div id="body_div">
+            {% include "mycoplasma_home/navBar.html" %}
+            <!-- <div id="title">{{candidate_info|getCommonNames}}</div> !-->
+            {% if show_photos %}
+            <div class="results_title">
+		<div class="collapse_holder">
+		    <img class="collapse" id="collapse_pictures" src="{{ STATIC_URL }}images/arrow_down.png"></img>
+		</div>
+		<span>Image Results for {{candidate_info|getCommonNames}}</span>
+	    </div>
+	    <div id="picture_tabs">
+	    	<ul>            
+            {% for candidate in candidate_info %}
+            	<li id="{{candidate.1}}_picture_tab"{% if forloop.counter0|isZero %}style="background-color: lightgray; font-weight: bold;"{% endif %}>{{candidate.0|abbreviateCommonName}}</li>
+            {% endfor %} 
+            </ul>
+        </div> 
+        <div id="picture_search_holder">
+            {% include "mycoplasma_home/pictureNav.html" %}   
+        </div>
+        {% endif %}
+        <br />
+        {% if show_genomes %}
+	    <div class="results_title">
+            	<div class="collapse_holder">	
+		    <img class="collapse" id="collapse_genome" src="{{ STATIC_URL }}images/arrow_down.png"></img> 
+            	</div>
+		<span>Genome Results for {{candidate_info|getCommonNames}}</span>
+	    </div>
+	    <div id="genome_tabs"><ul>            
+            {% for candidate in candidate_info %}
+            <li id="{{candidate.1}}_tab"{% if forloop.counter0|isZero %}style="background-color: lightgray; font-weight: bold;"{% endif %}>{{candidate.0|abbreviateCommonName}}</li>
+            {% endfor %} 
+            </ul>
+            </div> 
+            {% for candidate in candidate_info %}            
+            <div id="{{candidate.1}}" {% if forloop.counter0|isGreaterThan:0 %}style="display:block" {% else %} class="active_browser"{% endif %}>
+                {% if candidate.2|isEmptyString %}                
+                <div style="margin-top: 50px;"> Sorry there is no genome for this organism </div>
+                {% else %}
+                <iframe id="{{candidate.2}}" class="genome_browser" src="/gb2/gbrowse/{{candidate.2}}/" width="98%" height="75%"></iframe>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+<script> 
+    (function($) {
+        $(document).ready(function() {
+            /*$('#refresh').click(function() {
+                $('.active_browser').attr('src', $('.active_browser').attr('src'));
+                return false;
+            });*/
+            $('#genome_tabs ul li').bind('click', function() {
+                var newGenome = $('#' + $(this).attr('id').split("_")[0]);
+                var oldGenome = $('.active_browser');
+                oldGenome.hide();
+                oldGenome.removeClass('active_browser');
+                newGenome.addClass('active_browser');
+                newGenome.show();
+                $('#genome_tabs ul li').css("background-color", "lightslategray").css("font-weight", "");
+                $(this).css("background-color", "lightgray").css("font-weight", "bold");
+            });
+            $('.genome_browser').load(function() { 
+                $(this).parent().hide()
+            });
+            $('#picture_tabs ul li').bind('click', function() {
+                var newPictures = $('#' + $(this).attr('id').split("_")[0] + '_pictures');
+                var oldPictures = $('.active_pictures');
+                oldPictures.hide();
+                oldPictures.removeClass('active_pictures');
+                newPictures.addClass('active_pictures');
+                newPictures.show();
+                $('#picture_tabs ul li').css("background-color", "lightslategray").css("font-weight", "");
+                $(this).css("background-color", "lightgray").css("font-weight", "bold");
+            });
+        
+            $('#collapse_pictures').bind('click', function() {
+                $('#picture_search_holder').toggle();
+                $('#picture_tabs').toggle();
+                if ($(this).attr('src') == '{{ STATIC_URL }}images/arrow_down.png') {
+                    $(this).attr('src', '{{ STATIC_URL }}images/arrow_right.png');
+		    $(this).css("width", "5px").css("height", "7px");
+                }
+                else {
+                    $(this).attr('src', '{{ STATIC_URL }}images/arrow_down.png');
+                    $(this).css("width", "7px").css("height", "5px");
+		}
+            });
+            $('#collapse_genome').bind('click', function() {
+                $('.active_browser').toggle();
+                $('#genome_tabs').toggle();
+                if ($(this).attr('src') == '{{ STATIC_URL }}images/arrow_down.png') {
+                    $(this).attr('src', '{{ STATIC_URL }}images/arrow_right.png');
+		    $(this).css("width", "5px").css("height", "7px");
+                }
+                else {
+                    $(this).attr('src', '{{ STATIC_URL }}images/arrow_down.png');
+                    $(this).css("width", "7px").css("height", "5px");
+                }
+            });
+        });
+
+        $(window).load(function() { 
+            var genome_browser = $(".genome_browser");     
+            genome_browser.contents().find(".datatitle").hide();
+            genome_browser.contents().find("#banner_panel").hide();
+            genome_browser.contents().find("#tabbed_menu").hide();
+            genome_browser.contents().find("#banner_panel_hide").parent().hide();
+            genome_browser.contents().find("#main").children('p').hide();
+            genome_browser.contents().find("#source_form").parent().hide();
+            genome_browser.contents().find("#plugin_form").parent().hide();
+            $('.active_browser').show();   
+            //$('#picture_search_holder').height($('#picture_search_holder').height() + 30);      
+        });
+    })(jQuery)
+</script>

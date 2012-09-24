@@ -1,0 +1,144 @@
+.drawing-board {
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 0;
+}
+
+.tag-board {
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 250;
+}
+
+.toolbar-item {
+	display: inline-block;
+}
+
+.change-color {
+	border: 1px solid black;
+	vertical-align: top;
+	height: 25px;
+	width: 25px;
+	margin-right: 3px;
+}
+
+.change-color:hover {
+	cursor: pointer;
+}
+
+.draw-type {
+	border: 1px solid #AAAAAA;
+	background-color: #EEEEEE;
+	vertical-align: top;
+	border-radius: 5px;
+}
+
+.draw-type img {
+	height: 23px;
+}
+
+.draw-type:hover {
+	cursor: pointer;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEEEEE), to(#CCCCCC));
+	background-image: -moz-linear-gradient(top, #EEEEEE, #CCCCCC); /* for firefox 3.6+ */
+	filter: DXImageTransform.Microsoft.gradient(startColorstr='#EEEEEE', endColorstr='#CCCCCC'); /*For IE */
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	border: 1px solid #777777;
+}
+
+.toolbar-container {
+	background-color: #CCCCCC;
+	height: 50px;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEEEEE), to(#CCCCCC));
+	background-image: -moz-linear-gradient(top, #EEEEEE, #CCCCCC); /* for firefox 3.6+ */
+	filter: DXImageTransform.Microsoft.gradient(startColorstr='#EEEEEE', endColorstr='#CCCCCC'); /*For IE */
+}
+
+.toolbar-container span {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.toolbar-icon {
+	height: 35px;
+	margin-top: 9px;
+	border-right: 1px solid #777777;
+}
+
+.toolbar-icon:hover {
+	cursor: pointer;
+}
+
+.toolbar-container table {
+	display: inline-block;
+	height: 50px;
+}
+
+.toolbar-container table td {
+	padding-left: 20px;
+	padding-right: 20px;
+	vertical-align: top;
+}
+
+.add-tag {
+	height: 30px;
+	margin-top: 15px;
+	border-right: none;
+}
+
+.add-tag:hover {
+	cursor: pointer;
+}
+
+.add-tag-hidden {
+	display: none;
+}
+
+.desc-form .desc {
+	height: 25px;
+	font-size: 12px;
+	border: 1px solid grey;
+	padding: 3px;
+	width: 250px;
+}
+
+.submit-tag {
+	margin-top: 15px;
+	border: 1px solid #AAAAAA;
+	background-color: #EEEEEE;
+	vertical-align: top;
+	border-radius: 5px;
+	margin-left: 60px;
+	height: 28px;
+}
+
+.submit-tag:hover {
+	cursor: pointer;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEEEEE), to(#CCCCCC));
+	background-image: -moz-linear-gradient(top, #EEEEEE, #CCCCCC); /* for firefox 3.6+ */
+	filter: DXImageTransform.Microsoft.gradient(startColorstr='#EEEEEE', endColorstr='#CCCCCC'); /*For IE */
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	border: 1px solid #777777;
+}
+
+#tagPoints {
+	display: none;
+}
+
+th {
+	font-weight: normal;
+	font-size: 12px;
+	font-family: Lucida Grande;
+}
+#taggable-tooltip {
+	position: fixed;
+	padding: 3px 5px;
+	background-color: white;
+	border-radius: 7px;
+	border: 1px solid #CCCCCC;
+}
+

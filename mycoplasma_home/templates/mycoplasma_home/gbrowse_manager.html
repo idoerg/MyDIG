@@ -1,0 +1,366 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/ajax_uploader/ajaxfileupload.js"></script>
+
+<body>
+<head>
+    <title>DOME GBrowse Manager</title>
+    <style>
+	#header {
+      	    background-color: transparent;
+            color: white;
+            font-family: Times New Roman;
+	    font-variant: small-caps;
+            font-size: 30px;
+            font-family: lighter;
+	    padding: 4px;
+            text-align: center;
+	}
+
+	.file_uploader_label {
+            background-color: cornflowerblue;
+            color: white;
+            font-family: Lucida Grande;
+            font-size: 15px;
+            line-height: 100%;
+            padding: 5px 0 5px 10px;
+	    }
+
+        #uploader_holder {
+	        padding-bottom: 10px;
+	    }
+
+	    .file_uploader_input_holder {
+	        margin-left: 20px;
+	        margin-top: 12px;
+	    }
+
+	    .file_uploader_input_holder label {
+	        font-family: Lucida Grande;
+	        font-size: 15px;
+	        padding-right: 10px;
+	    }
+
+	    #species {
+	        border: 1px solid gray;
+	        font-size: 15px;
+	        font-family: Lucida Grande;
+	        padding: 3px;
+	    }
+
+	    #genbank_id {
+	        border: 1px solid gray;
+	        font-size: 15px;
+	        font-family: Lucida Grande;
+	        padding: 3px;
+	    }
+
+	    #species_genus {
+	        border-top: 1px solid gray;
+	        border-left: 1px solid gray;
+	        border-bottom: 1px solid gray;
+	        padding: 3px 5px 3px 3px;
+	        font-family: Lucida Grande;
+	        font-size: 15px;
+	    }
+
+	    #genbank_file {
+	        opacity: 0;
+	        position: absolute;
+	        height: 29px;
+	        font-size: 15px;
+	    }
+
+	    #genbank_file:hover {
+	        cursor: pointer;
+	    }
+
+	    #genbank_file_fake {
+	        padding: 3px;
+	        border: 1px solid gray;
+	        font-size: 15px;
+	        font-family: Lucida Grande;
+	    }
+
+	    .upload_submit_button {
+	        padding: 3px;
+	        font-family: Lucida Grande;
+	        font-size: 15px;
+	        border: 1px solid gray;
+	        color: white;
+	        background-color: dimgray;
+	        min-width: 79px;
+	    }
+
+	    .upload_submit_button:hover {
+	        cursor: pointer;
+	    }
+
+	    #fake_file_finder_button {
+	        margin-left: 5px;
+	    }
+
+	    .loading_image {
+	        display: inline-block;
+	        margin-bottom: -3px;
+	        height: 17px;
+	        width: 40px;
+	    }
+
+	    .loading_name {
+	        display: inline-block;
+	        padding-left: 10px;
+	        height: 17px;
+		overflow: hidden;
+		white-space: nowrap;
+		width: 185px;
+	    }
+
+	    .loading_name span {
+		width: 200px;
+	    }
+
+	    .loading_time {
+	        display: inline-block;
+	        font-size: 11px;
+	        float: right;
+	        margin-top: 3px; 
+	    }
+
+	    .loading_child {
+	        display: none;
+	        margin: 5px auto 0;
+	        width: 90%;
+	        color: white;
+	        background-color: steelblue;
+	        border-radius: 11px;
+	        padding: 12px;
+	        font-size: 15px;
+	        font-family: Lucida Grande;
+	    }
+
+	    #loading_holder {
+	        overflow-y: scroll;
+	        height: 560px;
+	    }
+
+	    #holder {
+	        background-color: #DDDDDD;
+		width: 918px;
+	        border: 1px solid black;
+		box-shadow: 0 11px 7px 0 #000000;
+		margin: 0 auto;
+		padding: 15px;
+	    }
+	
+	    #right_holder {
+	        height: 515px;
+	        float: right;
+	        width: 49.5%;
+	        display: inline-block;
+	    }
+
+	    #left_holder {
+	        display: inline-block;
+	        width: 50.35%;
+	        border-right: 1px solid black;
+	    }
+
+
+
+	    #current_mycoplasma {
+                height: 300;
+                overflow-y: scroll;
+                background-color: gray;
+            }
+
+	    #current_mycoplasma ul li {
+            	border-right: 1px solid black;
+            	border-left: 1px solid black;
+            	border-bottom: 1px solid black;
+            	background-color: steelblue;
+            	color: white;
+            	font-family: Lucida Grande;
+            	font-size: 15px;
+            	margin: 0 auto;
+            	padding: 3px;
+            	text-align: center;
+            	width: 55%;
+            	box-shadow: 0 10px 18px #000000;
+	    }
+	
+	    #error_message {
+	        color: red;
+	        padding-top: 5px;
+	        display: none;
+	        font-family: Lucida Grande;
+	        font-size: 15px;
+	        text-align: center;
+	    }
+
+        .error {
+            display: none;
+            margin: -10px auto 0;
+	        width: 89.75%;
+	        color: red;
+	        background-color: transparent;
+	        border-radius: 0 0 11px 11px;
+	        padding: 12px;
+	        font-size: 15px;
+	        font-family: Lucida Grande;
+            border-left: 1px solid steelblue;
+            border-right: 1px solid steelblue;
+            border-bottom: 1px solid steelblue;
+        }
+
+	#container_holder {
+	    background: url("{{ STATIC_URL }}images/dark-area.png") repeat-x scroll left top #3C3C3C;
+	    padding-bottom: 30px;
+	}
+
+	#container {
+	    margin: 0 auto;
+	}
+    </style>
+</head>
+{% include "mycoplasma_home/navBarAdmin.html" %}
+<div id="container_holder">    
+    <div id="container">
+    	<div id="header">Genome Uploader</div>
+    	<div id="holder">
+            <div id="left_holder">    
+                <div id="uploader_holder">    
+	            <br />
+                    <div class="file_uploader_label"> GenBank file to upload: </div>
+                    <div class="file_uploader_input_holder">
+	                <input type="file" id="genbank_file" name="genbank_file" />
+	                <input type="file_fake" id="genbank_file_fake" readonly="readonly">
+		        <button class="upload_submit_button" id="fake_file_finder_button">Browse</button>
+	            </div>  
+	            <br />
+	            <div class="file_uploader_label"> Name of the organism </div>
+                    <div class="file_uploader_input_holder">
+		        <label id="species_genus">Mycoplasma</label><input type="text" id="species" />
+	            </div>
+	            <br />
+	            <div class="file_uploader_label"> GenBank Accession </div>
+	            <div class="file_uploader_input_holder">
+    		        <input type="text" id="genbank_id" />
+	                <button class="upload_submit_button" id="start_upload">Upload Genome</button>
+	            </div>
+	            <div id="error_message">
+		        <div>Please refresh the page, an error has occurred.</div>
+		        <div>Any behavior past this point is unknown.</div>
+	            </div>
+                </div>
+	        <div class="file_uploader_label">Current Organisms in the Database</div>
+	        <div id="current_mycoplasma">
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        {% for organism in all_mycoplasma %}
+                        <li class="ui-widget-content current_mycoplasma" id="{{organism.common_name}}">{{organism.common_name}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div id="right_holder">
+                <div class="file_uploader_label">Current Pending Uploads</div>	
+                <div id="loading_holder"></div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+	    $('#fake_file_finder_button').live('click', function() {
+	        $('#genbank_file').trigger('click');
+	    });
+
+	    $('#genbank_file').change(function() {
+	        $('#genbank_file_fake').val($(this).val());
+	    });
+
+	    $('#start_upload').live('click', function() {
+            if ($('#species').val() != "" && $('#genbank_file').val() != "" && $('#genbank_id').val() != "") {
+	            var species = $('#species');
+	            var loading_div = $('#' + addNewLoadingDiv(species.val().toLowerCase()));
+	            $.ajaxFileUpload({
+	                url: 'genome_uploader/',
+            		secureuri: false,
+	                fileElementId: 'genbank_file',
+                    data: {
+	                    species : $('#species').val().toLowerCase(),
+	                    genbank_id : $('#genbank_id').val()
+                    },
+                    timeout : -1,
+	                success: function (data) {
+		                if (data == '0') {
+		                   $('#error_message').show();
+		                }
+                        else {
+                            var data_split = data.split(",");
+                            if (data_split[0] == "0") {
+                                loading_div.siblings('.error').html(data_split[1]).slideDown("slow");
+                                var failure = loading_div.children('.loading_image').attr('src',"{{ STATIC_URL }}images/failure.png");
+                                failure.css("height", "25px").css("width", "25px").css("margin-bottom", "-7px").css('cursor', 'pointer');
+                                failure.bind('click', function() {
+                                    loading_div.parent().remove();
+                                });
+                            }
+                            else {
+                                var success = loading_div.children('.loading_image').attr('src',"{{ STATIC_URL }}images/success.png");
+                                success.css("height", "25px").css("width", "25px").css("margin-bottom", "-7px").css('cursor', 'pointer');
+                                success.bind('click', function() {
+                                    loading_div.parent().remove();
+                                });      
+                            }
+                        }
+	                },
+	                error: function (data) {
+		                $('#error_message').show();	
+	                }
+	            });
+	        }
+	    });
+
+	    function addNewLoadingDiv(species_name) {
+	        var max_id = 0;
+		species_name = species_name.split(' ').join('_')
+	        $('.' + species_name).each(function() {
+		        var cur_id = $(this).attr('id').split('_');
+			var len = cur_id.length;
+			cur_id = parseInt(cur_id[len-1]);
+		        alert("Cur id: " + cur_id);
+			if (max_id < cur_id) {
+			        max_id = cur_id;
+		        }
+	        });
+	        max_id++;
+	        $('#loading_holder').append('<div class="loading_parent"><div class="loading_child" id="' + species_name + '_' + max_id + '"></div></div>');
+	        var new_div = $('#' + species_name + '_' + max_id);
+	        new_div.append('<img class="loading_image" src="{{ STATIC_URL }}images/loading_bar.gif"></img>'); 
+	        new_div.append('<div class="loading_name" title="Mycoplasma ' + species_name + '"><span>Mycoplasma ' + species_name + '</span></div>');
+	        var date = new Date();
+	        var minutes = (Math.floor(date.getMinutes() / 10) == 0 ? '0' : '') + date.getMinutes();
+	        var seconds = (Math.floor(date.getSeconds() / 10) == 0 ? '0' : '') + date.getSeconds();
+	        var am_pm = (Math.floor(date.getHours() / 10) == 0 ? 'AM' : 'PM');
+	        var hours = (Math.floor(date.getHours() / 10) == 0 ? date.getHours() : date.getHours() - 12);
+	        var formatted_date = hours  + ":" + minutes + ":" + seconds + " " + am_pm + " "  + date.toLocaleDateString(); 
+	        new_div.append('<div class="loading_time">' + formatted_date + '</div>');
+	        new_div.addClass(species_name);
+
+                new_div.parent().append('<div class="error" style="display:none;">Hey there</div>');
+
+	        new_div.fadeIn("slow");		
+		/*
+		new_div.children('.loading_name').hover(
+		    function() {
+			$(this).children('span').animate({"left" : "-=" + $(this).width() + "px"}, "slow");
+		    },
+		    function() {
+			$(this).children('span').animate({"left" : "+=" + $(this).width() + "px"}, "slow");
+		    }
+		);		
+		*/
+                return new_div.attr('id');
+	    }
+    </script>
+</body>

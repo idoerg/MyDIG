@@ -1,0 +1,599 @@
+{% include "mycoplasma_home/navBar.html" %}
+{% load template_tags %}
+
+<head>
+    <style>
+        body {
+            background-color: lightgray;
+        }
+        
+        div#image_container {
+            height: 500;
+            background-color: black;
+        }
+        
+        img#main_image {
+            z-index: 1;
+            position: absolute;
+        }
+        
+        canvas#drawingBoard {
+            z-index: 4;
+            position: absolute;
+        }
+        
+        canvas#tagBoard {
+            z-index: 2;
+            position: absolute;
+        }
+
+        canvas#tempTagBoard {
+            z-index: 3;
+            position: absolute;            
+        }
+        
+        div#toolbar {
+            align: left;
+            background: black;
+        }
+        
+        div#description_div {
+            z-index: 1;
+            position: relative;
+            color: white;
+        }
+        
+        form#DescForm {
+            color: white;
+            display: none;
+            margin-left: 15px;
+        }
+        
+        button#addTag {
+            left: 0;
+        }
+        
+        button#submit_tag {
+            display: none;
+        }
+        
+        button.drawType {
+            display: none;
+            height: 25px;
+            vertical-align: top;
+        }
+        
+        button.drawType img {
+            vertical-align: top;
+        }
+        
+        button.colorChange {
+            display: none;
+            border: 1px solid white;
+            height: 25px;
+            vertical-align: top;
+        }
+        
+        {% for color in color_options %}
+            button#{{color.0}} {
+                background-color: {{color.0}};
+            } 
+        {% endfor %}
+        
+        button#transparent {
+            background-color: black;
+        }
+        
+        div#pop_up {
+            position: absolute;
+            z-index: 7;
+            top: 300px;
+            left: 400px;
+            width: 150px;
+            text-align: center;
+            background-image: url({{MEDIA_URL}}{{bubble.imageName}});
+            background-repeat: no-repeat;
+            background-size: auto;
+        }
+        
+        
+        div#description_label {
+            position: absolute;
+            text-align: center;
+        }
+        
+    </style>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}tooltip/style.css"></link>
+</head>
+<body>
+    <div id="image_container">
+            <canvas id="drawingBoard"></canvas>
+            <canvas id="tagBoard"></canvas>
+            <canvas id="tempTagBoard"></canvas>
+            <img id="main_image" src="{{ MEDIA_URL }}{{image.imageName}}" alt="{{image.altText}}" height=500"></img>
+            <!-- <button id = "clickme"> Click me </button> -->
+            <div id = "description_div"> {{image.description}} </div>     
+    </div>
+    {% if user.is_staff %}    
+    <div id = "toolbar">
+        <button onclick="displayCanvas(event)" id = "addTag">Add a Tag</button>
+        <form id = "DescForm">
+            Description: <input id="desc" type="text" name="desc"></input>
+        </form>
+        {% for color in color_options %}
+            <button onclick="setColor('{{color.1}}', '{{color.0}}')" class = "colorChange" id = "{{color.0}}"></button>
+        {% endfor %} 
+        <button onclick="setColor('','transparent')" class = "colorChange" id = "transparent"></button>
+        <button onclick="setDraw('rect')" class = "drawType" id = "drawRect">
+            <img src = "{{ STATIC_URL  }}rectButtonIcon.png" height = "20px"></img>
+        </button>
+        <button onclick="setDraw('poly')" class = "drawType" id = "drawPoly">
+            <img src = "{{ STATIC_URL  }}polygonButtonIcon.png" height = "20px"></img>
+        </button>
+        <button onclick="submit(event)" id="submit_tag">Submit Tag</button>
+    </div>
+    {% endif %}
+
+</body>
+<script src="{{ STATIC_URL  }}kinetic-v1.0.1.js"></script>
+<script src="{{ STATIC_URL }}tooltip/script.js"></script>
+<script type="text/javascript">
+        var points = new Array(2);
+        var mouse_down = false;
+        var n = 0;
+        var description = "";
+        var color = "transparent";
+        var myImg = document.getElementById("main_image");
+        var canvas = document.getElementById("drawingBoard");
+        canvas.width = myImg.width;
+        canvas.height = myImg.height;
+        canvas.onmousedown = startRect;
+        canvas.onmouseup = finishRect;
+        canvas.onmousemove = moveRect;
+        canvas.style.display = "none";
+        var fillStyle = "";
+        var shape = "rect";
+        
+        var tempTagBoard = document.getElementById("tempTagBoard"); 
+        tempTagBoard.style.display = "none";      
+
+        var tagBoard = document.getElementById("tagBoard");
+        tagBoard.width = myImg.width;
+        tagBoard.height = myImg.height;
+        var allTags = setupTags();
+        setupShapeEvents();
+        
+        var pictureDescription = document.getElementById("description_div");
+        pictureDescription.style.left = (myImg.width + 10) + "px";
+
+        document.captureEvents(Event.MOUSEMOVE)
+        document.onmousemove = getMouseXY;
+        var tempX = 0;
+        var tempY = 0;
+        function getMouseXY(e) {
+            tempX = e.pageX;
+            tempY = e.pageY;
+            if (tempX < 0){tempX = 0;}
+            if (tempY < 0){tempY = 0;}
+            return true;
+        }
+        
+        function getOtherPoints(points_arr) {
+            var pointOne, pointTwo;            
+            if (points_arr[0][0] < points_arr[1][0] && points_arr[0][1] < points_arr[1][1]) {
+                pointOne = [points_arr[0][0], points_arr[1][1]];
+                pointTwo = [points_arr[1][0], points_arr[0][1]];
+            }
+            else if (points_arr[0][0] > points_arr[1][0] && points_arr[0][1] > points_arr[1][1]) {
+                pointOne = [points_arr[1][0], points_arr[0][1]];
+                pointTwo = [points_arr[0][0], points_arr[1][1]];
+            }
+            else if (points_arr[0][0] < points_arr[1][0] && points_arr[0][1] > points_arr[1][1]) {
+                pointOne = [points_arr[0][0], points_arr[1][1]];
+                pointTwo = [points_arr[1][0], points_arr[0][1]];
+            }
+            else {
+                pointOne = [points_arr[1][0], points_arr[0][1]];
+                pointTwo = [points_arr[0][0], points_arr[1][1]];
+            }
+            return [pointOne, pointTwo];
+        }
+
+        // Starts the rectangle by initializing first point and
+        // turns on movement tracker for mouse
+        function startRect(e) {
+            var point = getCoordinates(e);
+            points[0] = point;
+            mouse_down = true;
+        }
+        
+        // Starts the polygon by initializing first point and
+        // turns on movement tracker for mouse
+        function startPoly(e) {
+            var point = getCoordinates(e);
+            points = new Array(1);
+            points[0] = point;
+            n = 1;
+            mouse_down = true;
+        }
+        
+        // Finalizes the rectangle by taking last point and 
+        // turns off movement tracker for mouse
+        function finishRect(e) {
+            var point = getCoordinates(e);
+            points[1] = point;
+            mouse_down = false;
+        }
+        
+        function finishPoly(e) {
+            var point = getCoordinates(e);
+            points.push(point);
+            mouse_down = false;
+        }
+        
+        // Tracks mouse movement and re-renders rectangle on canvas
+        function moveRect(e) {
+             if (mouse_down) {   
+                var point = getCoordinates(e);
+                points[1] = point;
+                canvas.width = canvas.width;
+                var context = canvas.getContext("2d");
+                var otherPoints = getOtherPoints(points);
+                context.beginPath();   
+                context.moveTo(points[0][0], points[0][1]); 
+                context.lineTo(otherPoints[0][0], otherPoints[0][1]);
+                context.lineTo(points[1][0], points[1][1]);
+                context.lineTo(otherPoints[1][0], otherPoints[1][1]);
+                context.lineTo(points[0][0], points[0][1]);           
+                context.closePath();
+                if (fillStyle != "") {
+                    context.fillStyle = fillStyle;
+                    context.fill();
+                }
+                else {
+                    context.stroke();
+                }
+                
+            }
+        }
+        
+        // Tracks mouse movement and re-renders polygon on canvas
+        function addToPoly(e) {
+            if (mouse_down && n % 4 == 1) {
+                var point = getCoordinates(e);
+                points.push(point);
+                canvas.width = canvas.width;
+                var context = canvas.getContext("2d");
+                context.beginPath();
+                context.moveTo(points[0][0], points[0][1]);
+                for (var i = 1; i < points.length; i++) {    
+                    context.lineTo(points[i][0],points[i][1]);
+                }
+                context.closePath();
+                if (fillStyle != "") {
+                    context.fillStyle = fillStyle;
+                    context.fill();
+                }
+                else {
+                    context.stroke();
+                }
+            }
+            n++;
+        }
+        
+        
+        // helper function for getting coordinates (adjusts offset)
+        function findPosition(oElement) {
+            if(typeof( oElement.offsetParent ) != "undefined") {
+                for(var posX = 0, posY = 0; oElement; oElement = oElement.offsetParent) {
+                    posX += oElement.offsetLeft;
+                    posY += oElement.offsetTop;
+                }
+                return [ posX, posY ];
+            }
+            else {
+                return [ oElement.x, oElement.y ];
+            }
+        }
+
+        // gets the current coordinates of the mouse in the image
+        function getCoordinates(e, inThisElement) {
+            var PosX = 0;
+            var PosY = 0;
+            var ImgPos;
+            ImgPos = findPosition(canvas);
+            if (!e) var e = window.event;
+            if (e.pageX || e.pageY) {
+                PosX = e.pageX;
+                PosY = e.pageY;
+            }
+            else if (e.clientX || e.clientY) {
+                PosX = e.clientX + document.body.scrollLeft
+                    + document.documentElement.scrollLeft;
+                PosY = e.clientY + document.body.scrollTop
+                    + document.documentElement.scrollTop;
+            }
+            PosX = PosX - ImgPos[0];
+            PosY = PosY - ImgPos[1];
+            return [PosX, PosY];
+        }
+        
+        // Turns on/off the canvas and the entire tag editing app
+        function displayCanvas(e) {
+            if (e.target.innerHTML == "Add a Tag") {
+                canvas.style.display = "";
+                canvas.width = canvas.width;
+                e.target.innerHTML = "Stop Tagging";
+                
+                var descForm = document.getElementById("DescForm");
+                descForm.style.display = "inline";
+                                
+                var descForm = document.getElementById("submit_tag");
+                descForm.style.display = "inline";
+                
+                var colorButton;
+                {% for color in color_options %}                              
+                    colorButton = document.getElementById("{{color.0}}");
+                    colorButton.style.display = "inline";
+                {% endfor %}
+                
+                colorButton = document.getElementById("transparent");
+                colorButton.style.display = "inline";
+                
+                drawTypeRect = document.getElementById("drawRect");
+                drawTypeRect.style.display = "inline";
+                
+                drawTypePoly = document.getElementById("drawPoly");
+                drawTypePoly.style.display = "inline";
+        
+            }
+            else {
+                e.target.innerHTML = "Add a Tag";
+                canvas.style.display = "none";
+                
+                var descForm = document.getElementById("DescForm");
+                descForm.style.display = "none";
+                             
+                var submit = document.getElementById("submit_tag");
+                submit.style.display = "none";  
+                
+                var colorButton;
+                {% for color in color_options %}                              
+                    colorButton = document.getElementById("{{color.0}}");
+                    colorButton.style.display = "none";
+                {% endfor %}
+                
+                colorButton = document.getElementById("transparent");
+                colorButton.style.display = "none";
+                
+                drawTypeRect = document.getElementById("drawRect");
+                drawTypeRect.style.display = "none";
+                
+                drawTypePoly = document.getElementById("drawPoly");
+                drawTypePoly.style.display = "none";
+            }
+        }
+        
+        // sets the color of the rectangle/polygon
+        function setColor(rgbStr, colorName) {
+            if (rgbStr != "") {    
+                var rgbArr = rgbStr.split(",");
+                fillStyle = "rgba(" + rgbArr[0] + "," + rgbArr[1] + "," + rgbArr[2] + ",.5)";
+            }
+            else {
+                fillStyle = "";
+            }
+            color = fillStyle;
+            if (color == "") {
+                color = "transparent";
+            }
+            if (points.length > 1 && !mouse_down) {     
+                if (shape == "rect") {
+                    canvas.width = canvas.width;
+                    var context = canvas.getContext("2d");
+                    var otherPoints = getOtherPoints(points);
+                    context.beginPath();   
+                    context.moveTo(points[0][0], points[0][1]); 
+                    context.lineTo(otherPoints[0][0], otherPoints[0][1]);
+                    context.lineTo(points[1][0], points[1][1]);
+                    context.lineTo(otherPoints[1][0], otherPoints[1][1]);
+                    context.lineTo(points[0][0], points[0][1]);           
+                    context.closePath();
+                    if (fillStyle != "") {
+                        context.fillStyle = fillStyle;
+                        context.fill();
+                    }
+                    else {
+                        context.stroke();
+                    }
+                     
+                }
+                else if (shape == "poly") {
+                    canvas.width = canvas.width;
+                    var context = canvas.getContext("2d");
+                    context.beginPath();
+                    context.moveTo(points[0][0], points[0][1]);
+                    for (var i = 1; i < points.length; i++) {    
+                        context.lineTo(points[i][0],points[i][1]);
+                    }
+                    context.closePath();
+                    if (fillStyle != "") {
+                        context.fillStyle = fillStyle;
+                        context.fill();
+                    }
+                    else {
+                        context.stroke();
+                    }
+                }
+            }
+        }
+        
+        // submits the rectangle data to the database to store tags
+        function submit(e) {
+            description = document.getElementById("desc").value;
+            if (description != "" && color != "" && points.length > 0) {
+                var form = document.createElement("form");
+                form.setAttribute("method", "post");
+                form.setAttribute("action", document.URL + "submit/");
+                
+                createInputToForm("description", description, form);
+                
+                createInputToForm("color", color, form);
+                
+                var loopLength = 0;
+                if (shape == "rect") {
+                    loopLength = 2;
+                }
+                else if (shape == "poly") {
+                    loopLength = points.length;
+                }
+                
+                createInputToForm("numPoints", loopLength, form);
+                
+                for (i = 0; i < loopLength; i++) {
+                    createInputToForm("point" + i + "_x", points[i][0], form);
+                    createInputToForm("point" + i + "_y", points[i][1], form);
+                }
+                createInputToForm("shape", shape, form);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+            else {
+                alert("Could not save tag: missing value: " + points.length + ", " + description + ", " + color);
+            }  
+        }
+        
+        function createInputToForm(nameIn, valueIn, form) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", nameIn);
+            hiddenField.setAttribute("value", valueIn);
+            
+            form.appendChild(hiddenField);    
+        }
+        
+
+        // Displays a shape based on the database and mouseover
+        function setupShapeEvents() { 
+            var context = tagBoard.getContext("2d");
+            var myStage = new Kinetic.Stage(tagBoard);
+            var groupFillStyle = "transparent";
+            myStage.setDrawStage(function() {
+                {% for tuple in tagTuples %}
+                        groupFillStyle = "{{tuple.0.color}}";
+                        myStage.beginRegion();
+                    {% if tuple.1|definesRect %}
+                        context.beginPath();
+                        otherPoints = getOtherPoints([[{{tuple.1.0.pointX}},{{tuple.1.0.pointY}}],[{{tuple.1.1.pointX}},{{tuple.1.1.pointY}}]])
+                        context.moveTo({{tuple.1.0.pointX}}, {{tuple.1.0.pointY}});                    
+                        context.lineTo(otherPoints[0][0], otherPoints[0][1]);
+                        context.lineTo({{tuple.1.1.pointX}}, {{tuple.1.1.pointY}}); 
+                        context.lineTo(otherPoints[1][0], otherPoints[1][1]);
+                        context.lineTo({{tuple.1.0.pointX}}, {{tuple.1.0.pointY}});
+                        context.closePath();    
+                    {% else %}
+                            context.beginPath();
+                        {% for point in tuple.1 %}
+                            {% if forloop.counter0|isZero %}
+                            context.moveTo({{point.pointX}},{{point.pointY}});
+                            {% else %}
+                            context.lineTo({{point.pointX}},{{point.pointY}});
+                            {% endif %}
+                        {% endfor %}  
+                            context.closePath();     
+                    {% endif %}
+                    myStage.addRegionEventListener("onmouseover", function() {
+                        var canvPos = findPosition(myImg);
+                        tooltip.show('{{tuple.0.description}}',canvPos[0] + {{tuple.2}}, canvPos[1] + {{tuple.3}});
+                        var points_arr = allTags[{{forloop.counter0}}]['points'];
+                        var color = allTags[{{forloop.counter0}}]['color'];
+                        var tempTagBoard = document.getElementById('tempTagBoard');
+                        tempTagBoard.style.display = "";
+                        tempTagBoard.width = tagBoard.width;
+                        tempTagBoard.height = tagBoard.height;
+
+                        var context = tempTagBoard.getContext("2d");  
+                        tempStage = new Kinetic.Stage(tempTagBoard);
+                        tempStage.setDrawStage(function() {
+                            tempStage.beginRegion();
+                            context.beginPath();
+                            if (points_arr.length == 2) {                            
+                                otherPoints = getOtherPoints(points_arr);
+                                context.moveTo(points_arr[0][0], points_arr[0][1]);                    
+                                context.lineTo(otherPoints[0][0], otherPoints[0][1]);
+                                context.lineTo(points_arr[1][0], points_arr[1][1]); 
+                                context.lineTo(otherPoints[1][0], otherPoints[1][1]);
+                                context.lineTo(points_arr[0][0], points_arr[0][1]);    
+                            }
+                            else {
+                                for (var i = 1; i < points_arr.length; i++) { 
+                                    if (i == 0) {
+                                        context.moveTo(points_arr[i][0],points_arr[i][1]);
+                                    }
+                                    else {
+                                        context.lineTo(points_arr[i][0],points_arr[i][1]);
+                                    }
+                                }
+                            }
+                            
+                            context.closePath();
+
+                            if (color == "transparent") {                  
+                                context.strokeStyle = "black";
+                                context.stroke();
+                            }
+                            else {
+                                context.fillStyle = color;
+                                context.fill();
+                            }
+
+                            tempStage.addRegionEventListener("onmouseout", function() {                              
+                                tempTagBoard.style.display = "none";
+                                tooltip.hide();
+                            });                           
+    
+                            tempStage.closeRegion();
+                        });
+                        
+                    });
+                    myStage.closeRegion();
+                {% endfor %}
+                tagBoard.style.display = "";
+            });
+        }
+        
+        //Sets up tag array
+        function setupTags() { 
+            var tags = new Array();               
+                {% for tuple in tagTuples %}
+                    var tagHash = new Array(); 
+                    tagHash['color'] = "{{tuple.0.color}}";
+                    {% for point in tuple.1 %}
+                        {% if forloop.counter0|isZero %}
+                        tagHash['points'] = [[{{point.pointX}},{{point.pointY}}]];
+                        {% else %}                       
+                        tagHash['points'].push([{{point.pointX}},{{point.pointY}}]);
+                        {% endif %}
+                    {% endfor %}  
+                    tags.push(tagHash);
+                {% endfor %}
+            return tags;
+        }
+
+        // determines if the select tool is polygon or rectangle
+        function setDraw(type) {
+            if (type == "poly") {
+                canvas.onmousedown = startPoly;
+                canvas.onmouseup = finishPoly;
+                canvas.onmousemove = addToPoly;
+                shape = "poly";
+            }
+            else if (type == "rect") {
+                canvas.onmousedown = startRect;
+                canvas.onmouseup = finishRect;
+                canvas.onmousemove = moveRect;
+                shape = "rect";
+            }
+        }
+</script>

@@ -1,0 +1,7 @@
+##gff-version 3
+#!gff-spec-version 1.20
+#!processor NCBI annotwriter
+##sequence-region NC_015407.1 1 1840
+##species http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=862259
+NC_015407.1	RefSeq	region	1	1840	.	+	.	ID=id0;Dbxref=taxon:862259;Is_circular=true;gbkey=Src;genome=plasmid;mol_type=genomic DNA;plasmid-name=pMmc-95010;strain=95010
+###

@@ -1,0 +1,86 @@
+{% load template_tags %}
+
+<head>
+    <style>
+        body {
+            background-color: lightgray;
+        }        
+        img.imageDisplay {
+            border: 1px solid black;
+        }
+        
+        img.imageDisplay:hover {
+            border: 1px solid blue;
+        }
+
+        div.description {
+            text-align: center;
+            color: white;
+        }
+        
+        td.table_cell {
+            vertical-align: top;
+            width: 200px;
+            border: 2px solid black;
+            background-image: url(/static_site/gradient.png);
+            background-repeat: repeat-vertical;
+        }
+        
+        img#left_arrow {
+            border: 0;
+        }
+        
+        img#right_arrow {
+            border: 0;
+        }
+        
+        a.pager {
+            margin-left: 5px;
+            margin-right: 5px;
+            font-family:"Times New Roman", Times, serif;
+            font-size: 20px;
+        }
+        
+        a.pager:hover {
+            border: 1px solid black;
+            padding: 1px;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>    
+        {% for picture in picture_list %}
+            <td class="table_cell">
+                <div><a href= "/picture_editor/{{picture.picture_id.pk}}/" >                
+                    <img class = "imageDisplay" src= "{{MEDIA_URL}}{{picture.picture_id.imageName}}" width=180px height=130px></img>
+                    </a>
+                </div>
+                <div class = "description"><span> {{picture.picture_id.description}} </span></div>
+            </td>
+            {% if forloop.counter|mod:num_items_per_row %}
+                </tr><tr class = "table_row">
+            {% endif %}
+        {% endfor %}
+        </tr>
+    </table>
+    <div>
+        {% if pageIndex|isGreaterThan:1 %}
+        <a href = "/pictures/{{pageIndex|getRangePrev:picsPerPage}}/"><img id = "left_arrow" src = "/static_site/arrow-left.png" width = 25 height = 25></img></a>
+        {% else %}
+        <a href = "/pictures/{{pageIndex|getRange:picsPerPage}}/"><img id = "left_arrow" src = "/static_site/arrow-left.png" width = 25 height = 25></img></a>
+        {% endif %}
+            {% for page in pageIndex|firstPageNums %}
+            <a class = "pager" href="/pictures/{{page|getRange:picsPerPage}}/">{{page}}</a>    
+            {% endfor %}
+            <a class = "pager" id = "currentPage" href="/pictures/{{pageIndex|getRange:picsPerPage}}/">{{pageIndex}}</a>
+            {% for page in pageIndex|lastPageNums:numPages %}
+            <a class = "pager" href="/pictures/{{page|getRange:picsPerPage}}/">{{page}}</a>
+            {% endfor %}
+        {% if pageIndex|isLessThan:numPages %}    
+        <a href = "/pictures/{{pageIndex|getRangeNext:picsPerPage}}/"><img id = "right_arrow" src = "/static_site/arrow-right.png" width = 25 height = 25 ></img></a>
+        {% else %}
+        <a href = "/pictures/{{pageIndex|getRange:picsPerPage}}/"><img id = "right_arrow" src = "/static_site/arrow-right.png" width = 25 height = 25 ></img></a>
+        {% endif %}
+    </div>
+</body>
