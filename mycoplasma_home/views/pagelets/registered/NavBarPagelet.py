@@ -16,7 +16,7 @@ class NavBarPagelet(PageletBase):
 		Returns: Dictionary of arguments for rendering this pagelet
 	'''
 	def doProcessRender(self, request):
-		self.setLayout('admin/navBar.html')
+		self.setLayout('registered/navBar.html')
 
 		optionsList = NavBarOption.objects.all().order_by('rank')
 		bannertype_obj = PictureTypes.objects.get(imageType__exact="banner")

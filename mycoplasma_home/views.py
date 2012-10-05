@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from mycoplasma_home.models import NavBarOption, Pictures, PictureTypes, PictureProps
-from mycoplasma_home.models import TagShape, TagPoint, TagGroup
+from mycoplasma_home.models import TagPoint, TagGroup
 from mycoplasma_home.models import PictureDefinitionTag, GenomeUpload, BlastUpload, Landmark
 
 from multiuploader.models import Image

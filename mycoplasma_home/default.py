@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class NavBarOption(models.Model):
     optionName = models.CharField(max_length=20)
     href = models.CharField(max_length=100)

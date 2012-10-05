@@ -13,10 +13,10 @@ import shutil
 from GenomeDBDiff import GenomeDBDiff
 import GenomeDBUtil
 from SubProcess import runProgram
-os.putenv('DJANGO_SETTINGS_MODULE', '/var/www/mycoplasma_site/settings.py')
-from django.conf import settings
 from Bio import GenBank
 from BCBio.GFF import GFFExaminer
+from django.conf import settings
+from GFFRewriter import GFFRewriter
 
 NCBI = 'ftp.ncbi.nlm.nih.gov'
 MYCOPLASMA_DIR = 'genomes/Bacteria'
@@ -40,18 +40,19 @@ class GenomeDBUpdater:
     '''
     def update(self):
         # connect to the location of the Mycoplasma genomes
-        self.__connectToNCBI()
+        #self.__connectToNCBI()
         
         # get the new files list of this directory
-        newMycoDirs = self.__findMycoplasmaDirs()
+        #newMycoDirs = self.__findMycoplasmaDirs()
             
         # download the new Mycoplasma files
-        self.__remoteSync(newMycoDirs)
+        #self.__remoteSync(newMycoDirs)
         
-        self.ftp.quit()
+        #self.ftp.quit()
         
         # perform a simple diff function to find files that have changed
         dbDiff = self.__findLocalDiffList()
+        #self.report.addLogEntry('New organisms found: ' + str(dbDiff.getNewOrganisms()))
         
         # process the files that have changed for Blast results
         self.__processFastaFilesNotNew(dbDiff.getUnchangedFastaFiles(), dbDiff.getChangedFastaFiles())
@@ -201,7 +202,7 @@ class GenomeDBUpdater:
                 if (nucleotideExists):
                     shutil.copytree(nucleotideDB, NEW_GENOMIC_DATA_DIR + fileDir)
                 else:
-                    GenomeDBUtil.runFormatDB(os.path.basename(fasta), fileDir, NEW_GENOMIC_DATA_DIR, protein=False)
+                    GenomeDBUtil.runFormatDB(os.path.basename(fasta), NEW_GENOMIC_DATA_DIR + fileDir, protein=False)
             elif(extension == 'faa'):            
                 # check to see if the proteinDB directory exists
                 # for this organism already
@@ -226,6 +227,22 @@ class GenomeDBUpdater:
             dbName = os.path.splitext(os.path.basename(gff))[0] + '.db'
             dbName = os.path.join(loc, dbName)
             
+            gffRewriter = GFFRewriter(filename=gff, outfile=gff+".sorted.prepared" , accession=genbank_id)
+    
+            gffRewriter.addUnknownCvTerms({
+                'user' : settings.DATABASES['chado']['USER'], 
+                'password' : settings.DATABASES['chado']['PASSWORD'], 
+                'db' : settings.DATABASES['chado']['NAME']
+            })
+        
+            gffRewriter.addColor({
+                'user' : settings.DATABASES['chado']['USER'],
+                'password' : settings.DATABASES['chado']['PASSWORD'],
+                'db' : 'MyGO'
+            })
+        
+            error = gffRewriter.getError()
+            
             # run the sqlite database loader to be able to add it to GBrowse
             # since the name should be preserved, no changes need to be made
             # to the GBrowse configuration file
@@ -236,12 +253,13 @@ class GenomeDBUpdater:
             gbk = os.path.join(os.path.splitext(gff)[0], '.gbk')
             record = parser.parse(open(gbk))
             organismName = record.organism
+            organismDir = os.path.basename(loc)
             
-            GenomeDBUtil.editGBrowseEntry(gff, dbName, organismName)
+            GenomeDBUtil.editGBrowseEntry(gff, dbName, organismDir, organismName)
             
             # now edit the record in Chado
             args= ['--organism', organismName, "--gfffile", gff, "--dbname", settings.DATABASES['chado']['NAME'], "--dbuser", settings.DATABASES['chado']['USER'], "--dbpass", settings.DATABASES['chado']['PASSWORD'], "--random_tmp_dir"]
-            runProgram('gmod_bulk_uploader.pl', args)
+            runProgram('gmod_bulk_load_gff3.pl', args)
     
     '''
         Adds new organisms to the Chado and GBrowse and creates the BLAST databases
@@ -249,6 +267,7 @@ class GenomeDBUpdater:
     def __processGffFilesNew(self, newOrganismDirs):
         for newOrganism in newOrganismDirs:
             # start by creating the BLAST database
+            newOrganism = os.path.join(NEW_GENOMIC_DATA_DIR, newOrganism)
             print newOrganism
             organismFiles = os.walk(newOrganism).next()[2]
             faa = None
@@ -257,22 +276,24 @@ class GenomeDBUpdater:
             gbk = None
             for organismFile in organismFiles:
                 extension = os.path.splitext(organismFile)[1]
-                if (extension == 'ffn'):
+                if (extension == '.ffn'):
                     ffn = organismFile
-                elif (extension == 'faa'):
+                elif (extension == '.faa'):
                     faa = organismFile
-                elif (extension == 'gff'):
+                elif (extension == '.gff'):
                     gff = organismFile
-                elif (extension == 'gbk'):
+                elif (extension == '.gbk'):
                     gbk = organismFile
                 if (faa and ffn and gff and gbk):
                     break
             
             if (faa):
-                GenomeDBUtil.runFormatDB(os.path.basename(faa), newOrganism, NEW_GENOMIC_DATA_DIR, protein=True)
+                GenomeDBUtil.runFormatDB(os.path.basename(faa), newOrganism, protein=True)
+                self.report.addLogEntry('Ran formatdb successully on ' + faa)
             if (ffn):
-                GenomeDBUtil.runFormatDB(os.path.basename(ffn), newOrganism, NEW_GENOMIC_DATA_DIR, protein=False)
-            
+                GenomeDBUtil.runFormatDB(os.path.basename(ffn), newOrganism, protein=False)
+                self.report.addLogEntry('Ran formatdb successully on ' + ffn)
+                
             # process the gff and genbank files for creating the databases
             if (gff and gbk):
                 # create the sqlite database for GBrowse and create the configuration file
@@ -281,23 +302,47 @@ class GenomeDBUpdater:
                 dbName = os.path.join(newOrganism, dbName)
                 gff = os.path.join(newOrganism, gff)
                 
-                args = ['-a', 'DBI::SQLite', '-c', '-f', '-d', dbName, gff]
-                runProgram('bp_seqfeature_load.pl', args)
-                
                 parser = GenBank.RecordParser()
-                gbk = os.path.join(os.path.splitext(gff)[0], '.gbk')
+                gbk = os.path.join(newOrganism, gbk)
                 record = parser.parse(open(gbk))
                 organismName = record.organism
+                accession = record.accession[0]
+                self.report.addLogEntry('Found organism name ' + organismName)
                 
                 # create a brand new GBrowse configuration file
                 examiner = GFFExaminer()
                 gffHandle = open(gff)
                 landmark = examiner.available_limits(gffHandle)['gff_id'].keys()[0][0]
-                GenomeDBUtil.createNewGBrowseEntry(landmark, dbName, organismName)
                 
-                # now edit the record in Chado
-                args= ['--organism', organismName, "--gfffile", gff, "--dbname", settings.DATABASES['chado']['NAME'], "--dbuser", settings.DATABASES['chado']['USER'], "--dbpass", settings.DATABASES['chado']['PASSWORD'], "--random_tmp_dir"]
-                runProgram('gmod_bulk_uploader.pl', args)
+                gffRewriter = GFFRewriter(filename=gff, outfile=gff+".sorted.prepared" , accession=accession)
+    
+                gffRewriter.addUnknownCvTerms({
+                    'user' : settings.DATABASES['chado']['USER'], 
+                    'password' : settings.DATABASES['chado']['PASSWORD'], 
+                    'db' : settings.DATABASES['chado']['NAME']
+                })
+            
+                gffRewriter.addColor({
+                    'user' : settings.DATABASES['chado']['USER'],
+                    'password' : settings.DATABASES['chado']['PASSWORD'],
+                    'db' : 'MyGO'
+                })
+            
+                error = gffRewriter.getError()
+                
+                gff = gff + ".sorted.prepared"
+                
+                args = ['-a', 'DBI::SQLite', '-c', '-f', '-d', dbName, gff]
+                runProgram('bp_seqfeature_load.pl', args)
+                self.report.addLogEntry('Successfully created sqlite database for ' + str(gff))
+                
+                organismDir = os.path.basename(newOrganism)
+                GenomeDBUtil.createNewGBrowseEntry(landmark, dbName, organismDir, organismName)
+                self.report.addLogEntry('Added new GBrowse entry for ' + organismName)
+                
+                # now edit the record in Chado by first adding the organism and then adding
+                # bulk loading the information from gff3
+                GenomeDBUtil.addOrganismToChado(gff, organismName)
                         
             
         

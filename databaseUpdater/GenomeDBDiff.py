@@ -8,7 +8,7 @@
 '''
 import os
 from filecmp import cmp as diff
-os.putenv('DJANGO_SETTINGS_MODULE', '/var/www/mycoplasma_site/settings.py')
+import GenomeDBUtil
 from django.conf import settings 
 
 class GenomeDBDiff:

@@ -45,7 +45,7 @@ class SubProcessOutput:
     @param args: the arguments to the program to be run
 '''
 def runProgram(name, args):
-    args.append(name)
+    args.insert(0, name)
     proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output = proc.communicate()
     

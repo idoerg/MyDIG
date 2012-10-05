@@ -54,5 +54,7 @@ Instructions:
 
 6. Once all databases created, in /var/www/mycoplasma_site/ run: python manage.py syncdb
 
-*7. Test to see what is working: If GBrowse is not working check your machine's URL for GBrowse then go into 
+7. Alter the table "organism" in the chado database using the statement: ALTER TABLE organism DROP CONSTRAINT "organism_c1". Otherwise, the database will not allow the same species in value in the species column, which we need.
+
+*8. Test to see what is working: If GBrowse is not working check your machine's URL for GBrowse then go into 
     /var/www/mycoplasma_site/templates/mycoplasma_home/gbrowse.html and replace the iframe src with that URL

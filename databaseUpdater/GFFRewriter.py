@@ -102,7 +102,7 @@ class GFFRewriter:
                 if (hamapName):
                     hamapFile = open(hamapName,'r')
                 else:
-                    hamapFile = open('/var/www/mycoplasma_site/mycoplasma_home/static/python_scripts/hamap_families.dat', 'r')
+                    hamapFile = open('/var/www/mycoplasma_site/databaseUpdater/hamap_families.dat', 'r')
             except IOError:
                 self.error_msg = "Could not find the hamap file for coloring"
                 self.error = True

@@ -1,0 +1,12 @@
+.workbench-area {
+	background-color: white;
+	border-radius: 7px 7px 7px 7px;
+}
+
+#right-toolbar {
+	float: right;
+}
+
+#left-toolbar {
+	float: left;
+}

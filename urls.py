@@ -25,7 +25,7 @@ urlpatterns = patterns('mycoplasma_home.views.applications.public',
     url(r'^search/$', 'Search.Application.renderAction')
 )
 
-urlpatterns += patterns('mycoplasma_home.views.applications.admin',
+urlpatterns += patterns('mycoplasma_home.views.applications.registered',
     url(r'^images/editor/submit/$', 'SubmitImageTag.Application.renderAction'),
     url(r'^administration/$', 'Administration.Application.renderAction'),
     #url(r'^administration/gbrowse_manager/$', 'mycoplasma_home.views.gbrowse_manager'),
@@ -35,6 +35,11 @@ urlpatterns += patterns('mycoplasma_home.views.applications.admin',
     #url(r'^administration/image_manager/get_slider/$', 'mycoplasma_home.views.get_slider'),
     #url(r'^administration/image_manager/move_pending_image/$','mycoplasma_home.views.move_pending_image')
 )
+'''
+urlpatterns += patterns('mycoplasma_home.views.applications.admin',
+    # admin patterns for urls
+)
+'''
 
 urlpatterns += patterns('', 
     url(r'^admin/', include(admin.site.urls)),

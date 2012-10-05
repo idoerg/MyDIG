@@ -5,12 +5,24 @@
     Author: Andrew Oberlin
     Date: September 10, 2012
 '''
-import os
 from SubProcess import runProgram
 import shutil
 from BCBio.GFF import GFFExaminer
-os.putenv('DJANGO_SETTINGS_MODULE', '/var/www/mycoplasma_site/settings.py')
-from django.conf import settings 
+
+import os
+import sys
+
+path = '/var/www/mycoplasma_site'
+otherpath = '/var/www'
+sys.path.append(path)
+
+sys.path.append(otherpath)
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mycoplasma_site.settings'
+
+from django.conf import settings
+from mycoplasma_home.models import Organism
+from django.core.exceptions import ObjectDoesNotExist
 
 GBROWSE_DIR='/etc/gbrowse2/'
 
@@ -22,7 +34,7 @@ GBROWSE_DIR='/etc/gbrowse2/'
     @param loc: the organism directory of the fasta file
     @param protein: whether or not this is a protein database
 ''' 
-def runFormatDB(self, fastaName, loc, newOrOldDir, protein=False):
+def runFormatDB(fastaName, loc, protein=False):
         option = 'F'
         dbDir = 'nucleotideDB'
         if (protein):
@@ -31,17 +43,39 @@ def runFormatDB(self, fastaName, loc, newOrOldDir, protein=False):
             
         # must move the file into the new directory to correctly place the
         # formatdb information
-        loc = newOrOldDir + loc
         newLoc = os.path.join(loc, dbDir)
         originalFile = os.path.join(loc, fastaName)
         newFile = os.path.join(newLoc, fastaName)
         
+        os.mkdir(newLoc)
         shutil.move(originalFile, newLoc)
              
-        args = ['-p', option, '-i', ]
+        args = ['-p', option, '-i', newFile]
         runProgram('formatdb', args)
         
         shutil.move(newFile, loc)
+
+'''
+
+'''
+def addOrganismToChado(gff, organismName):
+    try:                   
+        organism = Organism.objects.get(common_name=organismName)                  
+    except ObjectDoesNotExist:
+        organisms = Organism.objects.order_by('-organism_id')
+        nextId = 0
+        if (len(organisms) > 0):  
+            nextId = organisms[0].organism_id + 1
+        organismNameArr = organismName.split()
+        if (len(organismNameArr) < 2):
+            raise Exception('Organism name does not have enough tokens to find a genus and species: ' + organismName)
+        genus = organismNameArr[0]
+        species = organismNameArr[1]
+        organism = Organism(organism_id=nextId, abbreviation=genus[0] + '. ' + species, genus=genus, species=species, common_name=organismName)                    
+        organism.save()
+            
+    args= ['--organism', organismName, "--gfffile", gff, "--dbname", settings.DATABASES['chado']['NAME'], "--dbuser", settings.DATABASES['chado']['USER'], "--dbpass", settings.DATABASES['chado']['PASSWORD'], "--random_tmp_dir"]
+    runProgram('gmod_bulk_load_gff3.pl', args)
         
 '''
     Changes a current entry in GBrowse for this gffFile
@@ -50,12 +84,11 @@ def runFormatDB(self, fastaName, loc, newOrOldDir, protein=False):
     @param dbName: the basename of the database name file
     @param organismName: the name of the organism being added
 '''
-def editGBrowseEntry(gffFile, dbName, organismName):
+def editGBrowseEntry(gffFile, dbName, organismDir, organismName):
     examiner = GFFExaminer()
     gffHandle = open(gffFile)
     landmark = examiner.available_limits(gffHandle)['gff_id'].keys()[0][0]
-    organism = organismName.replace(' ', '_').lower()
-    gbrowseConf = os.path.join(GBROWSE_DIR, organism + '.conf')
+    gbrowseConf = os.path.join(GBROWSE_DIR, organismDir.lower() + '.conf')
     if (os.path.isfile(gbrowseConf)):
         conf = open(gbrowseConf, 'r')
         confLines = conf.readlines()
@@ -65,7 +98,7 @@ def editGBrowseEntry(gffFile, dbName, organismName):
         for(counter, line) in enumerate(confLines):
             if (line[:15] == 'initial landmark'):
                 initialLandmarkArr = line.split("=")
-                initialLandmarkArr[1] = ' ' + landmark + ':1...50000\n'
+                initialLandmarkArr[1] = ' ' + landmark + ':1..50,000\n'
                 confLines[counter] = '='.join(initialLandmarkArr)
                 changedInitial = True
             elif(line[:8] == 'examples'):
@@ -80,7 +113,7 @@ def editGBrowseEntry(gffFile, dbName, organismName):
         conf.close()             
     else:
         dataSource = os.path.join(os.path.dirname(gffFile), dbName)
-        createNewGBrowseEntry(landmark, dataSource, organismName)
+        createNewGBrowseEntry(landmark, dataSource, organismDir, organismName)
         
 '''
     Uses the template file in the GBrowse directory to create a new
@@ -90,15 +123,14 @@ def editGBrowseEntry(gffFile, dbName, organismName):
     @param dataSource: the absolute path of the data source (sqlite database)
     @param organismName: the name of the organism being added to GBrowse
 '''
-def createNewGBrowseEntry(landmark, dataSource, organismName):
+def createNewGBrowseEntry(landmark, dataSource, organismDir, organismName):
     try:
-        templateConfFile = open(os.path.join(GBROWSE_DIR, 'mycoplasma_template.conf'), 'r')
+        templateConfFile = open(os.path.join(GBROWSE_DIR, 'mycoplasmaTemplate.conf'), 'r')
         templateConf = templateConfFile.readlines()
         templateConfFile.close()
     except:
         raise GBrowseEntryCreationException("Could not find the template file for adding the new entry to GBrowse")
     
-    organism = organismName.replace(' ', '_').lower()
     changedDBArgs = False
     changedInitial = False
     changedExample = False
@@ -106,7 +138,7 @@ def createNewGBrowseEntry(landmark, dataSource, organismName):
         if (line[:16] == 'initial landmark'):
             print line[:16]
             initialLandmarkArr = line.split("=")
-            initialLandmarkArr[1] = ' ' + landmark + ':1...50000\n'
+            initialLandmarkArr[1] = ' ' + landmark + ':1..50,000\n'
             templateConf[counter] = '='.join(initialLandmarkArr)
             changedInitial = True
         elif(line[:8] == 'examples'):
@@ -124,15 +156,15 @@ def createNewGBrowseEntry(landmark, dataSource, organismName):
             break
 
     try:
-        newConf = open(os.path.join(GBROWSE_DIR, organism + ".conf"), 'w')
+        newConf = open(os.path.join(GBROWSE_DIR, organismDir.lower() + ".conf"), 'w')
         newConf.writelines(templateConf)
         newConf.close()
     except:
-        raise GBrowseEntryCreationException("Could not create a new configuration file for " + organism)
+        raise GBrowseEntryCreationException("Could not create a new configuration file for " + organismName)
 
     try:
         gbrowseConf = open(os.path.join(GBROWSE_DIR, 'GBrowse.conf'), 'a')
-        appendStr = "\n[" + organism.lower() + "]\ndescription  = " + organismName + "\npath         = " + organism + ".conf"
+        appendStr = "\n[" + organismDir.lower() + "]\ndescription  = " + organismName + "\npath         = " + organismDir.lower() + ".conf\n"
 
         gbrowseConf.write(appendStr)
         gbrowseConf.close()
