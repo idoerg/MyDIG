@@ -1,0 +1,59 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/workbench.css" />
+	<script type="text/javascript" src="{{ STATIC_URL }}js/collapser/collapser.js"></script>
+</head>
+<body>
+	<div id="left-toolbar" class="toolbar-container">
+		<div class="workbench-area toolbar">
+			<div class="toolbar-header">
+				<div><img class="collapse" src="{{ STATIC_URL }}images/arrow_down.png"></img></div>
+				<div><span class="toolbar-title">My Pictures</span></div>
+				<div class="toolbar-options">
+					<span>Public</span><input id="public-pictures" name="public-pictures" type="checkbox" />
+					<span>Private</span><input id="private-pictures" name="private-pictures" type="checkbox" />
+				</div>
+			</div>
+			<div class="toolbar-body">
+				BODY
+			</div>
+		</div>
+		<div class="workbench-area toolbar">
+			<div class="toolbar-header">
+				<div><img class="collapse" src="{{ STATIC_URL }}images/arrow_down.png"></img></div>
+				<div><span class="toolbar-title">Recently Viewed Images</span></div>
+			</div>
+			<div class="toolbar-body">
+				BODY
+			</div>
+		</div>
+	</div>
+	<div id="work-area" class="workbench-area">
+		
+	</div>
+	<div id="right-toolbar" class="toolbar-container">
+		<div class="workbench-area toolbar">
+			<div class="toolbar-header">
+				<div><img class="collapse" src="{{ STATIC_URL }}images/arrow_down.png"></img></div>
+				<div><span class="toolbar-title">My Tags</span></div>
+				<div class="toolbar-options">
+					<span>Public</span><input id="public-pictures" name="public-pictures" type="checkbox" />
+					<span>Private</span><input id="private-pictures" name="private-pictures" type="checkbox" />
+				</div>
+			</div>
+			<div class="toolbar-body">
+				BODY
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	$('.toolbar-header').collapser({
+		selector: '.toolbar-body',
+		siblings: true
+	});
+
+	$(window).on('resize', function() {
+		var workAreaWidth = $(window).width() - (40 + $('#right-toolbar').width() + $('#left-toolbar').width());
+		$('#work-area').width(workAreaWidth > 200 ? workAreaWidth : 200);
+	});
+</script>

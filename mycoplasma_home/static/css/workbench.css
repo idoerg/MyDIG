@@ -1,12 +1,66 @@
 .workbench-area {
 	background-color: white;
 	border-radius: 7px 7px 7px 7px;
+	margin-top: 10px;
+}
+
+#work-area {
+	display: inline-block;
+	height: 500px;
+	width: 703px;
 }
 
 #right-toolbar {
+	display: inline-block;
+	margin-right: 10px;
+	width: 260px;
 	float: right;
+	margin-right: 10px;
 }
 
 #left-toolbar {
+	display: inline-block;
+	margin-left: 10px;
+	width: 260px;
 	float: left;
+	margin-right: 10px;
+}
+
+.toolbar {
+	padding: 3px;	
+}
+
+.toolbar-header {
+	min-height: 25px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #CCC;	
+}
+
+.toolbar-header:hover {
+	cursor: pointer;	
+}
+
+.toolbar-header > div {
+	display: inline-block;
+}
+
+.collapse {
+	padding: 3px 5px 3px 8px;
+}
+
+.toolbar-title {
+	font-family: Lucida Grande;
+	font-size: 14px;
+}
+
+.toolbar-options {
+	color: #333333;
+    font-family: Lucida Grande;
+    font-size: 10px;
+    float: right;
+}
+
+.toolbar-options > span {
+	vertical-align: super;
 }

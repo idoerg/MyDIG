@@ -12,20 +12,27 @@
 	**/
 	var public_methods = {
 		/**
-			Calls the zoomable plugin on initialization and only does so on load of teh
+			Calls the zoomable plugin on initialization and only does so on load of the
 			image so that it can properly get the height and width
 		**/
 		init: function(options) {
 			return this.each(function() {
 				$(this).data('collapsed', false);
 				if (options.selector) {
-					var $element = $(options.selector);
+					var selector = options.selector;
+					var $element;
+					if (options.siblings) {
+						$element = $(this).siblings(options.selector);
+					}
+					else {
+						$element = $(options.selector);
+					}
 					$element.show();
 					$(this).on('click', function() {
 						if ($(this).data('collapsed')) {
 							$(this).data('collapsed', false);
 							$element.slideDown();
-							var $collapseImg = $(this).children('img.collapse');
+							var $collapseImg = $(this).find('img.collapse');
 							if ($collapseImg.length > 0) {
 								var prevSrc = $collapseImg.attr('src');
 								$collapseImg.attr('src', prevSrc.replace('arrow_right', 'arrow_down'));
@@ -40,6 +47,10 @@
 								$collapseImg.attr('src', prevSrc.replace('arrow_down', 'arrow_right'));
 							}
 						}
+					});
+					
+					$(this).find('input', 'button').on('click', function(event) {
+						event.stopPropagation();
 					});
 				}
 				else {
