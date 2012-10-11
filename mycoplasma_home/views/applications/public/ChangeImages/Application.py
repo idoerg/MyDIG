@@ -7,7 +7,7 @@
 '''
 from renderEngine.AjaxApplicationBase import AjaxApplicationBase
 from django.views.decorators.csrf import csrf_exempt
-from mycoplasma_home.models import PictureProps, Organism, PictureDefinitionTag
+from mycoplasma_home.models import PictureProp, Organism, PictureDefinitionTag
 
 class Application(AjaxApplicationBase):
 	def doProcessRender(self, request):
@@ -30,7 +30,7 @@ class Application(AjaxApplicationBase):
 				organism = request.POST['organism']
 			
 			if (allPics == True):
-				picture_props = PictureProps.objects.filter(type_id__imageType__exact="database_photo")[rangeX:rangeY+1]
+				picture_props = PictureProp.objects.filter(type_id__imageType__exact="database_photo")[rangeX:rangeY+1]
 				picture_list = list()                
 				for prop in picture_props:
 					pictureModel = prop.picture_id

@@ -5,7 +5,7 @@
 	Date: July 23, 2012
 '''
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.models import NavBarOption, PictureTypes, PictureProps
+from mycoplasma_home.models import NavBarOption, PictureType, PictureProp
 
 class NavBarPagelet(PageletBase):
 	'''
@@ -24,8 +24,8 @@ class NavBarPagelet(PageletBase):
 			is_admin_page = request.GET['add_login']
 		
 		optionsList = NavBarOption.objects.all().order_by('rank')
-		bannertype_obj = PictureTypes.objects.get(imageType__exact="banner")
-		banner_img = PictureProps.objects.get(type_id__exact=bannertype_obj.pk).picture_id
+		bannertype_obj = PictureType.objects.get(imageType__exact="banner")
+		banner_img = PictureProp.objects.get(type_id__exact=bannertype_obj.pk).picture_id
 		banner_url = banner_img.imageName
 
 		return {

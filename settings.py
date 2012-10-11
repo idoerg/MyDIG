@@ -20,12 +20,12 @@ DATABASES = {
     },
     
     'chado': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'chado',
-        'USER': 'mycoplasma', 
-        'PASSWORD': '5i72c44u', 
-        'HOST': '', 
-        'PORT': '', 
+        'USER': 'mycoplasma',
+        'PASSWORD': '5i72c44u',
+        'HOST': '',
+        'PORT': '',
     }
 }
 

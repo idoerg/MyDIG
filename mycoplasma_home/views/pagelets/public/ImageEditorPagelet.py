@@ -6,7 +6,7 @@
     Date: August 5, 2012
 '''
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.models import Pictures, TagGroup, TagPoint
+from mycoplasma_home.models import Picture, TagGroup, TagPoint
 from django.core.exceptions import ObjectDoesNotExist
 
 class ImageEditorPagelet(PageletBase):
@@ -21,7 +21,7 @@ class ImageEditorPagelet(PageletBase):
         self.setLayout('public/imageEditor.html')
         try:
             imageKey = request.REQUEST['imageKey']
-            image = Pictures.objects.get(pk__exact=imageKey)      
+            image = Picture.objects.get(pk__exact=imageKey)      
             
             tagGroups = TagGroup.objects.filter(picture__exact=image)
             

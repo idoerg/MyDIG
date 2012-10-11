@@ -127,6 +127,7 @@ form#search {
 
 #login {
 	float: left;
+	padding-top: 20px;
 }
 
 td.login_title {
@@ -155,11 +156,6 @@ ul#user_options {
 	list-style-type: none;
 	padding-left: 5px;
 	margin-top: 2px;
-}
-
-div.logged_in_msg {
-	color: white;
-	font-size: 15;
 }
         
 li.logout {

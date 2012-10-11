@@ -5,9 +5,12 @@
 }
 
 #work-area {
-	display: inline-block;
 	height: 500px;
 	width: 703px;
+}
+
+#center-work-area {
+	display: inline-block;	
 }
 
 #right-toolbar {
@@ -34,11 +37,11 @@
 	min-height: 25px;
 	padding-top: 3px;
 	padding-bottom: 3px;
-	border-bottom: 1px solid #CCC;	
+	border-bottom: 1px solid #CCC;
 }
 
 .toolbar-header:hover {
-	cursor: pointer;	
+	cursor: pointer;
 }
 
 .toolbar-header > div {
@@ -63,4 +66,31 @@
 
 .toolbar-options > span {
 	vertical-align: super;
+}
+
+.image-thumbnail-container {
+	overflow-y: auto;
+	min-height: 100px;
+	max-height: 250px;
+}
+
+.my-pictures-image-holder {
+	height: 100px;
+	width: 100px;
+	overflow: hidden;
+	display: inline-block;
+	padding: 5px;
+	background-color: #F5F5F5;
+}
+
+.my-pictures-image-holder:hover {
+	background-color: #AAAAAA;
+}
+
+.my-pictures-image {
+	position: relative;
+}
+
+.my-pictures-image:hover {
+	cursor: pointer;
 }

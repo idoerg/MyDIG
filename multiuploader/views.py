@@ -63,7 +63,7 @@ def multiuploader(request):
     """
     Main Multiuploader module
     """
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated():
         log.info('received POST to main multiuploader view')
         if request.FILES == None:
             return HttpResponseBadRequest('Must have files attached!')
@@ -74,7 +74,7 @@ def multiuploader(request):
         (wrapped_file, filename) = handleUpload(file);
         #filename = wrapped_file.name
         file_size = wrapped_file.file.size
-       # log.info ('Got file: "%s"' % str(filename))
+        # log.info ('Got file: "%s"' % str(filename))
 
         #writing file manually into model
         #because we don't need form of any type.
@@ -82,6 +82,7 @@ def multiuploader(request):
         image.filename=str(filename)
         image.image=wrapped_file.file
         image.key_data = image.key_generate
+        image.user = request.user
         image.save()
         log.info('File saving done')
 

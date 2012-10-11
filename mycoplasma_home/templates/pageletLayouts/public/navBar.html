@@ -44,16 +44,11 @@
 	<div class="login_search" id="login">        
 	{% if user.is_authenticated %}
 		<div>
-			<div class="logged_in_msg">Logged in as: {{user.username}}</div>
-			<div>
-				<ul id="user_options">                         
-				{% if user.is_staff %}
-					<li class="logged_in_title_left"><a href="{{ SITE_URL }}administration/">Administration</a></li>    
-				{% endif %}
-					<li class="logout"><a onclick="logout(event)">Log out</a></li> 
-				</ul>
-			</div>
-		</div>       
+			<ul id="user_options">
+				<li class="logged_in_title_left"><a href="{{ SITE_URL }}administration/">Administration</a></li>
+				<li class="logout"><a onclick="logout(event)">Log out</a></li> 
+			</ul>
+		</div>     
 	{% else %}
 	{% if is_admin_page %}
 		<form name="login" method="post" action="{{ SITE_URL }}login_handler/">

@@ -5,7 +5,7 @@
 	Date: July 26, 2012
 '''
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.default import PictureProps
+from mycoplasma_home.default import PictureProp
 
 class ImagesPagelet(PageletBase):
 	'''
@@ -21,7 +21,7 @@ class ImagesPagelet(PageletBase):
 		num_items_row = 5
 		num_items_col = 3
 		picsPerPage = num_items_row * num_items_col	  
-		numPics = PictureProps.objects.filter(type_id__imageType__exact = "database_photo").count()
+		numPics = PictureProp.objects.filter(type_id__imageType__exact = "database_photo").count()
 		numPicPages = numPics/picsPerPage + 1
 		# sets the number of pictures to display in a row of the picture table generated
 

@@ -41,7 +41,7 @@
 						else {
 							$(this).data('collapsed', true);
 							$element.slideUp();
-							var $collapseImg = $(this).children('img.collapse');
+							var $collapseImg = $(this).find('img.collapse');
 							if ($collapseImg.length > 0) {
 								var prevSrc = $collapseImg.attr('src');
 								$collapseImg.attr('src', prevSrc.replace('arrow_down', 'arrow_right'));

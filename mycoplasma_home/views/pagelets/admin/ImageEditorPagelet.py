@@ -7,7 +7,7 @@
 '''
 
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.models import Pictures, TagGroup, TagPoint
+from mycoplasma_home.models import Picture, TagGroup, TagPoint
 from django.core.exceptions import ObjectDoesNotExist
 
 class ImageEditorPagelet(PageletBase):
@@ -23,7 +23,7 @@ class ImageEditorPagelet(PageletBase):
 
         try:
             imageKey = request.REQUEST['imageKey']
-            image = Pictures.objects.get(pk__exact=imageKey)      
+            image = Picture.objects.get(pk__exact=imageKey)      
             
             tagGroups = TagGroup.objects.filter(picture__exact=image)
             
@@ -36,7 +36,7 @@ class ImageEditorPagelet(PageletBase):
                 for tagPoint in tagPoints:
                     points.append([tagPoint.pointX, tagPoint.pointY])
                 
-                color = [group.red, group.green, group.blue]
+                color = [group.color.red, group.color.green, group.color.blue]
                 
                 tagTuples.append({
                     'color' : color,

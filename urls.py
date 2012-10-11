@@ -30,9 +30,9 @@ urlpatterns += patterns('mycoplasma_home.views.applications.registered',
     url(r'^administration/$', 'Administration.Application.renderAction'),
     #url(r'^administration/gbrowse_manager/$', 'mycoplasma_home.views.gbrowse_manager'),
     #url(r'^administration/gbrowse_manager/genome_uploader/$', 'mycoplasma_home.views.genome_uploader'),
-    #url(r'^administration/image_manager/$', 'mycoplasma_home.views.image_manager'),
+    url(r'^administration/imageManager/$', 'ImageManager.Application.renderAction'),
     #url(r'^administration/image_manager/delete_pending_image/$', 'mycoplasma_home.views.delete_pending_image'),
-    #url(r'^administration/image_manager/get_slider/$', 'mycoplasma_home.views.get_slider'),
+    url(r'^administration/imageManager/getSlider/$', 'ImageSlider.Application.renderAction'),
     #url(r'^administration/image_manager/move_pending_image/$','mycoplasma_home.views.move_pending_image')
 )
 '''

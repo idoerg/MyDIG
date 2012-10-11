@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class NavBarOption(models.Model):
     optionName = models.CharField(max_length=20)
@@ -15,30 +16,33 @@ class DropDownItem(models.Model):
     def __unicode__(self):
         return self.itemName
 
-class Pictures(models.Model):
+class Picture(models.Model):
     description = models.TextField()
     imageName = models.ImageField(upload_to="pictures/")
     publication = models.CharField(max_length=50)
     altText = models.TextField()
+    user = models.ForeignKey(User)
+    uploadDate = models.DateTimeField(auto_now_add=True)
+    isPrivate = models.BooleanField(default=False, null=False)
     def __unicode__(self):
         return self.altText
 
-class PictureTypes(models.Model):
+class PictureType(models.Model):
     description = models.CharField(max_length=50)
     imageType = models.CharField(max_length=15)
     def __unicode__(self):
         return self.imageType
 
-class PictureProps(models.Model):
-    picture_id = models.ForeignKey(Pictures)
-    type_id = models.ForeignKey(PictureTypes)
+class PictureProp(models.Model):
+    picture_id = models.ForeignKey(Picture)
+    type_id = models.ForeignKey(PictureType)
     def __unicode__(self):
         return ", ".join((str(self.picture_id), str(self.type_id)))
     class Meta:
         unique_together = ('picture_id','type_id')
 
 class PictureDefinitionTag(models.Model):
-    picture = models.ForeignKey(Pictures)
+    picture = models.ForeignKey(Picture)
     organism_id = models.IntegerField()
     name = models.TextField()
     def __unicode__(self):
@@ -54,7 +58,7 @@ class TagColor(models.Model):
 class TagGroup(models.Model):
     description = models.CharField(max_length=50)
     color = models.ForeignKey(TagColor)
-    picture = models.ForeignKey(Pictures)
+    picture = models.ForeignKey(Picture)
     def __unicode__(self):
         return self.description
     

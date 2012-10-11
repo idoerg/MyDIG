@@ -1,11 +1,12 @@
 from django.db import models
 import random
+from django.contrib.auth.models import User
 
 from django.conf import settings
 try:
     storage = settings.MULTI_IMAGES_FOLDER+'/'
 except AttributeError:
-    storage = 'multiuploader_images/'
+    storage = 'pictures/'
 
 class Image(models.Model):
     """Model for storing uploaded photos"""
@@ -13,6 +14,7 @@ class Image(models.Model):
     image = models.ImageField(upload_to=storage)
     key_data = models.CharField(max_length=90, unique=True, blank=True, null=True)
     upload_date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User)
 
     @property
     def key_generate(self):
@@ -26,4 +28,3 @@ class Image(models.Model):
 
     def __unicode__(self):
         return self.image.name
-

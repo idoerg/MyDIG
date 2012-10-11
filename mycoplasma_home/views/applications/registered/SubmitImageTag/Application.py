@@ -7,7 +7,7 @@
 '''
 from renderEngine.AjaxAdminApplicationBase import AjaxAdminApplicationBase
 from django.views.decorators.csrf import csrf_exempt
-from mycoplasma_home.models import Pictures, TagGroup, TagPoint
+from mycoplasma_home.models import Picture, TagGroup, TagPoint
 
 class Application(AjaxAdminApplicationBase):
 	def doProcessRender(self, request):
@@ -17,7 +17,7 @@ class Application(AjaxAdminApplicationBase):
 				colorIn = request.POST['color']
 				numPoints = int(request.POST['numPoints'])
 				imageKey = request.POST['imageKey']
-				image = Pictures.objects.get(pk__exact=imageKey) 
+				image = Picture.objects.get(pk__exact=imageKey) 
 				pointsArr = list()
 	
 				for i in range(numPoints):

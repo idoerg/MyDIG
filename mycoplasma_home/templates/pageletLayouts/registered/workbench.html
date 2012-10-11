@@ -1,6 +1,12 @@
+{% load template_tags %}
 <head>
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/workbench.css" />
-	<script type="text/javascript" src="{{ STATIC_URL }}js/collapser/collapser.js"></script>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/zoomable.css"></link>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/taggable.css"></link>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/collapser/collapser.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/kineticjs/kinetic-v3.10.0.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/zoomable/zoomable.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/taggable/taggable.js"></script>
 </head>
 <body>
 	<div id="left-toolbar" class="toolbar-container">
@@ -9,12 +15,23 @@
 				<div><img class="collapse" src="{{ STATIC_URL }}images/arrow_down.png"></img></div>
 				<div><span class="toolbar-title">My Pictures</span></div>
 				<div class="toolbar-options">
-					<span>Public</span><input id="public-pictures" name="public-pictures" type="checkbox" />
-					<span>Private</span><input id="private-pictures" name="private-pictures" type="checkbox" />
+					<span>Public</span><input id="public-pictures" name="public-pictures" type="checkbox" checked="checked" />
+					<span>Private</span><input id="private-pictures" name="private-pictures" type="checkbox" checked="checked" />
 				</div>
 			</div>
 			<div class="toolbar-body">
-				BODY
+				<div class="image-thumbnail-container">
+					<div>
+					{% for image in myImages %}
+						<div class="my-pictures-image-holder">
+							<img src="{{ MEDIA_URL }}{{ image.image.imageName }}" name="{{ image.image.pk }}" class="{{ image.permissions }}-image my-pictures-image" />
+						</div>
+						{% if forloop.counter|mod:2 %}
+			                </div><div>
+			            {% endif %}
+					{% endfor %}
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="workbench-area toolbar">
@@ -23,12 +40,15 @@
 				<div><span class="toolbar-title">Recently Viewed Images</span></div>
 			</div>
 			<div class="toolbar-body">
-				BODY
+				<div class="image-thumbnail-container">
+				
+				</div>
 			</div>
 		</div>
 	</div>
-	<div id="work-area" class="workbench-area">
-		
+	<div id="center-work-area">
+		<div id="header">Workbench</div>
+		<div id="work-area" class="workbench-area"></div>
 	</div>
 	<div id="right-toolbar" class="toolbar-container">
 		<div class="workbench-area toolbar">
@@ -36,12 +56,14 @@
 				<div><img class="collapse" src="{{ STATIC_URL }}images/arrow_down.png"></img></div>
 				<div><span class="toolbar-title">My Tags</span></div>
 				<div class="toolbar-options">
-					<span>Public</span><input id="public-pictures" name="public-pictures" type="checkbox" />
-					<span>Private</span><input id="private-pictures" name="private-pictures" type="checkbox" />
+					<span>Public</span><input id="public-pictures" name="public-pictures" type="checkbox" checked="checked" />
+					<span>Private</span><input id="private-pictures" name="private-pictures" type="checkbox" checked="checked" />
 				</div>
 			</div>
 			<div class="toolbar-body">
-				BODY
+				<div class="image-thumbnail-container">
+				
+				</div>
 			</div>
 		</div>
 	</div>
@@ -50,6 +72,49 @@
 	$('.toolbar-header').collapser({
 		selector: '.toolbar-body',
 		siblings: true
+	});
+
+	$('.my-pictures-image').each(function() {
+		var $img = $(this);
+		var $parent = $img.parent();
+		var imgRatio = $img.width()/$img.height();
+		var containerRatio = $parent.width()/$parent.height();
+		if (imgRatio > containerRatio) {
+			$img.css('width', $parent.width());
+			var topVal = ($parent.height() - $img.height())/2;
+			$img.css('top', topVal);
+		}
+		else if (imgRatio <= containerRatio) {
+			$img.css('height', $parent.height());
+			var leftVal = ($parent.width() - $img.width())/2;
+			$img.css('left', leftVal);
+		}
+	});
+
+	$('.my-pictures-image').on('click', function() {		
+		var $imgClone = $(this).clone();
+		var key = $(this).attr('name');
+		
+		$.ajax({
+			url : '{{ SITE_URL }}images/getTags/?imageKey=' + key,
+			type : 'GET',
+			dataType : 'json',
+			success : function(data) {
+				var $workArea = $('#work-area');
+				$workArea.empty();
+				// add workArea clone to the div
+				$workArea.append($imgClone);
+				
+				$($imgClone).taggable({
+			        originalData : data,
+			        parent: $workArea,
+			        imagesUrl: '{{ STATIC_URL }}images/'
+			    });
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert('An error occurred: ' + textStatus);
+			}
+		});
 	});
 
 	$(window).on('resize', function() {
