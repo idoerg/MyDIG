@@ -7,9 +7,10 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/kineticjs/kinetic-v3.10.0.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/zoomable/zoomable.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/taggable/taggable.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/webServiceClient/WebServiceClient.js"></script>
 </head>
 <body>
-	<div id="left-toolbar" class="toolbar-container">
+	<div id="left-toolbar">
 		<div class="workbench-area toolbar">
 			<div class="toolbar-header">
 				<div><img class="collapse" src="{{ STATIC_URL }}images/arrow_down.png"></img></div>
@@ -45,12 +46,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div id="center-work-area">
-		<div id="header">Workbench</div>
-		<div id="work-area" class="workbench-area"></div>
-	</div>
-	<div id="right-toolbar" class="toolbar-container">
 		<div class="workbench-area toolbar">
 			<div class="toolbar-header">
 				<div><img class="collapse" src="{{ STATIC_URL }}images/arrow_down.png"></img></div>
@@ -67,13 +62,19 @@
 			</div>
 		</div>
 	</div>
+	<div id="center-work-area">
+		<div id="header">Workbench</div>
+		<div id="work-area" class="workbench-area"></div>
+	</div>
 </body>
 <script type="text/javascript">
+	// allows each of the toolbars to be collapsible
 	$('.toolbar-header').collapser({
 		selector: '.toolbar-body',
 		siblings: true
 	});
 
+	// centers all of the images in there containers so that they fit correctly
 	$('.my-pictures-image').each(function() {
 		var $img = $(this);
 		var $parent = $img.parent();
@@ -91,34 +92,33 @@
 		}
 	});
 
+	// calls the getTags web service for this image in order to
+	// get the tags for the picture and stores them in cache so
+	// that only a ping is needed for the next time
 	$('.my-pictures-image').on('click', function() {		
 		var $imgClone = $(this).clone();
+		$imgClone.attr('id', 'current-editing');
 		var key = $(this).attr('name');
 		
-		$.ajax({
-			url : '{{ SITE_URL }}images/getTags/?imageKey=' + key,
-			type : 'GET',
-			dataType : 'json',
-			success : function(data) {
-				var $workArea = $('#work-area');
-				$workArea.empty();
-				// add workArea clone to the div
-				$workArea.append($imgClone);
-				
-				$($imgClone).taggable({
-			        originalData : data,
-			        parent: $workArea,
-			        imagesUrl: '{{ STATIC_URL }}images/'
-			    });
-			},
-			error : function(jqXHR, textStatus, errorThrown) {
-				alert('An error occurred: ' + textStatus);
-			}
-		});
+		var client = new WebServiceClient('{{ SITE_URL }}images/getTags');
+		var args = {
+			imageKey : key
+		};
+		
+		var callback = function(data) {
+			var $workArea = $('#work-area');
+			$workArea.empty();
+			// add workArea clone to the div
+			$workArea.append($imgClone);
+			$imgClone.taggable({
+		        originalData : data.tags,
+		        parent: $workArea,
+		        imagesUrl: '{{ STATIC_URL }}images/'
+		    });
+		};
+		
+		client.call(args, callback);		
 	});
 
-	$(window).on('resize', function() {
-		var workAreaWidth = $(window).width() - (40 + $('#right-toolbar').width() + $('#left-toolbar').width());
-		$('#work-area').width(workAreaWidth > 200 ? workAreaWidth : 200);
-	});
+	
 </script>

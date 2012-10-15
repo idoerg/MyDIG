@@ -5,26 +5,20 @@
 }
 
 #work-area {
-	height: 500px;
-	width: 703px;
+	height: 550px;
+	width: 960px;
 }
 
 #center-work-area {
-	display: inline-block;	
-}
-
-#right-toolbar {
-	display: inline-block;
-	margin-right: 10px;
-	width: 260px;
-	float: right;
-	margin-right: 10px;
+	left: 20px;
+	position: relative;	
+	width: 975px;
+	display: table;
 }
 
 #left-toolbar {
-	display: inline-block;
 	margin-left: 10px;
-	width: 260px;
+	width: 235px;
 	float: left;
 	margin-right: 10px;
 }
@@ -75,8 +69,8 @@
 }
 
 .my-pictures-image-holder {
-	height: 100px;
-	width: 100px;
+	height: 87px;
+	width: 87px;
 	overflow: hidden;
 	display: inline-block;
 	padding: 5px;
@@ -89,6 +83,7 @@
 
 .my-pictures-image {
 	position: relative;
+	display: block;
 }
 
 .my-pictures-image:hover {

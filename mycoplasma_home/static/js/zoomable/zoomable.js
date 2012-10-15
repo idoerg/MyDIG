@@ -177,9 +177,7 @@
 				$(this).addClass('zoomable-src');
 				$(this).parent().addClass('zoomable-parent');
 				
-				
-				
-				$(this).load(function() { 
+				var init = function() { 
 					// creates the structure
 					private_methods.createStructure(options, $(this).parent(), $(this));
 					$(this).draggable();
@@ -195,7 +193,11 @@
 							options.callback();
 						}
 					}
-				});
+				};
+				
+				$(this).attr('src', $(this).attr('src') + '?time=' + new Date().getTime());
+				
+				$(this).load(init);
 			});
 		}
 	};

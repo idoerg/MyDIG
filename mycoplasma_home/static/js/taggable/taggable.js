@@ -42,7 +42,7 @@
 			
 			$parent.prepend(private_methods.renderToolbar(colors, id, imagesUrl)); 
 			
-						$parent.parent().append('<div id="taggable-tooltip"></div>');
+			$parent.parent().append('<div id="taggable-tooltip"></div>');
 			
 			// creates the tag board and the drawing board
 			var $tagBoard = $('<div id="' + id + '-tag-board" class="tag-board"></div>').prependTo($img.parent());

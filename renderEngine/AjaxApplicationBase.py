@@ -6,12 +6,15 @@
 	Date: July 29, 2012
 '''
 from renderEngine.RenderEngine import RenderEngine
+from django.conf import settings
 
 class AjaxApplicationBase:
 	def __init__(self):
 		self.renderEngine = RenderEngine()
 	
 	def setJsonObject(self, obj):
+		obj['SITE_URL'] = settings.SITE_URL
+		obj['STATIC_URL'] = settings.STATIC_URL
 		self.renderEngine.setApplicationLayout(obj)
 
 	'''
@@ -25,6 +28,9 @@ class AjaxApplicationBase:
 		self.doProcessRender(request)
 		return self.renderEngine.renderJson(request)
 
+class WebServiceApplicationBase(AjaxApplicationBase):
+	def setJsonObject(self, obj):
+		self.renderEngine.setApplicationLayout(obj)
 '''
 	Used for mapping to the url in urls.py
 '''        	

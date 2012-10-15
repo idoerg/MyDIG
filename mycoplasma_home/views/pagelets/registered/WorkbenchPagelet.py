@@ -19,22 +19,17 @@ class WorkbenchPagelet(PageletBase):
     def doProcessRender(self, request):
         self.setLayout('registered/workbench.html')
 
-        privateImages = Image.objects.filter(user__exact=request.user.pk)
-        publicImages = Picture.objects.filter(originalUser__exact=request.user.pk)
+        userImages = Picture.objects.filter(user__exact=request.user.pk)
 
         myImages = []
-        
-        # private 
-        for image in privateImages:
-            myImages.append({
-                'permissions' : 'private',
-                'image' : image
-            })
-        
+                
         #
-        for image in publicImages:
+        for image in userImages:
+            permissions = 'public'
+            if image.isPrivate:
+                permissions = 'private'
             myImages.append({
-                'permissions' : 'public',
+                'permissions' : permissions,
                 'image' : image
             })
         

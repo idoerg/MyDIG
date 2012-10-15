@@ -83,6 +83,4 @@ class RenderEngine:
 		return HttpResponse(layout)
 
 	def renderJson(self, request):
-		self.applicationLayout['SITE_URL'] = settings.SITE_URL
-		self.applicationLayout['STATIC_SITE'] = settings.STATIC_URL
 		return HttpResponse(json.dumps(self.applicationLayout))

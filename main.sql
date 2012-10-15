@@ -176,7 +176,7 @@ ALTER SEQUENCE auth_permission_id_seq OWNED BY auth_permission.id;
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('auth_permission_id_seq', 606, true);
+SELECT pg_catalog.setval('auth_permission_id_seq', 621, true);
 
 
 --
@@ -354,7 +354,7 @@ ALTER SEQUENCE django_admin_log_id_seq OWNED BY django_admin_log.id;
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('django_admin_log_id_seq', 289, true);
+SELECT pg_catalog.setval('django_admin_log_id_seq', 297, true);
 
 
 --
@@ -396,7 +396,7 @@ ALTER SEQUENCE django_content_type_id_seq OWNED BY django_content_type.id;
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('django_content_type_id_seq', 202, true);
+SELECT pg_catalog.setval('django_content_type_id_seq', 207, true);
 
 
 --
@@ -462,7 +462,8 @@ CREATE TABLE multiuploader_image (
     filename character varying(60),
     image character varying(100) NOT NULL,
     key_data character varying(90),
-    upload_date timestamp with time zone NOT NULL
+    upload_date timestamp with time zone NOT NULL,
+    user_id integer NOT NULL
 );
 
 
@@ -705,6 +706,24 @@ SELECT pg_catalog.setval('mycoplasma_home_navbaroption_id_seq', 10, true);
 
 
 --
+-- Name: mycoplasma_home_picture; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
+--
+
+CREATE TABLE mycoplasma_home_picture (
+    id integer NOT NULL,
+    description text NOT NULL,
+    "imageName" character varying(100) NOT NULL,
+    publication character varying(50) NOT NULL,
+    "altText" text NOT NULL,
+    user_id integer NOT NULL,
+    "uploadDate" timestamp with time zone NOT NULL,
+    "isPrivate" boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.mycoplasma_home_picture OWNER TO mycoplasma;
+
+--
 -- Name: mycoplasma_home_picturedefinitiontag; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
@@ -747,17 +766,17 @@ SELECT pg_catalog.setval('mycoplasma_home_picturedefinitiontag_id_seq', 14, true
 
 
 --
--- Name: mycoplasma_home_pictureprops; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
+-- Name: mycoplasma_home_pictureprop; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
-CREATE TABLE mycoplasma_home_pictureprops (
+CREATE TABLE mycoplasma_home_pictureprop (
     id integer NOT NULL,
     picture_id_id integer NOT NULL,
     type_id_id integer NOT NULL
 );
 
 
-ALTER TABLE public.mycoplasma_home_pictureprops OWNER TO mycoplasma;
+ALTER TABLE public.mycoplasma_home_pictureprop OWNER TO mycoplasma;
 
 --
 -- Name: mycoplasma_home_pictureprops_id_seq; Type: SEQUENCE; Schema: public; Owner: mycoplasma
@@ -777,7 +796,7 @@ ALTER TABLE public.mycoplasma_home_pictureprops_id_seq OWNER TO mycoplasma;
 -- Name: mycoplasma_home_pictureprops_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mycoplasma
 --
 
-ALTER SEQUENCE mycoplasma_home_pictureprops_id_seq OWNED BY mycoplasma_home_pictureprops.id;
+ALTER SEQUENCE mycoplasma_home_pictureprops_id_seq OWNED BY mycoplasma_home_pictureprop.id;
 
 
 --
@@ -786,21 +805,6 @@ ALTER SEQUENCE mycoplasma_home_pictureprops_id_seq OWNED BY mycoplasma_home_pict
 
 SELECT pg_catalog.setval('mycoplasma_home_pictureprops_id_seq', 32, true);
 
-
---
--- Name: mycoplasma_home_pictures; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
---
-
-CREATE TABLE mycoplasma_home_pictures (
-    id integer NOT NULL,
-    description text NOT NULL,
-    "imageName" character varying(100) NOT NULL,
-    publication character varying(50) NOT NULL,
-    "altText" text NOT NULL
-);
-
-
-ALTER TABLE public.mycoplasma_home_pictures OWNER TO mycoplasma;
 
 --
 -- Name: mycoplasma_home_pictures_id_seq; Type: SEQUENCE; Schema: public; Owner: mycoplasma
@@ -820,7 +824,7 @@ ALTER TABLE public.mycoplasma_home_pictures_id_seq OWNER TO mycoplasma;
 -- Name: mycoplasma_home_pictures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mycoplasma
 --
 
-ALTER SEQUENCE mycoplasma_home_pictures_id_seq OWNED BY mycoplasma_home_pictures.id;
+ALTER SEQUENCE mycoplasma_home_pictures_id_seq OWNED BY mycoplasma_home_picture.id;
 
 
 --
@@ -831,17 +835,17 @@ SELECT pg_catalog.setval('mycoplasma_home_pictures_id_seq', 38, true);
 
 
 --
--- Name: mycoplasma_home_picturetypes; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
+-- Name: mycoplasma_home_picturetype; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
-CREATE TABLE mycoplasma_home_picturetypes (
+CREATE TABLE mycoplasma_home_picturetype (
     id integer NOT NULL,
     description character varying(50) NOT NULL,
     "imageType" character varying(15) NOT NULL
 );
 
 
-ALTER TABLE public.mycoplasma_home_picturetypes OWNER TO mycoplasma;
+ALTER TABLE public.mycoplasma_home_picturetype OWNER TO mycoplasma;
 
 --
 -- Name: mycoplasma_home_picturetypes_id_seq; Type: SEQUENCE; Schema: public; Owner: mycoplasma
@@ -861,7 +865,7 @@ ALTER TABLE public.mycoplasma_home_picturetypes_id_seq OWNER TO mycoplasma;
 -- Name: mycoplasma_home_picturetypes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mycoplasma
 --
 
-ALTER SEQUENCE mycoplasma_home_picturetypes_id_seq OWNED BY mycoplasma_home_picturetypes.id;
+ALTER SEQUENCE mycoplasma_home_picturetypes_id_seq OWNED BY mycoplasma_home_picturetype.id;
 
 
 --
@@ -872,15 +876,56 @@ SELECT pg_catalog.setval('mycoplasma_home_picturetypes_id_seq', 4, true);
 
 
 --
+-- Name: mycoplasma_home_tagcolor; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
+--
+
+CREATE TABLE mycoplasma_home_tagcolor (
+    id integer NOT NULL,
+    red integer NOT NULL,
+    green integer NOT NULL,
+    blue integer NOT NULL
+);
+
+
+ALTER TABLE public.mycoplasma_home_tagcolor OWNER TO mycoplasma;
+
+--
+-- Name: mycoplasma_home_tagcolor_id_seq; Type: SEQUENCE; Schema: public; Owner: mycoplasma
+--
+
+CREATE SEQUENCE mycoplasma_home_tagcolor_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mycoplasma_home_tagcolor_id_seq OWNER TO mycoplasma;
+
+--
+-- Name: mycoplasma_home_tagcolor_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mycoplasma
+--
+
+ALTER SEQUENCE mycoplasma_home_tagcolor_id_seq OWNED BY mycoplasma_home_tagcolor.id;
+
+
+--
+-- Name: mycoplasma_home_tagcolor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
+--
+
+SELECT pg_catalog.setval('mycoplasma_home_tagcolor_id_seq', 1, true);
+
+
+--
 -- Name: mycoplasma_home_taggroup; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
 CREATE TABLE mycoplasma_home_taggroup (
     id integer NOT NULL,
     description character varying(150) NOT NULL,
-    color character varying(20) NOT NULL,
     picture_id integer NOT NULL,
-    shape_id integer NOT NULL
+    color_id integer NOT NULL
 );
 
 
@@ -911,7 +956,7 @@ ALTER SEQUENCE mycoplasma_home_taggroup_id_seq OWNED BY mycoplasma_home_taggroup
 -- Name: mycoplasma_home_taggroup_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('mycoplasma_home_taggroup_id_seq', 57, true);
+SELECT pg_catalog.setval('mycoplasma_home_taggroup_id_seq', 1, true);
 
 
 --
@@ -954,47 +999,7 @@ ALTER SEQUENCE mycoplasma_home_tagpoint_id_seq OWNED BY mycoplasma_home_tagpoint
 -- Name: mycoplasma_home_tagpoint_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('mycoplasma_home_tagpoint_id_seq', 8779, true);
-
-
---
--- Name: mycoplasma_home_tagshape; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
---
-
-CREATE TABLE mycoplasma_home_tagshape (
-    id integer NOT NULL,
-    shape character varying(10) NOT NULL
-);
-
-
-ALTER TABLE public.mycoplasma_home_tagshape OWNER TO mycoplasma;
-
---
--- Name: mycoplasma_home_tagshape_id_seq; Type: SEQUENCE; Schema: public; Owner: mycoplasma
---
-
-CREATE SEQUENCE mycoplasma_home_tagshape_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.mycoplasma_home_tagshape_id_seq OWNER TO mycoplasma;
-
---
--- Name: mycoplasma_home_tagshape_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mycoplasma
---
-
-ALTER SEQUENCE mycoplasma_home_tagshape_id_seq OWNED BY mycoplasma_home_tagshape.id;
-
-
---
--- Name: mycoplasma_home_tagshape_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
---
-
-SELECT pg_catalog.setval('mycoplasma_home_tagshape_id_seq', 2, true);
+SELECT pg_catalog.setval('mycoplasma_home_tagpoint_id_seq', 8781, true);
 
 
 --
@@ -1125,6 +1130,13 @@ ALTER TABLE ONLY mycoplasma_home_navbaroption ALTER COLUMN id SET DEFAULT nextva
 -- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
 --
 
+ALTER TABLE ONLY mycoplasma_home_picture ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_pictures_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
+--
+
 ALTER TABLE ONLY mycoplasma_home_picturedefinitiontag ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_picturedefinitiontag_id_seq'::regclass);
 
 
@@ -1132,21 +1144,21 @@ ALTER TABLE ONLY mycoplasma_home_picturedefinitiontag ALTER COLUMN id SET DEFAUL
 -- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
 --
 
-ALTER TABLE ONLY mycoplasma_home_pictureprops ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_pictureprops_id_seq'::regclass);
+ALTER TABLE ONLY mycoplasma_home_pictureprop ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_pictureprops_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
 --
 
-ALTER TABLE ONLY mycoplasma_home_pictures ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_pictures_id_seq'::regclass);
+ALTER TABLE ONLY mycoplasma_home_picturetype ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_picturetypes_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
 --
 
-ALTER TABLE ONLY mycoplasma_home_picturetypes ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_picturetypes_id_seq'::regclass);
+ALTER TABLE ONLY mycoplasma_home_tagcolor ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_tagcolor_id_seq'::regclass);
 
 
 --
@@ -1161,13 +1173,6 @@ ALTER TABLE ONLY mycoplasma_home_taggroup ALTER COLUMN id SET DEFAULT nextval('m
 --
 
 ALTER TABLE ONLY mycoplasma_home_tagpoint ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_tagpoint_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
---
-
-ALTER TABLE ONLY mycoplasma_home_tagshape ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_tagshape_id_seq'::regclass);
 
 
 --
@@ -1229,18 +1234,6 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 28	Can add drop down item	10	add_dropdownitem
 29	Can change drop down item	10	change_dropdownitem
 30	Can delete drop down item	10	delete_dropdownitem
-34	Can add pictures	12	add_pictures
-35	Can change pictures	12	change_pictures
-36	Can delete pictures	12	delete_pictures
-37	Can add picture types	13	add_picturetypes
-38	Can change picture types	13	change_picturetypes
-39	Can delete picture types	13	delete_picturetypes
-40	Can add picture props	14	add_pictureprops
-41	Can change picture props	14	change_pictureprops
-42	Can delete picture props	14	delete_pictureprops
-43	Can add tag shape	15	add_tagshape
-44	Can change tag shape	15	change_tagshape
-45	Can delete tag shape	15	delete_tagshape
 46	Can add tag group	16	add_taggroup
 47	Can change tag group	16	change_taggroup
 48	Can delete tag group	16	delete_taggroup
@@ -1802,6 +1795,21 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 604	Can add image	202	add_image
 605	Can change image	202	change_image
 606	Can delete image	202	delete_image
+607	Can add genome upload	203	add_genomeupload
+608	Can change genome upload	203	change_genomeupload
+609	Can delete genome upload	203	delete_genomeupload
+610	Can add tag color	204	add_tagcolor
+611	Can change tag color	204	change_tagcolor
+612	Can delete tag color	204	delete_tagcolor
+613	Can add picture	205	add_picture
+614	Can change picture	205	change_picture
+615	Can delete picture	205	delete_picture
+616	Can add picture type	206	add_picturetype
+617	Can change picture type	206	change_picturetype
+618	Can delete picture type	206	delete_picturetype
+619	Can add picture prop	207	add_pictureprop
+620	Can change picture prop	207	change_pictureprop
+621	Can delete picture prop	207	delete_pictureprop
 \.
 
 
@@ -1811,9 +1819,9 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 
 COPY auth_user (id, username, first_name, last_name, email, password, is_staff, is_active, is_superuser, last_login, date_joined) FROM stdin;
 2	balishmf	Mitchell	Balish	balishmf@muohio.edu	sha1$c8bd2$bb8b0e9c26f254a8ed0d2bf17b7676719bc6a892	t	t	t	2011-07-18 15:51:51.368252-04	2011-07-05 11:02:33-04
-3	trial_not_staff	Someone	Else	someone@somewhere.com	sha1$af260$281a8f00cec58feaa2371f5d3cfaef9a1082b9a5	f	t	f	2011-07-19 15:05:18.047756-04	2011-07-15 10:48:21-04
 4	siebenmc				sha1$6ac49$43a6ac6e4a27ec163b79a38a04989675e3c298a7	t	t	f	2012-02-20 14:03:22.33559-05	2011-08-15 14:55:57-04
-1	oberliat	Andrew	Oberlin	oberliat@muohio.edu	sha1$c51ba$9d439c085bd5d4e2a867ee85c8175fc5fb850aad	t	t	t	2012-07-27 03:12:34.391912-04	2011-06-14 17:23:27-04
+3	trial_not_staff	Someone	Else	someone@somewhere.com	sha1$4527b$c101b9dd88dfa532a63920cbd0ea26277418dbce	f	t	f	2012-10-08 14:03:52.423679-04	2011-07-15 10:48:21-04
+1	oberliat	Andrew	Oberlin	oberliat@muohio.edu	sha1$c51ba$9d439c085bd5d4e2a867ee85c8175fc5fb850aad	t	t	t	2012-10-15 13:41:23.759265-04	2011-06-14 17:23:27-04
 \.
 
 
@@ -1860,18 +1868,6 @@ COPY auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 28	2	28
 29	2	29
 30	2	30
-31	2	34
-32	2	35
-33	2	36
-34	2	37
-35	2	38
-36	2	39
-37	2	40
-38	2	41
-39	2	42
-40	2	43
-41	2	44
-42	2	45
 43	2	46
 44	2	47
 45	2	48
@@ -1908,18 +1904,6 @@ COPY auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 76	1	28
 77	1	29
 78	1	30
-79	1	34
-80	1	35
-81	1	36
-82	1	37
-83	1	38
-84	1	39
-85	1	40
-86	1	41
-87	1	42
-88	1	43
-89	1	44
-90	1	45
 91	1	46
 92	1	47
 93	1	48
@@ -1940,16 +1924,7 @@ COPY django_admin_log (id, action_time, user_id, content_type_id, object_id, obj
 4	2011-06-14 17:52:56.509594-04	1	8	4	Dummy4	1	
 5	2011-06-14 17:53:05.948305-04	1	8	5	Dummy5	1	
 6	2011-06-15 16:21:32.858105-04	1	10	2	Child 1.2	1	
-12	2011-06-20 11:16:32.044183-04	1	12	1	Pictures object	1	
-13	2011-06-20 12:31:16.62648-04	1	13	1	PictureTypes object	1	
-14	2011-06-20 12:32:04.102864-04	1	14	1	PictureProps object	1	
 15	2011-06-20 13:01:54.317736-04	1	8	5	Pictures	2	Changed optionName.
-16	2011-06-20 14:54:20.017964-04	1	12	2	red mycoplasma	1	
-17	2011-06-20 14:55:06.475199-04	1	12	3	electron	1	
-18	2011-06-20 14:55:41.657053-04	1	12	4	flower painting	1	
-19	2011-06-20 14:56:05.298364-04	1	12	5	lady in forest	1	
-20	2011-06-20 14:56:42.799149-04	1	12	6	myco cultures	1	
-21	2011-06-20 14:56:58.563936-04	1	12	7	needle thing	1	
 22	2011-06-20 17:10:56.185904-04	1	8	5	Pictures	2	Changed href.
 23	2011-06-20 17:11:12.151639-04	1	8	2	Dummy2	2	Changed href.
 24	2011-06-20 18:00:21.385853-04	1	8	1	Home	2	Changed optionName and href.
@@ -1958,28 +1933,12 @@ COPY django_admin_log (id, action_time, user_id, content_type_id, object_id, obj
 27	2011-06-20 18:04:58.788489-04	1	10	2	Child 3.2	2	Changed itemName.
 28	2011-06-20 18:05:03.528742-04	1	10	1	Child 3.1	2	Changed itemName.
 29	2011-06-20 18:31:51.933198-04	1	10	3	2.1	1	
-30	2011-06-23 12:40:08.590477-04	1	15	1	TagShape object	1	
-31	2011-06-23 12:40:22.161826-04	1	15	2	TagShape object	1	
 32	2011-06-23 13:42:10.448232-04	1	16	1	Key	3	
-33	2011-06-23 15:59:30.113495-04	1	12	8	Rectangle	1	
-34	2011-06-23 16:00:01.437784-04	1	12	9	Polygon	1	
-35	2011-06-23 16:00:20.856031-04	1	13	2	icon	1	
-36	2011-06-23 16:00:32.831418-04	1	14	2	Rectangle, icon	1	
-37	2011-06-23 16:00:42.017099-04	1	14	3	Polygon, icon	1	
-38	2011-06-24 11:27:45.86794-04	1	15	2	poly	2	Changed shape.
 39	2011-06-24 11:30:39.348841-04	1	16	3	Petal	3	
 40	2011-06-24 11:33:17.507711-04	1	17	4	(404,70)	3	
 41	2011-06-24 11:33:23.782036-04	1	16	4	Petal	3	
-42	2011-06-24 12:06:28.704901-04	1	13	3	database_photo	1	
-43	2011-06-24 12:06:50.823135-04	1	14	4	red mycoplasma, database_photo	1	
-44	2011-06-24 12:06:57.402366-04	1	14	5	electron, database_photo	1	
-45	2011-06-24 12:07:08.899108-04	1	14	6	flower painting, database_photo	1	
-46	2011-06-24 12:07:17.310403-04	1	14	7	lady in forest, database_photo	1	
-47	2011-06-24 12:07:24.061673-04	1	14	8	myco cultures, database_photo	1	
-48	2011-06-24 12:07:29.729213-04	1	14	9	needle thing, database_photo	1	
 49	2011-06-24 12:14:18.368751-04	1	16	5	Petal	2	No fields changed.
 50	2011-06-24 12:42:15.515781-04	1	16	5	Petal	3	
-51	2011-06-24 12:48:54.390316-04	1	15	1	rect	2	Changed shape.
 52	2011-06-24 12:49:35.988502-04	1	16	6	Hello	3	
 53	2011-06-27 11:45:51.47587-04	1	16	2	First Tag	3	
 54	2011-06-28 11:28:57.929676-04	1	16	9	TagThree	3	
@@ -2023,33 +1982,14 @@ COPY django_admin_log (id, action_time, user_id, content_type_id, object_id, obj
 92	2011-06-29 16:40:00.471281-04	1	16	42	TagThree	3	
 93	2011-06-29 16:40:00.479437-04	1	16	41	TagTwo	3	
 94	2011-06-29 16:40:00.487778-04	1	16	40	TagOne	3	
-95	2011-06-29 18:22:23.260229-04	1	12	10	tag bubble	1	
-96	2011-06-29 18:24:37.807687-04	1	13	4	tag_bubble	1	
-97	2011-06-29 18:24:40.488694-04	1	14	10	tag bubble, tag_bubble	1	
 98	2011-06-30 15:01:13.337045-04	1	10	3	2.1	3	
 99	2011-06-30 15:01:38.94194-04	1	8	2	Gbrowse	2	Changed optionName.
 100	2011-06-30 15:09:56.992078-04	1	8	2	GBrowse	2	Changed optionName.
 101	2011-07-01 11:41:55.248104-04	1	8	4	Dummy4	3	
 102	2011-07-01 11:41:55.364715-04	1	8	3	Dummy3	3	
-103	2011-07-01 15:53:42.216159-04	1	12	10	tag bubble	3	
-104	2011-07-01 15:54:20.742915-04	1	12	11	arrow_left	1	
-105	2011-07-01 15:54:50.631648-04	1	12	12	arrow_right	1	
-106	2011-07-01 15:55:01.841374-04	1	14	11	arrow_left, icon	1	
-107	2011-07-01 15:55:10.653049-04	1	14	12	arrow_right, icon	1	
 108	2011-07-05 11:02:33.238016-04	1	3	2	balishmf	1	
 109	2011-07-05 11:03:54.344614-04	1	3	2	balishmf	2	Changed first_name, last_name, email, is_staff, is_superuser and user_permissions.
 110	2011-07-05 11:04:09.981699-04	1	3	1	oberliat	2	Changed first_name, last_name and user_permissions.
-111	2011-07-05 16:42:28.200026-04	1	12	12	arrow_right	3	
-112	2011-07-05 16:42:59.053714-04	1	12	11	arrow_left	3	
-113	2011-07-05 16:42:59.068162-04	1	12	9	Polygon	3	
-114	2011-07-05 16:42:59.076541-04	1	12	8	Rectangle	3	
-115	2011-07-05 16:49:10.39344-04	1	12	1	Banner	2	Changed description, imageName, publication and altText.
-116	2011-07-05 16:49:29.346392-04	1	12	7	needle thing	2	Changed imageName.
-117	2011-07-05 16:49:44.436025-04	1	12	6	myco cultures	2	Changed imageName.
-118	2011-07-05 16:49:53.601336-04	1	12	5	lady in forest	2	Changed imageName.
-119	2011-07-05 16:50:02.470997-04	1	12	4	flower painting	2	Changed imageName.
-120	2011-07-05 16:50:10.156369-04	1	12	3	electron	2	Changed imageName.
-121	2011-07-05 16:50:17.978866-04	1	12	2	red mycoplasma	2	Changed imageName.
 122	2011-07-06 15:43:43.594395-04	1	18	2	nc_000912.fasta	3	
 123	2011-07-06 15:43:43.675697-04	1	18	1	nc_000912.fasta	3	
 124	2011-07-06 18:09:29.713702-04	1	18	14	nc_000912.fasta	3	
@@ -2137,41 +2077,11 @@ COPY django_admin_log (id, action_time, user_id, content_type_id, object_id, obj
 206	2011-07-22 15:54:14.753184-04	1	202	16	multiuploader_images/2SL31-mycoplasma_8.jpg	3	
 207	2011-07-25 17:43:18.145734-04	1	202	48	multiuploader_images/arrow-right.png	3	
 208	2011-07-25 17:43:18.25093-04	1	202	47	multiuploader_images/DatabaseBanner1_1.jpg	3	
-209	2011-07-26 18:53:57.529023-04	1	12	13	old banner	3	
-210	2011-07-26 18:57:50.339741-04	1	12	14	left arrow	3	
-211	2011-07-26 19:04:57.382451-04	1	12	15	right arrow	3	
-212	2011-07-26 19:14:49.989467-04	1	12	16	arrow right	3	
-213	2011-07-26 19:17:53.07658-04	1	12	17	arrow right	3	
-214	2011-07-26 19:19:48.286951-04	1	12	7	needle thing	2	Changed imageName.
-215	2011-07-26 19:20:43.671387-04	1	12	18	arrow right	3	
-216	2011-07-27 13:38:59.957189-04	1	12	19	arrow right	3	
-217	2011-07-27 13:40:48.088412-04	1	14	14	arrow right, database_photo	3	
-218	2011-07-27 13:48:56.142662-04	1	12	7	needle thing	2	Changed imageName.
-219	2011-07-27 14:02:21.632085-04	1	12	20	arrow right	3	
-220	2011-07-27 14:06:07.189073-04	1	12	21	arrow right	3	
-221	2011-07-27 14:31:40.121038-04	1	12	22	arrow right	3	
-222	2011-07-27 14:37:55.619883-04	1	12	23	arrow right	3	
-223	2011-07-27 14:39:18.595613-04	1	12	24	arrow right	3	
 224	2011-07-27 14:40:24.355699-04	1	202	90	multiuploader_images/arrow-right.png	3	
 225	2011-08-15 14:55:57.812614-04	1	3	4	siebenmc	1	
 226	2011-08-15 14:56:14.752792-04	1	3	4	siebenmc	2	Changed is_staff.
-227	2011-08-19 11:30:20.348228-04	1	12	29		3	
-228	2011-08-19 11:30:20.49465-04	1	12	28		3	
-229	2011-08-19 11:30:20.502947-04	1	12	27		3	
-230	2011-08-19 11:35:58.704318-04	1	12	30	poop	3	
 231	2011-08-19 12:03:30.113064-04	1	202	127	multiuploader_images/c211f99aded854b0211a6c798a22394b.png	3	
-232	2011-08-19 12:06:17.547116-04	1	12	26	floaral thing	3	
-233	2011-08-19 12:06:17.569645-04	1	12	25	arrow right	3	
-234	2011-08-19 12:06:17.577746-04	1	12	7	needle thing	3	
-235	2011-08-19 12:06:17.585956-04	1	12	6	myco cultures	3	
-236	2011-08-19 12:06:17.594314-04	1	12	5	lady in forest	3	
-237	2011-08-19 12:06:17.602697-04	1	12	4	flower painting	3	
-238	2011-08-19 12:06:17.611011-04	1	12	3	electron	3	
-239	2011-08-19 12:06:17.619477-04	1	12	2	red mycoplasma	3	
-240	2011-08-19 12:06:17.627832-04	1	12	1	Banner	3	
 241	2011-08-19 12:12:58.600313-04	1	202	135	multiuploader_images/272913d897024486748b12c7364f5edd.png	3	
-242	2011-08-19 12:16:28.268668-04	1	12	31	Website Banner	1	
-243	2011-08-19 12:16:42.825585-04	1	14	25	Website Banner, banner	1	
 244	2011-08-19 17:10:39.499849-04	1	46	12	dicty	3	
 245	2011-08-19 17:10:39.512344-04	1	46	11	frog	3	
 246	2011-08-19 17:10:39.520438-04	1	46	10	yeast	3	
@@ -2212,12 +2122,14 @@ COPY django_admin_log (id, action_time, user_id, content_type_id, object_id, obj
 281	2012-03-30 15:13:49.279293-04	1	8	10	Pictures	2	Changed href.
 282	2012-04-13 14:04:59.93496-04	1	46	61	Mycoplasma hyorhinis_hub_1_uid51695	3	
 283	2012-04-13 14:05:12.090926-04	1	199	59	NC_014448	3	
-284	2012-07-06 22:15:12.087523-04	1	16	57	Mycoplasma	3	
-285	2012-07-06 22:15:17.837404-04	1	16	56	Aggregate	3	
-286	2012-07-27 03:23:49.739939-04	1	8	10	Images	2	Changed optionName and href.
-287	2012-07-27 03:24:40.896205-04	1	8	9	Blast	2	Changed optionName.
-288	2012-07-27 03:25:56.649544-04	1	10	4	DropDown	1	
-289	2012-07-27 03:27:34.009073-04	1	10	4	DropDown	3	
+290	2012-08-20 13:47:39.813695-04	1	8	10	Images	2	Changed optionName and href.
+291	2012-10-11 13:51:28.171487-04	1	204	1	R: 256, G: 0, B: 0	1	
+292	2012-10-11 13:52:03.067264-04	1	16	1	Test tag group	1	
+293	2012-10-11 13:53:46.897603-04	1	17	8780	(200,300) Test tag group	1	
+294	2012-10-11 13:54:00.202881-04	1	17	8781	(343,213) Test tag group	1	
+295	2012-10-11 13:56:57.767637-04	1	17	8781	(343,213) Test tag group	3	
+296	2012-10-11 13:56:57.782676-04	1	17	8780	(200,300) Test tag group	3	
+297	2012-10-11 13:57:11.763817-04	1	16	1	Test tag group	3	
 \.
 
 
@@ -2236,10 +2148,6 @@ COPY django_content_type (id, name, app_label, model) FROM stdin;
 8	nav bar option	mycoplasma_home	navbaroption
 9	log entry	admin	logentry
 10	drop down item	mycoplasma_home	dropdownitem
-12	pictures	mycoplasma_home	pictures
-13	picture types	mycoplasma_home	picturetypes
-14	picture props	mycoplasma_home	pictureprops
-15	tag shape	mycoplasma_home	tagshape
 16	tag group	mycoplasma_home	taggroup
 17	tag point	mycoplasma_home	tagpoint
 18	blast upload	mycoplasma_home	blastupload
@@ -2427,6 +2335,11 @@ COPY django_content_type (id, name, app_label, model) FROM stdin;
 200	picture definition tag	mycoplasma_home	picturedefinitiontag
 201	kv store	thumbnail	kvstore
 202	image	multiuploader	image
+203	genome upload	mycoplasma_home	genomeupload
+204	tag color	mycoplasma_home	tagcolor
+205	picture	mycoplasma_home	picture
+206	picture type	mycoplasma_home	picturetype
+207	picture prop	mycoplasma_home	pictureprop
 \.
 
 
@@ -2487,14 +2400,17 @@ ab243bed41ce2f69cea4cf185a3ca1a5	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQ
 8625d6100f8160f610d763b592d10ae5	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-04-22 21:28:41.534735-04
 5480664dab4d28d39e2e8ead6e7842fc	MDIyMmZiZDhmZjc3MjFiODFkMDNkM2Q4NTUyZGUwZmRmNmEzMGU2NzqAAn1xAShYGAAAAGh5b3Jo\naW5pc19odWJfMV91aWQ1MTY5NXECVQE2VQ1fYXV0aF91c2VyX2lkcQNLAVgYAAAAaHlvcmhpbmlz\nIGh1YiAxIHVpZDUxNjk1cQRVATZVEl9hdXRoX3VzZXJfYmFja2VuZHEFVSlkamFuZ28uY29udHJp\nYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEGY2RqYW5nby5kYi5tb2RlbHMuYmFzZQptb2Rl\nbF91bnBpY2tsZQpxB2NteWNvcGxhc21hX2hvbWUuY2hhZG8KT3JnYW5pc20KcQhdY2RqYW5nby5k\nYi5tb2RlbHMuYmFzZQpzaW1wbGVfY2xhc3NfZmFjdG9yeQpxCYdScQp9cQsoVQdjb21tZW50cQxV\nAFUGX3N0YXRlcQ1jZGphbmdvLmRiLm1vZGVscy5iYXNlCk1vZGVsU3RhdGUKcQ4pgXEPfXEQKFUG\nYWRkaW5ncRGJVQJkYnESVQVjaGFkb3ETdWJVC29yZ2FuaXNtX2lkcRROVQxhYmJyZXZpYXRpb25x\nFVgbAAAATS4gaHlvcmhpbmlzIGh1YiAxIHVpZDUxNjk1cRZVC2NvbW1vbl9uYW1lcRdYIwAAAE15\nY29wbGFzbWEgaHlvcmhpbmlzIGh1YiAxIHVpZDUxNjk1cRhVBWdlbnVzcRlVCk15Y29wbGFzbWFx\nGlUHc3BlY2llc3EbaAR1YlUBMFgXAAAAYWdhbGFjdGlhZV9wZzJfdWlkNjE2MTlxHFUBNmgHaAhd\naAmHUnEdfXEeKFUHY29tbWVudHEfVQBVBl9zdGF0ZXEgaA4pgXEhfXEiKFUGYWRkaW5ncSOJVQJk\nYnEkVQVjaGFkb3EldWJVC29yZ2FuaXNtX2lkcSZLPlUMYWJicmV2aWF0aW9ucSdYGgAAAE0uIGFn\nYWxhY3RpYWVfcGcyX3VpZDYxNjE5cShVC2NvbW1vbl9uYW1lcSlYIgAAAE15Y29wbGFzbWEgYWdh\nbGFjdGlhZV9wZzJfdWlkNjE2MTlxKlUFZ2VudXNxK1UKTXljb3BsYXNtYXEsVQdzcGVjaWVzcS1o\nHHViVQEwdS4=\n	2012-04-27 14:39:52.102036-04
 c8d6d2ea687187707126c09ecfee98ff	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-05-02 21:58:16.723026-04
-df3d61429d3ee04dc8b03cb6d5ada39d	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-07-03 18:46:32.80426-04
-4f446992dd8675d606dfdffc4e822e81	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-07-03 19:03:05.349698-04
-2b433e035bbef3b1318a2078603543d2	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-07-04 03:11:02.607069-04
-8c748cc89d72b5d8e3916035a2db164d	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-07-04 17:05:02.434954-04
-1b1bda56092662d4b08185153d6501a8	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-07-08 21:10:12.308156-04
-ff2b86be94b1e2cb0bcba8ef509585ea	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-07-20 22:10:49.795572-04
-d1590f5aa88c1a55b26e287677b190dd	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-08-10 03:12:34.405138-04
-bb6c7c36ee1871e84bb818ff7097219d	Y2Y2OTVlNjUzOWQ1ODFhNWY1MmM0ZDc4MTA0Y2JkYjdhNTM0YWMyNzqAAn1xAVUKdGVzdGNvb2tp\nZXECVQZ3b3JrZWRxA3Mu\n	2012-08-31 11:05:06.131108-04
+f61827c83b9bbb8e738b36078b433067	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-09-06 16:20:41.442395-04
+29663f2f6bf20aa00a0defb5a0696705	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-09-10 11:26:43.988977-04
+7872b3f06b3809bf70faad57c90da488	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-09-21 15:31:31.586186-04
+b8a5bd619d9701662c752a45f53cc25d	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-10 15:23:50.876331-04
+451803deac939c4847347251a772d799	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-22 13:10:34.481433-04
+f7491f88b24198177f851976a4a5d6e2	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-22 14:40:57.504987-04
+4153119e40c12a711502d06d0a352dac	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-25 13:34:19.98802-04
+4297c663a7b30b637b1bfcfe577c342b	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-29 12:44:55.991284-04
+46e969c8f952430f8db8b3b705463fbf	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-29 12:46:34.021142-04
+8bcbf90e1bcd950b0ba6fa5e62d47455	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-29 13:30:54.63688-04
+657aee02d56964a0fe9c75839d50812d	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-29 13:41:23.794792-04
 \.
 
 
@@ -2511,11 +2427,7 @@ COPY django_site (id, domain, name) FROM stdin;
 -- Data for Name: multiuploader_image; Type: TABLE DATA; Schema: public; Owner: mycoplasma
 --
 
-COPY multiuploader_image (id, filename, image, key_data, upload_date) FROM stdin;
-128	41210ad0d6aa4623508c9f519d9021a1.png	multiuploader_images/41210ad0d6aa4623508c9f519d9021a1.png	28311675839902754722060624200382608027692026126854693578940101543597983444369	2011-08-19 11:55:59.325336-04
-133	5888786cafbcd1bd0b3eaaaba1130603.png	multiuploader_images/5888786cafbcd1bd0b3eaaaba1130603.png	51294260214175108930115638735668900719071687562987124682932296615485173608260	2011-08-19 11:56:01.664562-04
-134	1c7a078627995d8c52124aa1e27b1b64.png	multiuploader_images/1c7a078627995d8c52124aa1e27b1b64.png	14749698573420445716647714051119616380753056419913156612593890908004645899584	2011-08-19 11:56:01.986895-04
-137	981fe7e184c9a8a1a454094866bbc8fe.png	multiuploader_images/981fe7e184c9a8a1a454094866bbc8fe.png	103302989576424840454010228424676574523034916075241660359135892934940970462722	2011-08-19 12:57:23.478341-04
+COPY multiuploader_image (id, filename, image, key_data, upload_date, user_id) FROM stdin;
 \.
 
 
@@ -2540,6 +2452,8 @@ COPY mycoplasma_home_dropdownitem (id, "itemName", "navBarOpt_id", href, rank) F
 --
 
 COPY mycoplasma_home_genomeupload (genbank_file, name, id) FROM stdin;
+genbank_files/Tagger_4.png	Tagger.png	1
+genbank_files/Tagger_5.png	Tagger.png	2
 genbank_files/Tagger_4.png	Tagger.png	1
 genbank_files/Tagger_5.png	Tagger.png	2
 \.
@@ -2579,8 +2493,24 @@ NC_009497	62	61
 COPY mycoplasma_home_navbaroption (id, "optionName", href, rank) FROM stdin;
 7	Home	index.html	1
 8	GBrowse	genome_browser	2
+9	BLAST	blast	3
 10	Images	images	4
-9	Blast	blast	3
+\.
+
+
+--
+-- Data for Name: mycoplasma_home_picture; Type: TABLE DATA; Schema: public; Owner: mycoplasma
+--
+
+COPY mycoplasma_home_picture (id, description, "imageName", publication, "altText", user_id, "uploadDate", "isPrivate") FROM stdin;
+31	The banner for the website	pictures/DatabaseBanner1_1.png	none	Website Banner	1	2012-10-11 10:34:28.154468-04	f
+32	Mycoplasma genitalium	pictures/7567b275b9a5bb652d688f896b3e4e05.png	none	Mycoplasma genitalium	1	2012-10-11 10:34:28.154468-04	f
+33	Mycoplasma mobile	pictures/272913d897024486748b12c7364f5edd.png	none	Mycoplasma mobile	1	2012-10-11 10:34:28.154468-04	f
+34	Mycoplasma pneumoniae	pictures/bf18767fa2cd28aa44f101fe926131eb.png	none	Mycoplasma pneumoniae	1	2012-10-11 10:34:28.154468-04	f
+35	Mycoplasma penetrans	pictures/2e3f1eccb748bd03b3f334fc601f5f59.png	none	Mycoplasma penetrans	1	2012-10-11 10:34:28.154468-04	f
+36	Mycoplasma pneumoniae	pictures/65041f08998e601ccfa82998a2263198.png	none	Mycoplasma pneumoniae	1	2012-10-11 10:34:28.154468-04	f
+37	Mycoplamsa agassizii	pictures/644fc7bafed9f4d66f4b5f721a2ab585.png	none	Mycoplasma agassizii	1	2012-10-11 10:34:28.154468-04	f
+38	Mycoplasma gallinarium	pictures/03eeef201f51345b898237ec79c5a4b3.png	none	Mycoplasma gallinarium	1	2012-10-11 10:34:28.154468-04	f
 \.
 
 
@@ -2600,10 +2530,10 @@ COPY mycoplasma_home_picturedefinitiontag (id, picture_id, organism_id, name) FR
 
 
 --
--- Data for Name: mycoplasma_home_pictureprops; Type: TABLE DATA; Schema: public; Owner: mycoplasma
+-- Data for Name: mycoplasma_home_pictureprop; Type: TABLE DATA; Schema: public; Owner: mycoplasma
 --
 
-COPY mycoplasma_home_pictureprops (id, picture_id_id, type_id_id) FROM stdin;
+COPY mycoplasma_home_pictureprop (id, picture_id_id, type_id_id) FROM stdin;
 25	31	1
 26	32	3
 27	33	3
@@ -2616,26 +2546,10 @@ COPY mycoplasma_home_pictureprops (id, picture_id_id, type_id_id) FROM stdin;
 
 
 --
--- Data for Name: mycoplasma_home_pictures; Type: TABLE DATA; Schema: public; Owner: mycoplasma
+-- Data for Name: mycoplasma_home_picturetype; Type: TABLE DATA; Schema: public; Owner: mycoplasma
 --
 
-COPY mycoplasma_home_pictures (id, description, "imageName", publication, "altText") FROM stdin;
-31	The banner for the website	pictures/DatabaseBanner1_1.png	none	Website Banner
-32	Mycoplasma genitalium	pictures/7567b275b9a5bb652d688f896b3e4e05.png	none	Mycoplasma genitalium
-33	Mycoplasma mobile	pictures/272913d897024486748b12c7364f5edd.png	none	Mycoplasma mobile
-34	Mycoplasma pneumoniae	pictures/bf18767fa2cd28aa44f101fe926131eb.png	none	Mycoplasma pneumoniae
-35	Mycoplasma penetrans	pictures/2e3f1eccb748bd03b3f334fc601f5f59.png	none	Mycoplasma penetrans
-36	Mycoplasma pneumoniae	pictures/65041f08998e601ccfa82998a2263198.png	none	Mycoplasma pneumoniae
-37	Mycoplamsa agassizii	pictures/644fc7bafed9f4d66f4b5f721a2ab585.png	none	Mycoplasma agassizii
-38	Mycoplasma gallinarium	pictures/03eeef201f51345b898237ec79c5a4b3.png	none	Mycoplasma gallinarium
-\.
-
-
---
--- Data for Name: mycoplasma_home_picturetypes; Type: TABLE DATA; Schema: public; Owner: mycoplasma
---
-
-COPY mycoplasma_home_picturetypes (id, description, "imageType") FROM stdin;
+COPY mycoplasma_home_picturetype (id, description, "imageType") FROM stdin;
 1	The banner for the website	banner
 2	Pictures used as icons	icon
 3	Photo to be displayed as part of the database	database_photo
@@ -2644,10 +2558,19 @@ COPY mycoplasma_home_picturetypes (id, description, "imageType") FROM stdin;
 
 
 --
+-- Data for Name: mycoplasma_home_tagcolor; Type: TABLE DATA; Schema: public; Owner: mycoplasma
+--
+
+COPY mycoplasma_home_tagcolor (id, red, green, blue) FROM stdin;
+1	256	0	0
+\.
+
+
+--
 -- Data for Name: mycoplasma_home_taggroup; Type: TABLE DATA; Schema: public; Owner: mycoplasma
 --
 
-COPY mycoplasma_home_taggroup (id, description, color, picture_id, shape_id) FROM stdin;
+COPY mycoplasma_home_taggroup (id, description, picture_id, color_id) FROM stdin;
 \.
 
 
@@ -2656,16 +2579,6 @@ COPY mycoplasma_home_taggroup (id, description, color, picture_id, shape_id) FRO
 --
 
 COPY mycoplasma_home_tagpoint (id, group_id, "pointX", "pointY", rank) FROM stdin;
-\.
-
-
---
--- Data for Name: mycoplasma_home_tagshape; Type: TABLE DATA; Schema: public; Owner: mycoplasma
---
-
-COPY mycoplasma_home_tagshape (id, shape) FROM stdin;
-2	poly
-1	rect
 \.
 
 
@@ -3127,7 +3040,7 @@ ALTER TABLE ONLY mycoplasma_home_picturedefinitiontag
 -- Name: mycoplasma_home_pictureprops_picture_id_id_key; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
-ALTER TABLE ONLY mycoplasma_home_pictureprops
+ALTER TABLE ONLY mycoplasma_home_pictureprop
     ADD CONSTRAINT mycoplasma_home_pictureprops_picture_id_id_key UNIQUE (picture_id_id, type_id_id);
 
 
@@ -3135,7 +3048,7 @@ ALTER TABLE ONLY mycoplasma_home_pictureprops
 -- Name: mycoplasma_home_pictureprops_pkey; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
-ALTER TABLE ONLY mycoplasma_home_pictureprops
+ALTER TABLE ONLY mycoplasma_home_pictureprop
     ADD CONSTRAINT mycoplasma_home_pictureprops_pkey PRIMARY KEY (id);
 
 
@@ -3143,7 +3056,7 @@ ALTER TABLE ONLY mycoplasma_home_pictureprops
 -- Name: mycoplasma_home_pictures_pkey; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
-ALTER TABLE ONLY mycoplasma_home_pictures
+ALTER TABLE ONLY mycoplasma_home_picture
     ADD CONSTRAINT mycoplasma_home_pictures_pkey PRIMARY KEY (id);
 
 
@@ -3151,8 +3064,16 @@ ALTER TABLE ONLY mycoplasma_home_pictures
 -- Name: mycoplasma_home_picturetypes_pkey; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
-ALTER TABLE ONLY mycoplasma_home_picturetypes
+ALTER TABLE ONLY mycoplasma_home_picturetype
     ADD CONSTRAINT mycoplasma_home_picturetypes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mycoplasma_home_tagcolor_pkey; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
+--
+
+ALTER TABLE ONLY mycoplasma_home_tagcolor
+    ADD CONSTRAINT mycoplasma_home_tagcolor_pkey PRIMARY KEY (id);
 
 
 --
@@ -3169,14 +3090,6 @@ ALTER TABLE ONLY mycoplasma_home_taggroup
 
 ALTER TABLE ONLY mycoplasma_home_tagpoint
     ADD CONSTRAINT mycoplasma_home_tagpoint_pkey PRIMARY KEY (id);
-
-
---
--- Name: mycoplasma_home_tagshape_pkey; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
---
-
-ALTER TABLE ONLY mycoplasma_home_tagshape
-    ADD CONSTRAINT mycoplasma_home_tagshape_pkey PRIMARY KEY (id);
 
 
 --
@@ -3226,14 +3139,14 @@ CREATE INDEX "mycoplasma_home_dropdownitem_navBarOpt_id" ON mycoplasma_home_drop
 -- Name: mycoplasma_home_pictureprops_picture_id_id; Type: INDEX; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
-CREATE INDEX mycoplasma_home_pictureprops_picture_id_id ON mycoplasma_home_pictureprops USING btree (picture_id_id);
+CREATE INDEX mycoplasma_home_pictureprops_picture_id_id ON mycoplasma_home_pictureprop USING btree (picture_id_id);
 
 
 --
 -- Name: mycoplasma_home_pictureprops_type_id_id; Type: INDEX; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
-CREATE INDEX mycoplasma_home_pictureprops_type_id_id ON mycoplasma_home_pictureprops USING btree (type_id_id);
+CREATE INDEX mycoplasma_home_pictureprops_type_id_id ON mycoplasma_home_pictureprop USING btree (type_id_id);
 
 
 --
@@ -3241,13 +3154,6 @@ CREATE INDEX mycoplasma_home_pictureprops_type_id_id ON mycoplasma_home_picturep
 --
 
 CREATE INDEX mycoplasma_home_taggroup_picture_id ON mycoplasma_home_taggroup USING btree (picture_id);
-
-
---
--- Name: mycoplasma_home_taggroup_shape_id; Type: INDEX; Schema: public; Owner: mycoplasma; Tablespace: 
---
-
-CREATE INDEX mycoplasma_home_taggroup_shape_id ON mycoplasma_home_taggroup USING btree (shape_id);
 
 
 --
@@ -3338,6 +3244,14 @@ ALTER TABLE ONLY django_admin_log
 
 
 --
+-- Name: multiuploader_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
+--
+
+ALTER TABLE ONLY multiuploader_image
+    ADD CONSTRAINT multiuploader_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: mycoplasma_home_dropdownitem_navBarOpt_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
 --
 
@@ -3350,23 +3264,31 @@ ALTER TABLE ONLY mycoplasma_home_dropdownitem
 --
 
 ALTER TABLE ONLY mycoplasma_home_picturedefinitiontag
-    ADD CONSTRAINT mycoplasma_home_picturedefinitiontag_picture_id_fkey FOREIGN KEY (picture_id) REFERENCES mycoplasma_home_pictures(id);
+    ADD CONSTRAINT mycoplasma_home_picturedefinitiontag_picture_id_fkey FOREIGN KEY (picture_id) REFERENCES mycoplasma_home_picture(id);
 
 
 --
 -- Name: mycoplasma_home_pictureprops_picture_id_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
 --
 
-ALTER TABLE ONLY mycoplasma_home_pictureprops
-    ADD CONSTRAINT mycoplasma_home_pictureprops_picture_id_id_fkey FOREIGN KEY (picture_id_id) REFERENCES mycoplasma_home_pictures(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY mycoplasma_home_pictureprop
+    ADD CONSTRAINT mycoplasma_home_pictureprops_picture_id_id_fkey FOREIGN KEY (picture_id_id) REFERENCES mycoplasma_home_picture(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
 -- Name: mycoplasma_home_pictureprops_type_id_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
 --
 
-ALTER TABLE ONLY mycoplasma_home_pictureprops
-    ADD CONSTRAINT mycoplasma_home_pictureprops_type_id_id_fkey FOREIGN KEY (type_id_id) REFERENCES mycoplasma_home_picturetypes(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY mycoplasma_home_pictureprop
+    ADD CONSTRAINT mycoplasma_home_pictureprops_type_id_id_fkey FOREIGN KEY (type_id_id) REFERENCES mycoplasma_home_picturetype(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: mycoplasma_home_taggroup_color_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
+--
+
+ALTER TABLE ONLY mycoplasma_home_taggroup
+    ADD CONSTRAINT mycoplasma_home_taggroup_color_fkey FOREIGN KEY (color_id) REFERENCES mycoplasma_home_tagcolor(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -3374,15 +3296,7 @@ ALTER TABLE ONLY mycoplasma_home_pictureprops
 --
 
 ALTER TABLE ONLY mycoplasma_home_taggroup
-    ADD CONSTRAINT mycoplasma_home_taggroup_picture_id_fkey FOREIGN KEY (picture_id) REFERENCES mycoplasma_home_pictures(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: mycoplasma_home_taggroup_shape_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
---
-
-ALTER TABLE ONLY mycoplasma_home_taggroup
-    ADD CONSTRAINT mycoplasma_home_taggroup_shape_id_fkey FOREIGN KEY (shape_id) REFERENCES mycoplasma_home_tagshape(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT mycoplasma_home_taggroup_picture_id_fkey FOREIGN KEY (picture_id) REFERENCES mycoplasma_home_picture(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -3391,6 +3305,14 @@ ALTER TABLE ONLY mycoplasma_home_taggroup
 
 ALTER TABLE ONLY mycoplasma_home_tagpoint
     ADD CONSTRAINT mycoplasma_home_tagpoint_group_id_fkey FOREIGN KEY (group_id) REFERENCES mycoplasma_home_taggroup(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: originalUser_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
+--
+
+ALTER TABLE ONLY mycoplasma_home_picture
+    ADD CONSTRAINT "originalUser_fkey" FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
