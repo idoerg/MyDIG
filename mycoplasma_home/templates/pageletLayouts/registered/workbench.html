@@ -51,8 +51,8 @@
 				<div><img class="collapse" src="{{ STATIC_URL }}images/arrow_down.png"></img></div>
 				<div><span class="toolbar-title">My Tags</span></div>
 				<div class="toolbar-options">
-					<span>Public</span><input id="public-pictures" name="public-pictures" type="checkbox" checked="checked" />
-					<span>Private</span><input id="private-pictures" name="private-pictures" type="checkbox" checked="checked" />
+					<span>Public</span><input id="public-tags" name="public-tags" type="checkbox" checked="checked" />
+					<span>Private</span><input id="private-tags" name="private-tags" type="checkbox" checked="checked" />
 				</div>
 			</div>
 			<div class="toolbar-body">
@@ -75,7 +75,7 @@
 	});
 
 	// centers all of the images in there containers so that they fit correctly
-	$('.my-pictures-image').each(function() {
+	$('.my-pictures-image').load(function() {
 		var $img = $(this);
 		var $parent = $img.parent();
 		var imgRatio = $img.width()/$img.height();
@@ -113,11 +113,31 @@
 			$imgClone.taggable({
 		        originalData : data.tags,
 		        parent: $workArea,
-		        imagesUrl: '{{ STATIC_URL }}images/'
+		        imagesUrl: '{{ STATIC_URL }}images/',
+		        alreadyLoaded: true
 		    });
 		};
 		
 		client.call(args, callback);		
+	});
+
+	// check boxes should limit the field of my pictures to public and private
+	$('#public-pictures').on('click', function() {
+		if (!$(this).is(':checked')) {
+			$('.public-image').parent().hide();
+		}
+		else {
+			$('.public-image').parent().show();
+		}
+	});
+
+	$('#private-pictures').on('click', function() {
+		if (!$(this).is(':checked')) {
+			$('.private-image').parent().hide();
+		}
+		else {
+			$('.private-image').parent().show();
+		}
 	});
 
 	

@@ -25,25 +25,35 @@ class Application(WebServiceApplicationBase):
 			try:
 				image = Picture.objects.get(pk__exact=imageKey) 
 				
-				tagGroups = TagGroup.objects.filter(picture__exact=image)
-				
-				for group in tagGroups:
-					tagPoints = TagPoint.objects.filter(group__exact = group).order_by('rank')
-					points = []
+				authenticated = True
+				if (image.isPrivate):
+					if (request.user.is_authenticated()):
+						authenticated = image.user == request.user
+					else:
+						authenticated = False
+						
+				if (authenticated):
+					tagGroups = TagGroup.objects.filter(picture__exact=image)
 					
-					for tagPoint in tagPoints:
-						points.append([
-							tagPoint.pointX, 
-							tagPoint.pointY
-						])
-					
-					color = [group.color.red, group.color.green, group.color.blue]
-					
-					tagTuples.append({
-						'color' : color,
-						'points' : points,
-						'description' : group.description
-					})
+					for group in tagGroups:
+						tagPoints = TagPoint.objects.filter(group__exact = group).order_by('rank')
+						points = []
+						
+						for tagPoint in tagPoints:
+							points.append([
+								tagPoint.pointX, 
+								tagPoint.pointY
+							])
+						
+						color = [group.color.red, group.color.green, group.color.blue]
+						
+						tagTuples.append({
+							'color' : color,
+							'points' : points,
+							'description' : group.description
+						})
+				else:
+					errorMessage = INVALID_IMAGE_KEY
 			except ObjectDoesNotExist:
 				errorMessage = INVALID_IMAGE_KEY
 		else:

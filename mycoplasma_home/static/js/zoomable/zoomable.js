@@ -177,27 +177,31 @@
 				$(this).addClass('zoomable-src');
 				$(this).parent().addClass('zoomable-parent');
 				
+				var self = this;
+				
 				var init = function() { 
 					// creates the structure
-					private_methods.createStructure(options, $(this).parent(), $(this));
-					$(this).draggable();
-				
-					$(this).data('zoomable', true);
+					private_methods.createStructure(options, $(self).parent(), $(self));
+					$(self).draggable();
 					
 					// checks for callback and callback arguments
-					if (options.callback) {
+					if (options.callback && !$(self).data('zoomable')) {
 						if (options.callback_args) {
-							options.callback.apply(this, options.callback_args);
+							options.callback.apply(self, options.callback_args);
+							$(self).data('zoomable', true);
 						}
 						else {
 							options.callback();
+							$(self).data('zoomable', true);
 						}
 					}
 				};
-				
-				$(this).attr('src', $(this).attr('src') + '?time=' + new Date().getTime());
-				
-				$(this).load(init);
+				if (options.alreadyLoaded) {
+					init();
+				}
+				else {
+					$(this).load(init);
+				}
 			});
 		}
 	};

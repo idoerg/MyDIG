@@ -651,7 +651,8 @@
 					callback: private_methods.createStructure,
 					callback_args: [$parent, $(this), args.originalData, options.imagesUrl],
 					zoom_callback: private_methods.resizeCanvas,
-					zoom_callback_args: [$(this).attr('id')]
+					zoom_callback_args: [$(this).attr('id')],
+					alreadyLoaded: options.alreadyLoaded
 				});
 			});
 		}
