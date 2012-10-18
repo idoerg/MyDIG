@@ -36,13 +36,15 @@
 			canvases, one for drawing and teh other for the mouseover events of the tags that already
 			exist. 
 		**/
-		createStructure: function($parent, $img, originalData, imagesUrl) {
+		createStructure: function($parent, $img, originalData, imagesUrl, callback) {
 			// create the toolbar
 			var id = $img.attr('id');
 			
 			$parent.prepend(private_methods.renderToolbar(colors, id, imagesUrl)); 
 			
-			$parent.parent().append('<div id="taggable-tooltip"></div>');
+			if ($('#taggable-tooltip').length == 0) {
+				$parent.parent().append('<div id="taggable-tooltip"></div>');
+			}
 			
 			// creates the tag board and the drawing board
 			var $tagBoard = $('<div id="' + id + '-tag-board" class="tag-board"></div>').prependTo($img.parent());
@@ -118,6 +120,10 @@
 				n: 0,
 				mouseDown : false
 			});
+			
+			if (callback) {
+				callback();
+			}
 		},
 		/**
 		
@@ -435,7 +441,7 @@
 		/**
 			Uses KineticJs to redraw the tag board to fit the current scale of the image
 			and converts the tag points to the current zoom level. Also, starts the mouseover
-			events for these polugons
+			events for these polygons
 		**/
 		redrawTagBoard: function($tagBoard) {
 			var tags = $tagBoard.data('tags');
@@ -649,7 +655,7 @@
 				$.extend(args, options);
 				$(this).zoomable({
 					callback: private_methods.createStructure,
-					callback_args: [$parent, $(this), args.originalData, options.imagesUrl],
+					callback_args: [$parent, $(this), args.originalData, options.imagesUrl, options.callback],
 					zoom_callback: private_methods.resizeCanvas,
 					zoom_callback_args: [$(this).attr('id')],
 					alreadyLoaded: options.alreadyLoaded

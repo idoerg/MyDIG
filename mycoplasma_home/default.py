@@ -17,15 +17,15 @@ class DropDownItem(models.Model):
         return self.itemName
 
 class Picture(models.Model):
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     imageName = models.ImageField(upload_to="pictures/")
-    publication = models.CharField(max_length=50)
-    altText = models.TextField()
+    publication = models.CharField(max_length=50, blank=True, null=True)
+    altText = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User)
     uploadDate = models.DateTimeField(auto_now_add=True)
     isPrivate = models.BooleanField(default=False, null=False)
     def __unicode__(self):
-        return self.altText
+        return str(self.imageName.name)
 
 class PictureType(models.Model):
     description = models.CharField(max_length=50)
@@ -47,6 +47,17 @@ class PictureDefinitionTag(models.Model):
     name = models.TextField()
     def __unicode__(self):
         return ", ".join((str(self.picture_id), str(self.name)))
+    
+class RecentlyViewedPicture(models.Model):
+    picture = models.ForeignKey(Picture)
+    user = models.ForeignKey(User)
+    lastDateViewed = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ("picture", "user")
+    
+    def __unicode__(self):
+        return (self.picture.imageName.name) + " viewed by " + self.user.username
 
 class TagColor(models.Model):
     red = models.IntegerField()

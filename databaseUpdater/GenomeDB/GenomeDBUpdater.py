@@ -6,13 +6,13 @@
 '''
 import ftplib
 import re
-from CronJobReport import CronJobReport
+from databaseUpdater.util.CronJobReport import CronJobReport
 import sys
 import os
 import shutil
 from GenomeDBDiff import GenomeDBDiff
 import GenomeDBUtil
-from SubProcess import runProgram
+from databaseUpdater.util.SubProcess import runProgram
 from Bio import GenBank
 from BCBio.GFF import GFFExaminer
 from django.conf import settings

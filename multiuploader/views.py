@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render_to_response
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
-from models import Image as modelsImage
+from mycoplasma_home.models import Picture
 from django.core.files.uploadedfile import UploadedFile
 from django.core.files import File
 
@@ -78,11 +78,10 @@ def multiuploader(request):
 
         #writing file manually into model
         #because we don't need form of any type.
-        image = modelsImage()
-        image.filename=str(filename)
-        image.image=wrapped_file.file
-        image.key_data = image.key_generate
+        image = Picture()
+        image.imageName = wrapped_file.file
         image.user = request.user
+        image.isPrivate = True
         image.save()
         log.info('File saving done')
 
@@ -92,20 +91,22 @@ def multiuploader(request):
 
         #settings imports
         try:
-            file_delete_url = settings.MULTI_FILE_DELETE_URL+'/'
-            file_url = settings.MULTI_IMAGE_URL+'/'+image.key_data+'/'
+            file_delete_url = settings.MULTI_FILE_DELETE_URL + '/'
+            file_url = settings.MEDIA_URL + image.imageName.name
         except AttributeError:
             file_delete_url = 'multi_delete/'
             file_url = 'multi_image/'+image.key_data+'/'
 
         #generating json response array
         result = []
-        result.append({"name":filename, 
-                       "size":file_size, 
-                       "url":file_url, 
-                       "thumbnail_url":thumb_url,
-                       "delete_url":file_delete_url+str(image.pk)+'/', 
-                       "delete_type":"POST",})
+        result.append({
+           "name" : filename, 
+           "size" : file_size, 
+           "url" : file_url,
+           "thumbnail_url" : thumb_url,
+           "delete_url" : file_delete_url + ' ?imageKey=' + str(image.pk), 
+           "delete_type" : "POST"
+        })
         response_data = simplejson.dumps(result)
         
         if "application/json" in request.META['HTTP_ACCEPT_ENCODING']:
@@ -115,9 +116,4 @@ def multiuploader(request):
         return HttpResponse(response_data, mimetype=mimetype)
     else: #GET
         return HttpResponse('Only POST accepted')
-
-def multi_show_uploaded(request, key):
-    image = get_object_or_404(modelsImage, key_data=key)
-    url = settings.MEDIA_URL+image.image.name
-    return render_to_response('multiuploader/one_image.html', {"multi_single_url":url,})
 

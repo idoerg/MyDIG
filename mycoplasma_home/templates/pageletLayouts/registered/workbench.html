@@ -25,6 +25,9 @@
 					<div>
 					{% for image in myImages %}
 						<div class="my-pictures-image-holder">
+							<div class="top-right-float" title=".ui-icon-close">                        
+				                <span class="ui-state-default ui-corner-all ui-icon ui-icon-trash delete-image-button"></span> 
+				            </div>
 							<img src="{{ MEDIA_URL }}{{ image.image.imageName }}" name="{{ image.image.pk }}" class="{{ image.permissions }}-image my-pictures-image" />
 						</div>
 						{% if forloop.counter|mod:2 %}
@@ -91,13 +94,56 @@
 			$img.css('left', leftVal);
 		}
 	});
+	
+	// creates an "Are you sure box for when a user decides to delete an image
+	var $dialogAreYouSure = $('<div></div>')
+	    .html('Are you sure you want to delete?')
+	    .dialog({
+	        autoOpen  : false,
+	        title     : 'Delete Image',
+	        buttons   : [{
+	                        text: "Yes",
+	                        click: function() {
+	                            $.ajax({
+	                                url: '{{ SITE_URL }}administration/deleteImage',
+	                                type: "POST",
+	                                data: { image_pk: lastImagePkHover },
+	                                context: document.body,
+	                                success: function(data){
+	                                    refreshSlider(data);
+	                                }
+	                            });
+	                            $(this).dialog("close"); 
+	                        }
+	                    },
+	                    {
+	                        text: "No",
+	                        click: function() { 
+	                            $(this).dialog("close"); 
+	                        }
+	                    }],
+	        draggable : false,
+	        resizable : false,
+	    });
 
+	// make the trash cans work on hover
+	$('.my-pictures-image').on('mouseenter', function() {
+		$(this).parent().find('.delete-image-button').show();
+	});
+
+	$('.my-pictures-image').on('mouseout', function(event) {
+		if (!$(event.relatedTarget).hasClass('delete-image-button')) {
+			$(this).parent().find('.delete-image-button').hide();
+		}
+	});
+	
 	// calls the getTags web service for this image in order to
 	// get the tags for the picture and stores them in cache so
 	// that only a ping is needed for the next time
 	$('.my-pictures-image').on('click', function() {		
 		var $imgClone = $(this).clone();
 		$imgClone.attr('id', 'current-editing');
+		$imgClone.attr('class', '');
 		var key = $(this).attr('name');
 		
 		var client = new WebServiceClient('{{ SITE_URL }}images/getTags');
@@ -114,29 +160,41 @@
 		        originalData : data.tags,
 		        parent: $workArea,
 		        imagesUrl: '{{ STATIC_URL }}images/',
-		        alreadyLoaded: true
+		        alreadyLoaded: true,
+		        callback : function() {
+			        var $editButton = $('<div class="edit-image-container"></div>');
+			        $editButton.append('<button class="edit-image-button"><img src="{{ STATIC_URL }}images/polygonButtonIcon.png"></img><span>Edit Image</span></button>');
+					$imgClone.parent().prepend($editButton);
+					$imgClone.parent().on('mouseover', function() {
+						$editButton.show();
+					});
+
+					$imgClone.parent().on('mouseout', function() {
+						$editButton.hide();
+					});
+		        } 
 		    });
 		};
 		
-		client.call(args, callback);		
+		client.call(args, callback);
 	});
 
 	// check boxes should limit the field of my pictures to public and private
 	$('#public-pictures').on('click', function() {
 		if (!$(this).is(':checked')) {
-			$('.public-image').parent().hide();
+			$('.public-image').parent().hide('slow');
 		}
 		else {
-			$('.public-image').parent().show();
+			$('.public-image').parent().show('slow');
 		}
 	});
 
 	$('#private-pictures').on('click', function() {
 		if (!$(this).is(':checked')) {
-			$('.private-image').parent().hide();
+			$('.private-image').parent().hide('slow');
 		}
 		else {
-			$('.private-image').parent().show();
+			$('.private-image').parent().show('slow');
 		}
 	});
 

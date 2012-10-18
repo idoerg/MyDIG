@@ -6,7 +6,7 @@
     Date: August 5, 2012
 '''
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.models import Picture, TagGroup, TagPoint
+from mycoplasma_home.models import Picture, TagGroup, TagPoint, RecentlyViewedPicture
 from django.core.exceptions import ObjectDoesNotExist
 
 class ImageEditorPagelet(PageletBase):
@@ -21,31 +21,47 @@ class ImageEditorPagelet(PageletBase):
         self.setLayout('public/imageEditor.html')
         try:
             imageKey = request.REQUEST['imageKey']
-            image = Picture.objects.get(pk__exact=imageKey)      
+            image = Picture.objects.get(pk__exact=imageKey)
             
-            tagGroups = TagGroup.objects.filter(picture__exact=image)
+            error = False
             
-            tagTuples = list()
+            if (image.isPrivate):
+                if (request.user.is_authenticated() or image.user != request.user):
+                    error = True
             
-            for group in tagGroups:
-                tagPoints = TagPoint.objects.filter(group__exact = group).order_by('rank')
-                points = []
+            if (not error):
+                tagGroups = TagGroup.objects.filter(picture__exact=image)
                 
-                for tagPoint in tagPoints:
-                    points.append([tagPoint.pointX, tagPoint.pointY])
+                tagTuples = list()
                 
-                color = [group.color.red, group.color.green, group.color.blue]
+                for group in tagGroups:
+                    tagPoints = TagPoint.objects.filter(group__exact = group).order_by('rank')
+                    points = []
+                    
+                    for tagPoint in tagPoints:
+                        points.append([tagPoint.pointX, tagPoint.pointY])
+                    
+                    color = [group.color.red, group.color.green, group.color.blue]
+                    
+                    tagTuples.append({
+                        'color' : color,
+                        'points' : points,
+                        'description' : group.description
+                    })
                 
-                tagTuples.append({
-                    'color' : color,
-                    'points' : points,
-                    'description' : group.description
-                })
-            
-            return {
-                'tags' : tagTuples,
-                'image' : image
-            }
+                if (request.user.is_authenticated()):
+                    recentlyViewed = RecentlyViewedPicture()
+                    recentlyViewed.picture = image
+                    recentlyViewed.user = request.user
+                    recentlyViewed.save()
+                
+                return {
+                    'tags' : tagTuples,
+                    'image' : image
+                }
+            else:
+                self.setLayout('public/404Media.html')
+                return {}
         except ObjectDoesNotExist:
             self.setLayout('public/404Media.html')
             return {}

@@ -5,7 +5,7 @@
     Author: Andrew Oberlin
     Date: September 10, 2012
 '''
-from SubProcess import runProgram
+from databaseUpdater.util.SubProcess import runProgram
 import shutil
 from BCBio.GFF import GFFExaminer
 
