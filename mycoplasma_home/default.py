@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
+import os
 
 class NavBarOption(models.Model):
     optionName = models.CharField(max_length=20)
@@ -24,6 +26,13 @@ class Picture(models.Model):
     user = models.ForeignKey(User)
     uploadDate = models.DateTimeField(auto_now_add=True)
     isPrivate = models.BooleanField(default=False, null=False)
+    
+    def delete(self, *args, **kwargs):
+        path = self.imageName.path
+        super(Picture, self).delete(*args, **kwargs)
+        if (os.path.exists(path)):
+            os.remove(path)
+    
     def __unicode__(self):
         return str(self.imageName.name)
 
@@ -51,7 +60,11 @@ class PictureDefinitionTag(models.Model):
 class RecentlyViewedPicture(models.Model):
     picture = models.ForeignKey(Picture)
     user = models.ForeignKey(User)
-    lastDateViewed = models.DateTimeField(auto_now_add=True)
+    lastDateViewed = models.DateTimeField()
+    
+    def save(self, *args, **kwargs):
+        self.lastDateViewed = datetime.now()
+        super(RecentlyViewedPicture, self).save(*args, **kwargs)
     
     class Meta:
         unique_together = ("picture", "user")

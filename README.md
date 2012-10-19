@@ -44,3 +44,5 @@ Otherwise, the database will not allow the same species in value in the species 
    
  9. In your terminal, move to the directory /var/www/mycoplasma_site/databaseUpdater. Run the following command:
  					python GenomeUpdater.py
+ 					
+ 10. Add the cron job for pruning to crontab to run every Saturday at 3:00am (should already be configured in the cron tab sh for pruning)

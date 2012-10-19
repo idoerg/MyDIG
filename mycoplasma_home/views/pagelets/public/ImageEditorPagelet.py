@@ -50,10 +50,8 @@ class ImageEditorPagelet(PageletBase):
                     })
                 
                 if (request.user.is_authenticated()):
-                    recentlyViewed = RecentlyViewedPicture()
-                    recentlyViewed.picture = image
-                    recentlyViewed.user = request.user
-                    recentlyViewed.save()
+                    recentlyViewed = RecentlyViewedPicture.objects.get_or_create(picture=image, user=request.user)
+                    recentlyViewed[0].save()
                 
                 return {
                     'tags' : tagTuples,
