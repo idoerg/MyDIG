@@ -3,8 +3,8 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/zoomable.css"></link>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/taggable.css"></link>
     <script type="text/javascript" src="{{ STATIC_URL }}js/kineticjs/kinetic-v3.10.0.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/zoomable/zoomable.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/taggable/taggable.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/zoomable.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/taggable.js"></script>
 </head>
 <body>
     <div id="image_container">
@@ -22,6 +22,8 @@
     $('#main_image').taggable({
         originalData : $.parseJSON(unescape($.trim($('#tagPoints').val()))),
         parent: $('#image_container'),
-        imagesUrl: '{{ STATIC_URL }}images/'
+        imagesUrl: '{{ STATIC_URL }}images/',
+        genomicInfo: $('#image_container').find('.info-container'),
+        title: '{{ organism.common_name }}'
     });
 </script>

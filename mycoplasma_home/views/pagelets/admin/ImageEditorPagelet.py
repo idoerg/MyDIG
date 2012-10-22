@@ -7,7 +7,7 @@
 '''
 
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.models import Picture, TagGroup, TagPoint
+from mycoplasma_home.models import Picture, TagGroup, TagPoint, PictureDefinitionTag, Organism
 from django.core.exceptions import ObjectDoesNotExist
 
 class ImageEditorPagelet(PageletBase):
@@ -23,7 +23,10 @@ class ImageEditorPagelet(PageletBase):
 
         try:
             imageKey = request.REQUEST['imageKey']
-            image = Picture.objects.get(pk__exact=imageKey)      
+            image = Picture.objects.get(pk__exact=imageKey)    
+            
+            defTag = PictureDefinitionTag.objects.get(picture__exact=image)
+            organism = Organism.objects.get(pk__exact=defTag.organism_id)
             
             tagGroups = TagGroup.objects.filter(picture__exact=image)
             
@@ -45,6 +48,7 @@ class ImageEditorPagelet(PageletBase):
                 })
     
             return {
+                'organism' : organism,
                 'tags' : tagTuples,
                 'image' : image
             }

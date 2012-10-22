@@ -142,3 +142,6 @@ th {
 	border: 1px solid #CCCCCC;
 }
 
+.geneLinksMenu {
+	display: none;	
+}

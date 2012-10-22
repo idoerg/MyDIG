@@ -16,9 +16,50 @@
 			jQuery UI 1.8.18 or higher
 			zoomable.js and all of its dependencies
 			KineticJs 3.10.0
-			JsRender with taggableTemplate.js
 			taggable.css
 	**/   
+	var public_methods = {
+		init: function(options) {
+			return this.each(function() {
+				var args = { originalData: []};
+				
+				var $parent;
+				if (options.parent) {
+					$parent = options.parent;
+				}
+				else {
+					$parent = $(this).parent();
+				}
+				if (options.imagesUrl[0] != '/') {
+					options.imagesUrl += '/';
+				}
+				
+				var settings = {
+					parent : $parent, 
+					img : $(this), 
+					originalData : args.originalData, 
+					imagesUrl : options.imagesUrl, 
+					callback : options.callback,
+					title : (options.title ? options.title : 'Genome Links'),
+					genomicInfo : options.genomicInfo
+				};
+				
+				$.extend(args, options);
+				$(this).zoomable({
+					callback: private_methods.createStructure,
+					callback_args: [settings],
+					zoom_callback: private_methods.resizeCanvas,
+					zoom_callback_args: [$(this).attr('id')],
+					alreadyLoaded: options.alreadyLoaded
+				});
+			});
+		},
+		isTaggable: function() {
+			var imgId = $(this).attr('id');
+			return $('#' + imgId + '-drawing-board').length > 0;
+		}
+	};
+	
 	var colors = [
 		{ colorRGB : 'rgb(255, 0, 0)'},
 		{ colorRGB : 'rgb(0, 0, 255)'},
@@ -36,11 +77,28 @@
 			canvases, one for drawing and teh other for the mouseover events of the tags that already
 			exist. 
 		**/
-		createStructure: function($parent, $img, originalData, imagesUrl, callback) {
+		createStructure: function(settings) {
+			var $parent = settings.parent;
+			var $img = settings.img;
+			var originalData = settings.originalData;
+			var imagesUrl = settings.imagesUrl;
+			var callback = settings.callback;
+			var $genomicInfo = settings.genomicInfo;
+			
 			// create the toolbar
 			var id = $img.attr('id');
 			
 			$parent.prepend(private_methods.renderToolbar(colors, id, imagesUrl)); 
+			$genomicInfo.prepend(
+				$('<div class="organismTitle">' + settings.title + 
+					'</div><div class="geneLinksMenu"><div class="geneLinkContainer"></div><div class="newGeneLinkForm"><input type="text" id="newLink' + id + 
+					'"/ ><button>Add New Gene Link</button></div></div><div class="speciesInfo"></div>'
+				)
+			);
+			
+			$genomicInfo.find('.speciesInfo').append(settings.speciesInfo);
+			
+			$genomicInfo.attr('id', id + 'GeneLinkContainer');
 			
 			if ($('#taggable-tooltip').length == 0) {
 				$parent.parent().append('<div id="taggable-tooltip"></div>');
@@ -134,47 +192,47 @@
 				colorButtons += '<button class="change-color toolbar-item" style="background-color: ' + colors[i].colorRGB + '"></button>';
 			}
 			var $render = $('<div class="toolbar-container"> \
-					<span> \
-						<img class="toolbar-icon" src="' + imagesUrl + 'tag.png"></img> \
-					</span> \
-					<span> \
-						<img id="' + id + '-begin-tagging" class="add-tag toolbar-item" src="' + imagesUrl + 'button-play_green.png"></img> \
-						<img id="' + id + '-end-tagging" class="add-tag-hidden toolbar-item" src="' + imagesUrl + 'button-pause_red.png"></img> \
-					</span> \
-					<span id="' + id + '-toolbar-table-container" class="toolbar-table-container" style="display: none;"> \
-						<table cellspacing="0" cellpadding="0"> \
-							<thead> \
-								<tr> \
-									<th>Description</th> \
-									<th>Colors</th> \
-									<th>Draw Mode</th> \
-								</tr> \
-							</thead> \
-							<tbody> \
-								<tr> \
-									<td> \
-										<form id="' + id + '-description-form" class="desc-form toolbar-item"> \
-											<input type="text" name="desc" class="desc" /> \
-										</form> \
-									</td> \
-									<td id="' + id + '-color-toolbar">' + 
-										colorButtons + 
-									'</td> \
-									<td> \
-										<button id="' + id + '-draw-rect" class="draw-rect draw-type toolbar-item"> \
-											<img height="20px" src="' + imagesUrl + 'rectButtonIcon.png"></img> \
-										</button> \
-										<button id="'+ id + '-draw-poly" class="draw-poly draw-type toolbar-item"> \
-											<img height="20px" src="' + imagesUrl + 'polygonButtonIcon.png"> \
-										</button> \
-									</td> \
-								</tr> \
-							</tbody> \
-						</table> \
-						<button id="' + id + '-submit-tag" class="submit-tag toolbar-item">Submit Tag</button> \
-					</span> \
-				</div>');
-				return $render;
+				<span> \
+					<img class="toolbar-icon" src="' + imagesUrl + 'tag.png"></img> \
+				</span> \
+				<span> \
+					<img id="' + id + '-begin-tagging" class="add-tag toolbar-item" src="' + imagesUrl + 'button-play_green.png"></img> \
+					<img id="' + id + '-end-tagging" class="add-tag-hidden toolbar-item" src="' + imagesUrl + 'button-pause_red.png"></img> \
+				</span> \
+				<span id="' + id + '-toolbar-table-container" class="toolbar-table-container" style="display: none;"> \
+					<table cellspacing="0" cellpadding="0"> \
+						<thead> \
+							<tr> \
+								<th>Description</th> \
+								<th>Colors</th> \
+								<th>Draw Mode</th> \
+							</tr> \
+						</thead> \
+						<tbody> \
+							<tr> \
+								<td> \
+									<form id="' + id + '-description-form" class="desc-form toolbar-item"> \
+										<input type="text" name="desc" class="desc" /> \
+									</form> \
+								</td> \
+								<td id="' + id + '-color-toolbar">' + 
+									colorButtons + 
+								'</td> \
+								<td> \
+									<button id="' + id + '-draw-rect" class="draw-rect draw-type toolbar-item"> \
+										<img height="20px" src="' + imagesUrl + 'rectButtonIcon.png"></img> \
+									</button> \
+									<button id="'+ id + '-draw-poly" class="draw-poly draw-type toolbar-item"> \
+										<img height="20px" src="' + imagesUrl + 'polygonButtonIcon.png"> \
+									</button> \
+								</td> \
+							</tr> \
+						</tbody> \
+					</table> \
+					<button id="' + id + '-submit-tag" class="submit-tag toolbar-item">Submit Tag</button> \
+				</span> \
+			</div>');
+			return $render;
 		},
 		/**
 			Redraws and resizes the canvases based on the image's current
@@ -250,14 +308,45 @@
 			$tagBoard.data('tags').push({
 				color: colorArr,
 				points: tagPoints,
-				description: description
+				description: description,
+				genes: []
 			});
 			
 			// updates the tag board
 			draw_methods.redrawTagBoard($tagBoard);
+		},
+		/**
+		 	Shows the genomic information for the selected tag if one is selected
+		**/
+		showGenomicInfo: function(tag, id) {
+			var $infoContainer = $('#' + id + 'GeneLinkContainer');
+			var $linksMenu = $infoContainer.children('.geneLinksMenu');
+			if (!$linksMenu.is(":visible")) {
+				var $linkContainer = $linksMenu.children('.geneLinkContainer')
+				var $speciesInfo = $infoContainer.find('.speciesInfo');
+				$linkContainer.empty();
+				
+				for (gene in tag.genes) {
+					$linkContainer.append('<div class="geneLink"><span class="deleteGeneLink">X</span>' + gene.name + '</div>');
+				}
+				
+				$speciesInfo.hide();
+				$linksMenu.show();
+			}
+		},
+		/**
+		 	Hides the genomic information 
+		**/
+		hideGenomicInfo: function(id) {
+			var $infoContainer = $('#' + id + 'GeneLinkContainer');
+			$infoContainer.find('.geneLinksMenu').hide();
+			$infoContainer.find('.speciesInfo').show();
 		}
 	};
 	
+	/**
+	 * Helper Methods specific to drawing. Should be translated into an object soon. 
+	**/
 	var draw_methods = {
 		/**
 			Methods for drawing a rectangle
@@ -445,6 +534,8 @@
 		**/
 		redrawTagBoard: function($tagBoard) {
 			var tags = $tagBoard.data('tags');
+			$tagBoard.data('locked', false);
+			var id = $tagBoard.attr('id').split('-')[0];
 			
 			// check to see if a stage has been initialized
 			var stage;
@@ -499,6 +590,7 @@
 				// sets the color and description for this polygon
 				poly.color = color;
 				poly.description = tags[i].description;
+				poly.setId(i);
 				
 				// finds the position of the tooltip for this polygon
 				// should be centered in the middle of the polygon and below it
@@ -523,22 +615,45 @@
 				
 				// shows the polygon and its tooltip
 				poly.on('mouseover', function(evt) {
-					evt.shape.attrs.fill = evt.shape.color;
-					evt.shape.attrs.stroke = "black";
-					var shape = evt.shape;
-					var pos = draw_methods.getPolyPos(evt.shape, $tagBoard);
-					pos[0] -= $('#taggable-tooltip').html(shape.description).width()/2;
-					pos[1] -= $(window).scrollTop() - 20;
-					$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show(); 
-					layer.draw();
+					if (!$tagBoard.data('locked')) {
+						// draws the shape on mouse over
+						evt.shape.attrs.fill = evt.shape.color;
+						evt.shape.attrs.stroke = "black";
+						var shape = evt.shape;
+						
+						// positions the tag tooltip
+						var pos = draw_methods.getPolyPos(evt.shape, $tagBoard);
+						pos[0] -= $('#taggable-tooltip').html(shape.description).width()/2;
+						pos[1] -= $(window).scrollTop() - 20;
+						$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show(); 
+						layer.draw();
+						
+						// sets the selected tag for showing information
+						var shapeId = evt.shape.getId();
+						$tagBoard.data('selectedTag', tags[shapeId]);
+						private_methods.showGenomicInfo(tags[shapeId], id);
+					}
 				});
 				
 				// hides the polygon and its tooltip
 				poly.on('mouseout', function(evt) {
-					evt.shape.attrs.fill = "";
-					evt.shape.attrs.stroke = "rgba(255,255,255,0)";
-					$('#taggable-tooltip').hide();
-					layer.draw();
+					if (!$tagBoard.data('locked')) {
+						// draws the polygon as invisible again
+						evt.shape.attrs.fill = "";
+						evt.shape.attrs.stroke = "rgba(255,255,255,0)";
+						
+						// hides the tooltip and redraws the layer
+						$('#taggable-tooltip').hide();
+						layer.draw();
+						
+						private_methods.hideGenomicInfo(id);
+					}
+				});
+				
+				// toggles the mouseout event for this poly
+				// and the mouseover events for all other poly's
+				poly.on('click', function(evt) {
+					$tagBoard.data('locked', !$tagBoard.data('locked'));
 				});
 				
 				layer.add(poly);
@@ -633,34 +748,6 @@
 			var $img = $canvas.siblings('.zoomable-src');
 			var scale = $img.data('originalHeight')/$img.height();
 			return [point[0]*scale, point[1]*scale];
-		}
-	};
-	
-	var public_methods = {
-		init: function(options) {
-			return this.each(function() {
-				var args = { originalData: []};
-				
-				var $parent;
-				if (options.parent) {
-					$parent = options.parent;
-				}
-				else {
-					$parent = $(this).parent();
-				}
-				if (options.imagesUrl[0] != '/') {
-					options.imagesUrl += '/';
-				}
-				
-				$.extend(args, options);
-				$(this).zoomable({
-					callback: private_methods.createStructure,
-					callback_args: [$parent, $(this), args.originalData, options.imagesUrl, options.callback],
-					zoom_callback: private_methods.resizeCanvas,
-					zoom_callback_args: [$(this).attr('id')],
-					alreadyLoaded: options.alreadyLoaded
-				});
-			});
 		}
 	};
 
