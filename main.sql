@@ -11,6 +11,170 @@ SET escape_string_warning = off;
 
 SET search_path = public, pg_catalog;
 
+ALTER TABLE ONLY public.mycoplasma_home_taggroup DROP CONSTRAINT user_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_tag DROP CONSTRAINT user_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_recentlyviewedpicture DROP CONSTRAINT user_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_taggroup DROP CONSTRAINT picture_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_recentlyviewedpicture DROP CONSTRAINT picture_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_picture DROP CONSTRAINT "originalUser_fkey";
+ALTER TABLE ONLY public.mycoplasma_home_tagpoint DROP CONSTRAINT mycoplasma_home_tagpoint_group_id_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_tag DROP CONSTRAINT mycoplasma_home_taggroup_color_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_pictureprop DROP CONSTRAINT mycoplasma_home_pictureprops_type_id_id_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_pictureprop DROP CONSTRAINT mycoplasma_home_pictureprops_picture_id_id_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_picturedefinitiontag DROP CONSTRAINT mycoplasma_home_picturedefinitiontag_picture_id_fkey;
+ALTER TABLE ONLY public.mycoplasma_home_dropdownitem DROP CONSTRAINT "mycoplasma_home_dropdownitem_navBarOpt_id_fkey";
+ALTER TABLE ONLY public.multiuploader_image DROP CONSTRAINT multiuploader_user_id_fkey;
+ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_user_id_fkey;
+ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_content_type_id_fkey;
+ALTER TABLE ONLY public.auth_permission DROP CONSTRAINT content_type_id_refs_id_728de91f;
+ALTER TABLE ONLY public.auth_user_user_permissions DROP CONSTRAINT auth_user_user_permissions_user_id_fkey;
+ALTER TABLE ONLY public.auth_user_user_permissions DROP CONSTRAINT auth_user_user_permissions_permission_id_fkey;
+ALTER TABLE ONLY public.auth_user_groups DROP CONSTRAINT auth_user_groups_user_id_fkey;
+ALTER TABLE ONLY public.auth_user_groups DROP CONSTRAINT auth_user_groups_group_id_fkey;
+ALTER TABLE ONLY public.auth_message DROP CONSTRAINT auth_message_user_id_fkey;
+ALTER TABLE ONLY public.auth_group_permissions DROP CONSTRAINT auth_group_permissions_permission_id_fkey;
+ALTER TABLE ONLY public.auth_group_permissions DROP CONSTRAINT auth_group_permissions_group_id_fkey;
+DROP INDEX public.mycoplasma_home_tagpoint_group_id;
+DROP INDEX public.mycoplasma_home_pictureprops_type_id_id;
+DROP INDEX public.mycoplasma_home_pictureprops_picture_id_id;
+DROP INDEX public."mycoplasma_home_dropdownitem_navBarOpt_id";
+DROP INDEX public.django_admin_log_user_id;
+DROP INDEX public.django_admin_log_content_type_id;
+DROP INDEX public.auth_permission_content_type_id;
+DROP INDEX public.auth_message_user_id;
+ALTER TABLE ONLY public.thumbnail_kvstore DROP CONSTRAINT thumbnail_kvstore_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_taggroup DROP CONSTRAINT name_unique;
+ALTER TABLE ONLY public.mycoplasma_home_tagpoint DROP CONSTRAINT mycoplasma_home_tagpoint_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_taggroup DROP CONSTRAINT mycoplasma_home_taggroup_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_tagcolor DROP CONSTRAINT mycoplasma_home_tagcolor_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_tag DROP CONSTRAINT mycoplasma_home_tag_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_recentlyviewedpicture DROP CONSTRAINT mycoplasma_home_recentlyviewedpicture_uniqueness;
+ALTER TABLE ONLY public.mycoplasma_home_recentlyviewedpicture DROP CONSTRAINT mycoplasma_home_recentlyviewedpicture_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_picturetype DROP CONSTRAINT mycoplasma_home_picturetypes_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_picture DROP CONSTRAINT mycoplasma_home_pictures_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_pictureprop DROP CONSTRAINT mycoplasma_home_pictureprops_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_pictureprop DROP CONSTRAINT mycoplasma_home_pictureprops_picture_id_id_key;
+ALTER TABLE ONLY public.mycoplasma_home_picturedefinitiontag DROP CONSTRAINT mycoplasma_home_picturedefinitiontag_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_navbaroption DROP CONSTRAINT mycoplasma_home_navbaroption_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_landmark DROP CONSTRAINT mycoplasma_home_landmark_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_dropdownitem DROP CONSTRAINT mycoplasma_home_dropdownitem_pkey;
+ALTER TABLE ONLY public.mycoplasma_home_blastupload DROP CONSTRAINT mycoplasma_home_blastupload_pkey;
+ALTER TABLE ONLY public.multiuploader_image DROP CONSTRAINT multiuploader_image_pkey;
+ALTER TABLE ONLY public.multiuploader_image DROP CONSTRAINT multiuploader_image_key_data_key;
+ALTER TABLE ONLY public.django_site DROP CONSTRAINT django_site_pkey;
+ALTER TABLE ONLY public.django_session DROP CONSTRAINT django_session_pkey;
+ALTER TABLE ONLY public.django_content_type DROP CONSTRAINT django_content_type_pkey;
+ALTER TABLE ONLY public.django_content_type DROP CONSTRAINT django_content_type_app_label_key;
+ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_pkey;
+ALTER TABLE ONLY public.auth_user DROP CONSTRAINT auth_user_username_key;
+ALTER TABLE ONLY public.auth_user_user_permissions DROP CONSTRAINT auth_user_user_permissions_user_id_key;
+ALTER TABLE ONLY public.auth_user_user_permissions DROP CONSTRAINT auth_user_user_permissions_pkey;
+ALTER TABLE ONLY public.auth_user DROP CONSTRAINT auth_user_pkey;
+ALTER TABLE ONLY public.auth_user_groups DROP CONSTRAINT auth_user_groups_user_id_key;
+ALTER TABLE ONLY public.auth_user_groups DROP CONSTRAINT auth_user_groups_pkey;
+ALTER TABLE ONLY public.auth_permission DROP CONSTRAINT auth_permission_pkey;
+ALTER TABLE ONLY public.auth_permission DROP CONSTRAINT auth_permission_content_type_id_key;
+ALTER TABLE ONLY public.auth_message DROP CONSTRAINT auth_message_pkey;
+ALTER TABLE ONLY public.auth_group DROP CONSTRAINT auth_group_pkey;
+ALTER TABLE ONLY public.auth_group_permissions DROP CONSTRAINT auth_group_permissions_pkey;
+ALTER TABLE ONLY public.auth_group_permissions DROP CONSTRAINT auth_group_permissions_group_id_key;
+ALTER TABLE ONLY public.auth_group DROP CONSTRAINT auth_group_name_key;
+ALTER TABLE public.mycoplasma_home_tagpoint ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_taggroup ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_tagcolor ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_tag ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_recentlyviewedpicture ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_picturetype ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_pictureprop ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_picturedefinitiontag ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_picture ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_navbaroption ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_landmark ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_genomeupload ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_dropdownitem ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.mycoplasma_home_blastupload ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.multiuploader_image ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.django_site ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.django_content_type ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.django_admin_log ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_user_user_permissions ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_user_groups ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_user ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_permission ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_message ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_group_permissions ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_group ALTER COLUMN id DROP DEFAULT;
+DROP TABLE public.thumbnail_kvstore;
+DROP SEQUENCE public.mycoplasma_home_tagpoint_id_seq;
+DROP TABLE public.mycoplasma_home_tagpoint;
+DROP SEQUENCE public.mycoplasma_home_taggroup_id_seq1;
+DROP SEQUENCE public.mycoplasma_home_taggroup_id_seq;
+DROP TABLE public.mycoplasma_home_taggroup;
+DROP SEQUENCE public.mycoplasma_home_tagcolor_id_seq;
+DROP TABLE public.mycoplasma_home_tagcolor;
+DROP TABLE public.mycoplasma_home_tag;
+DROP SEQUENCE public.mycoplasma_home_recentlyviewedpicture_id_seq;
+DROP TABLE public.mycoplasma_home_recentlyviewedpicture;
+DROP SEQUENCE public.mycoplasma_home_picturetypes_id_seq;
+DROP TABLE public.mycoplasma_home_picturetype;
+DROP SEQUENCE public.mycoplasma_home_pictures_id_seq;
+DROP SEQUENCE public.mycoplasma_home_pictureprops_id_seq;
+DROP TABLE public.mycoplasma_home_pictureprop;
+DROP SEQUENCE public.mycoplasma_home_picturedefinitiontag_id_seq;
+DROP TABLE public.mycoplasma_home_picturedefinitiontag;
+DROP TABLE public.mycoplasma_home_picture;
+DROP SEQUENCE public.mycoplasma_home_navbaroption_id_seq;
+DROP TABLE public.mycoplasma_home_navbaroption;
+DROP SEQUENCE public.mycoplasma_home_landmark_id_seq;
+DROP TABLE public.mycoplasma_home_landmark;
+DROP SEQUENCE public.mycoplasma_home_genomeupload_id_seq;
+DROP TABLE public.mycoplasma_home_genomeupload;
+DROP SEQUENCE public.mycoplasma_home_dropdownitem_id_seq;
+DROP TABLE public.mycoplasma_home_dropdownitem;
+DROP SEQUENCE public.mycoplasma_home_blastupload_id_seq;
+DROP TABLE public.mycoplasma_home_blastupload;
+DROP SEQUENCE public.multiuploader_image_id_seq;
+DROP TABLE public.multiuploader_image;
+DROP SEQUENCE public.django_site_id_seq;
+DROP TABLE public.django_site;
+DROP TABLE public.django_session;
+DROP SEQUENCE public.django_content_type_id_seq;
+DROP TABLE public.django_content_type;
+DROP SEQUENCE public.django_admin_log_id_seq;
+DROP TABLE public.django_admin_log;
+DROP SEQUENCE public.auth_user_user_permissions_id_seq;
+DROP TABLE public.auth_user_user_permissions;
+DROP SEQUENCE public.auth_user_id_seq;
+DROP SEQUENCE public.auth_user_groups_id_seq;
+DROP TABLE public.auth_user_groups;
+DROP TABLE public.auth_user;
+DROP SEQUENCE public.auth_permission_id_seq;
+DROP TABLE public.auth_permission;
+DROP SEQUENCE public.auth_message_id_seq;
+DROP TABLE public.auth_message;
+DROP SEQUENCE public.auth_group_permissions_id_seq;
+DROP TABLE public.auth_group_permissions;
+DROP SEQUENCE public.auth_group_id_seq;
+DROP TABLE public.auth_group;
+DROP SCHEMA public;
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+SET search_path = public, pg_catalog;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
