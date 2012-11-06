@@ -72,6 +72,15 @@ class RecentlyViewedPicture(models.Model):
     def __unicode__(self):
         return (self.picture.imageName.name) + " viewed by " + self.user.username
 
+class TagGroup(models.Model):
+    name = models.TextField()
+    user = models.ForeignKey(User)
+    picture = models.ForeignKey(Picture)
+    dateCreated = models.DateTimeField(auto_now_add=True, editable=False)
+    lastModified = models.DateTimeField(auto_now=True)
+    def __unicode__(self):
+        return self.name
+
 class TagColor(models.Model):
     red = models.IntegerField()
     green = models.IntegerField()
@@ -79,15 +88,15 @@ class TagColor(models.Model):
     def __unicode__(self):
         return 'R: ' + str(self.red) + ', G: ' + str(self.green) + ', B: ' + str(self.blue)
 
-class TagGroup(models.Model):
+class Tag(models.Model):
     description = models.CharField(max_length=50)
     color = models.ForeignKey(TagColor)
-    picture = models.ForeignKey(Picture)
+    user = models.ForeignKey(User)
     def __unicode__(self):
         return self.description
     
 class TagPoint(models.Model):
-    group = models.ForeignKey(TagGroup)
+    tag = models.ForeignKey(Tag)
     pointX = models.IntegerField()
     pointY = models.IntegerField()
     rank = models.IntegerField()

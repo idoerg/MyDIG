@@ -1,5 +1,5 @@
 '''
-    Render Engine for Django
+	Render Engine for Django
 	
 	Author: Andrew Oberlin
 	Date: July 21, 2012
@@ -39,6 +39,13 @@ class RenderEngine:
 			self.applicationArgs = tmpArgs
 		else:
 			self.applicationArgs = dict(tmpArgs.items() + args.items())
+					
+	'''
+		Gets the Application layout for this rendering engine
+	'''
+	def getApplicationLayout(self):
+		return self.applicationLayout
+	
 	'''
 		Binds the pageletFile to the pageletName
 	'''

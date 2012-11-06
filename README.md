@@ -5,18 +5,31 @@ Instructions for fresh install of Django Based Mycoplasma Database:
 
 Prerequisites: (THIS IS THE HARDEST PART)
     Django - Web framework used for website -- https://docs.djangoproject.com/en/1.3/topics/install/
+    
     PostgreSQL - database system used for website -- aptitude install postgresql-8.4
+    
     MySQL - database system used with a GO database clone
+    
     Apache - Web Server for Django -- aptitude install apache2
+    
     mod-wsgi - mod for Apache for Django -- aptitude install libapache2-mod-wsgi
+    
     GBrowse - genome browser used -- http://gmod.org/wiki/GBrowse_2.0_Install_HOWTO (WATCH FOR PREREQUISITES)
+    
     Chado - database schema used for organism database 
             -- http://gmod.svn.sourceforge.net/viewvc/gmod/schema/trunk/chado/INSTALL.Chado (You may only need the prerequisites with the dump)
+    
     SQLite - database used to back GBrowse 
     	-- CPAN DBD::SQLite for adaptor
     	-- aptitude install sqlite3
+    	
     Django files - the package (files) in order to create the website
+    
     BioPerl - http://www.bioperl.org/wiki/Installing_BioPerl_on_Ubuntu_Server
+    
+    Pip - aptitude install python-pip
+    
+    Sorl-thumbnail - pip install sorl-thumbnail
 
 Instructions:
 

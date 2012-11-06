@@ -9,14 +9,16 @@
  						4. Tag.js in the taggableUtil package
  -------------------------------------------------------------------------------------
 */
-function TagBoard(tagBoard, originalData, image, defaultInfoViewCallback) {
+function TagBoard(tagBoard, originalData, image, organisms, siteUrl, defaultInfoViewCallback) {
 	this.board = tagBoard;
 	this.image = image;
+	this.organisms = organisms;
 	this.tags = this.__convertOriginalDataToTags(originalData);
 	this.stage = null;
 	this.layer = null;
 	this.locked = false;
 	this.selectedTag = null;
+	this.siteUrl = siteUrl;
 	this.defaultInfoViewCallback = defaultInfoViewCallback;
 };
 
@@ -25,7 +27,14 @@ TagBoard.prototype.getBoard = function() {
 };
 
 TagBoard.prototype.addTag = function(color, points, description) {
-	this.tags.push(new Tag(color, points, description));
+	var tag = new Tag(color, points, description, this.image.attr('id'), this.siteUrl);
+	
+	// saves the tag and then adds the 
+	tag.save(
+		Util.scopeCallback(this, function() {
+			this.tags.push(tag);
+		})
+	);
 };
 
 TagBoard.prototype.redraw = function() {
@@ -111,14 +120,14 @@ TagBoard.prototype.__createPolyFromTag = function(tag, i) {
 	poly.pos = [(leftMin + leftMax)/2, topMax];
 	
 	// shows the polygon and its tooltip
-	poly.on('mouseover', TaggableUtil.scopeCallback(this, this.polyOnMouseOver));
+	poly.on('mouseover', Util.scopeCallback(this, this.polyOnMouseOver));
 	
 	// hides the polygon and its tooltip
-	poly.on('mouseout', TaggableUtil.scopeCallback(this, this.polyOnMouseOut));
+	poly.on('mouseout', Util.scopeCallback(this, this.polyOnMouseOut));
 	
 	// toggles the mouseout event for this poly
 	// and the mouseover events for all other poly's
-	poly.on('click', TaggableUtil.scopeCallback(this, this.polyOnClick));
+	poly.on('click', Util.scopeCallback(this, this.polyOnClick));
 	
 	return poly;
 };

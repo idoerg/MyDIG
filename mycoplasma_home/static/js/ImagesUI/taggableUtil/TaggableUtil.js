@@ -94,9 +94,3 @@ TaggableUtil.getOtherRectPoints = function(points) {
 	}
 	return [pointOne, pointTwo]; 
 };
-
-TaggableUtil.scopeCallback = function(scope, fn) {
-	return function() {
-		fn.apply(scope, arguments);
-	};
-};

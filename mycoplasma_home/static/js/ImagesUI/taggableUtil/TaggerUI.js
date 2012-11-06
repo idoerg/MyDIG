@@ -4,13 +4,15 @@
 	Dependencies:
 		1. All of the dependencies taggable.js 
 **/
-function TaggerUI(image, parent, originalData, title, genomicInfo, imagesUrl, alreadyLoaded, callback) {
+function TaggerUI(image, parent, originalData, organisms, genomicInfo, imagesUrl, siteUrl, alreadyLoaded, callback) {
 	this.image = image;
 	this.parent = parent;
 	this.originalData = originalData;
 	this.genomicInfo = genomicInfo;
 	this.imagesUrl = imagesUrl;
-	this.title = title;
+	this.siteUrl = siteUrl;
+	this.organisms = organisms;
+	this.title = "";
 	this.callback = callback;
 	this.alreadyLoaded = alreadyLoaded;
 	this.colors = [
@@ -25,10 +27,16 @@ function TaggerUI(image, parent, originalData, title, genomicInfo, imagesUrl, al
 	];
 	this.created = false;
 	
+	for (var i = 0; i < organisms.length; i++) {
+		this.title += organisms[i].common_name;
+		if (i < organisms.length - 1) {
+			this.title += ", ";
+		}
+	}
 	
 	$(this.image).zoomable({
-		callback: TaggableUtil.scopeCallback(this, this.createStructure),
-		zoom_callback: TaggableUtil.scopeCallback(this, this.resizeCanvas),
+		callback: Util.scopeCallback(this, this.createStructure),
+		zoom_callback: Util.scopeCallback(this, this.resizeCanvas),
 		zoom_callback_args: [$(this.image).attr('id')],
 		alreadyLoaded: this.alreadyLoaded
 	});
@@ -59,7 +67,7 @@ TaggerUI.prototype.createStructure = function() {
 	}).prependTo(this.image.parent());
 	
 	// creates the drawing API
-	this.drawingAPI = new DrawingAPI(drawingBoard, tagBoard, this.originalData, this.image);
+	this.drawingAPI = new DrawingAPI(drawingBoard, tagBoard, this.siteUrl, this.originalData, this.image, this.organisms);
 	
 	var self = this;
 	

@@ -6,6 +6,12 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/collapser/collapser.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/kineticjs/kinetic-v3.10.0.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/zoomable.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/taggableUtil/Tag.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/taggableUtil/TaggableUtil.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/taggableUtil/TagBoard.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/taggableUtil/DrawingBoard.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/taggableUtil/DrawingAPI.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/taggableUtil/TaggerUI.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/taggable.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/webServiceClient/WebServiceClient.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/DialogUI/AreYouSureDialog.js"></script>
@@ -66,9 +72,77 @@
 	</div>
 	<div id="center-work-area">
 		<div id="header">Workbench</div>
-		<div id="work-area" class="workbench-area"></div>
+		<div id="work-area" class="workbench-area">
+			<div class="zoomable-left">
+	            
+	        </div>
+	        <div class="zoomable-right">
+	            <div class="info-container">
+	            </div>
+	        </div>
+		</div>
 	</div>
 </body>
+<script type="text/javascript">
+	function ImageMetadataClient() {
+		this.client = new WebServiceClient('{{ SITE_URL }}images/getImageMetadata');
+	};
+
+	ImageMetadataClient.prototype.call = function(imageKey, callback) {
+		var args = {
+			imageKey: imageKey
+		};
+		
+		this.client.call(args, callback);
+	};
+
+	function GetTagsClient() {
+		this.client = new WebServiceClient('{{ SITE_URL }}images/getTags');
+	};
+
+	GetTagsClient.prototype.callback = function(data, textStatus, jqXHR, image, organismsList) {
+		var $workArea = $('#work-area');
+		$workArea.find('.info-container').empty();
+		$workArea.find('.toolbar-container').remove();
+		
+		// add workArea clone to the div
+		$workArea.find('.zoomable-left').html(image);
+		image.taggable({
+	        originalData: data.tags,
+	        parent: $workArea,
+	        imagesUrl: '{{ STATIC_URL }}images/',
+	        siteUrl: '{{ SITE_URL }}',
+	        alreadyLoaded: true,
+	        genomicInfo: $workArea.find('.info-container'),
+	        organisms: organismsList,
+	        callback: function() {
+		        var $editButton = $('<div class="edit-image-container"></div>');
+		        $editButton.append('<button class="edit-image-button"><img src="{{ STATIC_URL }}images/polygonButtonIcon.png"></img><span>Edit Image</span></button>');
+				image.parent().prepend($editButton);
+				image.parent().on('mouseover', function() {
+					$editButton.show();
+				});
+
+				image.parent().on('mouseout', function() {
+					$editButton.hide();
+				});
+	        } 
+	    });
+	};
+
+	GetTagsClient.prototype.call = function(imageKey, organismsList, image) {
+		var args = {
+			imageKey: imageKey
+		};
+
+		var self = this;
+		
+		this.client.call(args, function(data, textStatus, jqXHR) {
+			var scopedCallback = Util.scopeCallback(self, self.callback);
+			scopedCallback(data, textStatus, jqXHR, image, organismsList);
+		});
+	};
+</script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		// allows each of the toolbars to be collapsible
@@ -117,37 +191,12 @@
 			$imgClone.attr('class', '');
 			var key = $(this).attr('name');
 			
-			var client = new WebServiceClient('{{ SITE_URL }}images/getTags');
-			var args = {
-				imageKey : key
-			};
+			var getTagsClient = new GetTagsClient();
+			var getImageMetadataClient = new ImageMetadataClient();
 			
-			var callback = function(data) {
-				var $workArea = $('#work-area');
-				$workArea.empty();
-				// add workArea clone to the div
-				$workArea.append($imgClone);
-				$imgClone.taggable({
-			        originalData : data.tags,
-			        parent: $workArea,
-			        imagesUrl: '{{ STATIC_URL }}images/',
-			        alreadyLoaded: true,
-			        callback : function() {
-				        var $editButton = $('<div class="edit-image-container"></div>');
-				        $editButton.append('<button class="edit-image-button"><img src="{{ STATIC_URL }}images/polygonButtonIcon.png"></img><span>Edit Image</span></button>');
-						$imgClone.parent().prepend($editButton);
-						$imgClone.parent().on('mouseover', function() {
-							$editButton.show();
-						});
-	
-						$imgClone.parent().on('mouseout', function() {
-							$editButton.hide();
-						});
-			        } 
-			    });
-			};
-			
-			client.call(args, callback);
+			getImageMetadataClient.call(key, function(data, textStatus, jqXHR) {
+				getTagsClient.call(key, data.organisms, $imgClone);
+			});
 		});
 	
 		// trash cans should prompt the user to delete the image and this should pull up the

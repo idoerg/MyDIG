@@ -14,6 +14,7 @@
 		Dependencies:
 			jQuery 1.7.2 or higher
 			jQuery UI 1.8.18 or higher
+			Util.js in js/util
 			zoomable.js and all of its dependencies
 			KineticJs 3.10.0
 			taggable.css
@@ -25,12 +26,17 @@
 				parent : $(this).parent(),
 				originalData : [],
 				title : 'Genome Links',
-				alreadyLoaded : false
+				alreadyLoaded : false,
+				siteUrl : '/'
 			};
 			
 			// make sure that the imagesUrl ends in a slash
 			if (options.imagesUrl[options.imagesUrl.length - 1] != '/') {
 				options.imagesUrl += '/';
+			}
+			
+			if (options.siteUrl[options.siteUrl.length - 1] != '/') {
+				options.siteUrl += '/';
 			}
 			
 			$.extend(settings, options);
@@ -39,9 +45,9 @@
 			return this.each(function() {
 				// the object that keeps track of the tagging application
 				var taggableObj = new TaggerUI(
-					$(this), settings.parent, settings.originalData, settings.title,
-					settings.genomicInfo, settings.imagesUrl, settings.alreadyloaded, 
-					settings.callback
+					$(this), settings.parent, settings.originalData, settings.organisms,
+					settings.genomicInfo, settings.imagesUrl, settings.siteUrl,
+					settings.alreadyloaded, settings.callback
 				);
 				
 				// saves the taggable object in the data cache for reference

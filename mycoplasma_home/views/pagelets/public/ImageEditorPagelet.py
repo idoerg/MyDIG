@@ -6,7 +6,7 @@
     Date: August 5, 2012
 '''
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.models import Picture, TagGroup, TagPoint, RecentlyViewedPicture
+from mycoplasma_home.models import Picture, Tag, TagPoint, RecentlyViewedPicture
 from django.core.exceptions import ObjectDoesNotExist
 
 class ImageEditorPagelet(PageletBase):
@@ -30,23 +30,23 @@ class ImageEditorPagelet(PageletBase):
                     error = True
             
             if (not error):
-                tagGroups = TagGroup.objects.filter(picture__exact=image)
+                tags = Tag.objects.filter(picture__exact=image)
                 
                 tagTuples = list()
                 
-                for group in tagGroups:
-                    tagPoints = TagPoint.objects.filter(group__exact = group).order_by('rank')
+                for tag in tags:
+                    tagPoints = TagPoint.objects.filter(tag__exact = tag).order_by('rank')
                     points = []
                     
                     for tagPoint in tagPoints:
                         points.append([tagPoint.pointX, tagPoint.pointY])
                     
-                    color = [group.color.red, group.color.green, group.color.blue]
+                    color = [tag.color.red, tag.color.green, tag.color.blue]
                     
                     tagTuples.append({
                         'color' : color,
                         'points' : points,
-                        'description' : group.description
+                        'description' : tag.description
                     })
                 
                 if (request.user.is_authenticated()):

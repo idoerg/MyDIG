@@ -6,9 +6,10 @@
  * @param tagBoard
  * @return
  */
-function DrawingAPI(drawingBoard, tagBoard, originalData, image) {
-	this.tagBoard = new TagBoard(tagBoard, originalData, image);
+function DrawingAPI(drawingBoard, tagBoard, siteUrl, originalData, image, organisms) {
+	this.tagBoard = new TagBoard(tagBoard, originalData, image, organisms, siteUrl);
 	this.drawingBoard = new DrawingBoard(drawingBoard, image);
+	this.organisms = organisms;
 	this.image = image;
 };
 
@@ -80,14 +81,14 @@ DrawingAPI.prototype.startTagging = function() {
 	canvas.off('mousemove');
 	
 	if (this.getShape() == 'rect') {
-		canvas.on('mousedown', TaggableUtil.scopeCallback(this.drawingBoard, this.drawingBoard.startRect));
-		canvas.on('mouseup', TaggableUtil.scopeCallback(this.drawingBoard, this.drawingBoard.finishRect));
-		canvas.on('mousemove', TaggableUtil.scopeCallback(this.drawingBoard, this.drawingBoard.expandRect));
+		canvas.on('mousedown', Util.scopeCallback(this.drawingBoard, this.drawingBoard.startRect));
+		canvas.on('mouseup', Util.scopeCallback(this.drawingBoard, this.drawingBoard.finishRect));
+		canvas.on('mousemove', Util.scopeCallback(this.drawingBoard, this.drawingBoard.expandRect));
 	}
 	else {
-		canvas.on('mousedown', TaggableUtil.scopeCallback(this.drawingBoard, this.drawingBoard.startPoly));
-		canvas.on('mouseup', TaggableUtil.scopeCallback(this.drawingBoard, this.drawingBoard.finishPoly));
-		canvas.on('mousemove', TaggableUtil.scopeCallback(this.drawingBoard, this.drawingBoard.expandPoly));
+		canvas.on('mousedown', Util.scopeCallback(this.drawingBoard, this.drawingBoard.startPoly));
+		canvas.on('mouseup', Util.scopeCallback(this.drawingBoard, this.drawingBoard.finishPoly));
+		canvas.on('mousemove', Util.scopeCallback(this.drawingBoard, this.drawingBoard.expandPoly));
 	}
 };
 

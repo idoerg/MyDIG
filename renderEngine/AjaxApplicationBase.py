@@ -31,6 +31,9 @@ class AjaxApplicationBase:
 class WebServiceApplicationBase(AjaxApplicationBase):
 	def setJsonObject(self, obj):
 		self.renderEngine.setApplicationLayout(obj)
+		
+	def getJsonObject(self):
+		return self.renderEngine.getApplicationLayout()
 '''
 	Used for mapping to the url in urls.py
 '''        	

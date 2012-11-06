@@ -16,7 +16,6 @@ urlpatterns = patterns('mycoplasma_home.views.applications.public',
     url(r'^index.html$', 'Home.Application.renderAction'),
     url(r'^images/editor/$','EditImage.Application.renderAction'),
     url(r'^images/$', 'Images.Application.renderAction'),
-    url(r'^images/getTags$', 'GetImageTags.Application.renderAction'),
     url(r'^images/change/$', 'ChangeImages.Application.renderAction'),
     url(r'^genome_browser/$', 'GBrowse.Application.renderAction'),
     url(r'^blast/$', 'Blast.Application.renderAction'),
@@ -26,15 +25,21 @@ urlpatterns = patterns('mycoplasma_home.views.applications.public',
     url(r'^search/$', 'Search.Application.renderAction')
 )
 
+urlpatterns += patterns('mycoplasma_home.views.webServices',
+    url(r'^images/getTags$', 'GetImageTags.Application.renderAction'),
+    url(r'^images/getTagGroups$', 'GetImageTagGroups.Application.renderAction'),
+    url(r'^images/getImageMetadata$', 'GetImageMetadata.Application.renderAction')
+)
+
 urlpatterns += patterns('mycoplasma_home.views.applications.registered',
-    url(r'^images/editor/submit/$', 'SubmitImageTag.Application.renderAction'),
+    #url(r'^images/editor/submit/$', 'SubmitImageTag.Application.renderAction'),
     url(r'^administration/$', 'Administration.Application.renderAction'),
     #url(r'^administration/gbrowse_manager/$', 'mycoplasma_home.views.gbrowse_manager'),
     #url(r'^administration/gbrowse_manager/genome_uploader/$', 'mycoplasma_home.views.genome_uploader'),
     url(r'^administration/imageManager/$', 'ImageManager.Application.renderAction'),
     url(r'^administration/deleteImage$', 'DeleteImage.Application.renderAction'),
     url(r'^administration/imageManager/getSlider/$', 'ImageSlider.Application.renderAction'),
-    #url(r'^administration/image_manager/move_pending_image/$','mycoplasma_home.views.move_pending_image')
+    #url(r'^administration/saveTag$','')
 )
 '''
 urlpatterns += patterns('mycoplasma_home.views.applications.admin',
