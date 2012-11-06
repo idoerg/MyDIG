@@ -176,7 +176,7 @@ ALTER SEQUENCE auth_permission_id_seq OWNED BY auth_permission.id;
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('auth_permission_id_seq', 621, true);
+SELECT pg_catalog.setval('auth_permission_id_seq', 627, true);
 
 
 --
@@ -354,7 +354,7 @@ ALTER SEQUENCE django_admin_log_id_seq OWNED BY django_admin_log.id;
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('django_admin_log_id_seq', 297, true);
+SELECT pg_catalog.setval('django_admin_log_id_seq', 309, true);
 
 
 --
@@ -396,7 +396,7 @@ ALTER SEQUENCE django_content_type_id_seq OWNED BY django_content_type.id;
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('django_content_type_id_seq', 207, true);
+SELECT pg_catalog.setval('django_content_type_id_seq', 209, true);
 
 
 --
@@ -494,7 +494,7 @@ ALTER SEQUENCE multiuploader_image_id_seq OWNED BY multiuploader_image.id;
 -- Name: multiuploader_image_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('multiuploader_image_id_seq', 147, true);
+SELECT pg_catalog.setval('multiuploader_image_id_seq', 150, true);
 
 
 --
@@ -711,10 +711,10 @@ SELECT pg_catalog.setval('mycoplasma_home_navbaroption_id_seq', 10, true);
 
 CREATE TABLE mycoplasma_home_picture (
     id integer NOT NULL,
-    description text NOT NULL,
+    description text,
     "imageName" character varying(100) NOT NULL,
-    publication character varying(50) NOT NULL,
-    "altText" text NOT NULL,
+    publication character varying(50),
+    "altText" text,
     user_id integer NOT NULL,
     "uploadDate" timestamp with time zone NOT NULL,
     "isPrivate" boolean DEFAULT false NOT NULL
@@ -831,7 +831,7 @@ ALTER SEQUENCE mycoplasma_home_pictures_id_seq OWNED BY mycoplasma_home_picture.
 -- Name: mycoplasma_home_pictures_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
 --
 
-SELECT pg_catalog.setval('mycoplasma_home_pictures_id_seq', 38, true);
+SELECT pg_catalog.setval('mycoplasma_home_pictures_id_seq', 51, true);
 
 
 --
@@ -874,6 +874,63 @@ ALTER SEQUENCE mycoplasma_home_picturetypes_id_seq OWNED BY mycoplasma_home_pict
 
 SELECT pg_catalog.setval('mycoplasma_home_picturetypes_id_seq', 4, true);
 
+
+--
+-- Name: mycoplasma_home_recentlyviewedpicture; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
+--
+
+CREATE TABLE mycoplasma_home_recentlyviewedpicture (
+    picture_id integer,
+    user_id integer,
+    "lastDateViewed" timestamp with time zone NOT NULL,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.mycoplasma_home_recentlyviewedpicture OWNER TO mycoplasma;
+
+--
+-- Name: mycoplasma_home_recentlyviewedpicture_id_seq; Type: SEQUENCE; Schema: public; Owner: mycoplasma
+--
+
+CREATE SEQUENCE mycoplasma_home_recentlyviewedpicture_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mycoplasma_home_recentlyviewedpicture_id_seq OWNER TO mycoplasma;
+
+--
+-- Name: mycoplasma_home_recentlyviewedpicture_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mycoplasma
+--
+
+ALTER SEQUENCE mycoplasma_home_recentlyviewedpicture_id_seq OWNED BY mycoplasma_home_recentlyviewedpicture.id;
+
+
+--
+-- Name: mycoplasma_home_recentlyviewedpicture_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
+--
+
+SELECT pg_catalog.setval('mycoplasma_home_recentlyviewedpicture_id_seq', 1, true);
+
+
+--
+-- Name: mycoplasma_home_tag; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
+--
+
+CREATE TABLE mycoplasma_home_tag (
+    id integer NOT NULL,
+    description character varying(150) NOT NULL,
+    color_id integer NOT NULL,
+    user_id integer,
+    group_id integer
+);
+
+
+ALTER TABLE public.mycoplasma_home_tag OWNER TO mycoplasma;
 
 --
 -- Name: mycoplasma_home_tagcolor; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
@@ -922,10 +979,12 @@ SELECT pg_catalog.setval('mycoplasma_home_tagcolor_id_seq', 1, true);
 --
 
 CREATE TABLE mycoplasma_home_taggroup (
+    name text,
+    user_id integer NOT NULL,
+    "dateCreated" timestamp with time zone NOT NULL,
+    "lastModified" timestamp with time zone NOT NULL,
     id integer NOT NULL,
-    description character varying(150) NOT NULL,
-    picture_id integer NOT NULL,
-    color_id integer NOT NULL
+    picture_id integer
 );
 
 
@@ -949,7 +1008,7 @@ ALTER TABLE public.mycoplasma_home_taggroup_id_seq OWNER TO mycoplasma;
 -- Name: mycoplasma_home_taggroup_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mycoplasma
 --
 
-ALTER SEQUENCE mycoplasma_home_taggroup_id_seq OWNED BY mycoplasma_home_taggroup.id;
+ALTER SEQUENCE mycoplasma_home_taggroup_id_seq OWNED BY mycoplasma_home_tag.id;
 
 
 --
@@ -960,12 +1019,40 @@ SELECT pg_catalog.setval('mycoplasma_home_taggroup_id_seq', 1, true);
 
 
 --
+-- Name: mycoplasma_home_taggroup_id_seq1; Type: SEQUENCE; Schema: public; Owner: mycoplasma
+--
+
+CREATE SEQUENCE mycoplasma_home_taggroup_id_seq1
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mycoplasma_home_taggroup_id_seq1 OWNER TO mycoplasma;
+
+--
+-- Name: mycoplasma_home_taggroup_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: mycoplasma
+--
+
+ALTER SEQUENCE mycoplasma_home_taggroup_id_seq1 OWNED BY mycoplasma_home_taggroup.id;
+
+
+--
+-- Name: mycoplasma_home_taggroup_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: mycoplasma
+--
+
+SELECT pg_catalog.setval('mycoplasma_home_taggroup_id_seq1', 1, true);
+
+
+--
 -- Name: mycoplasma_home_tagpoint; Type: TABLE; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
 CREATE TABLE mycoplasma_home_tagpoint (
     id integer NOT NULL,
-    group_id integer NOT NULL,
+    tag_id integer NOT NULL,
     "pointX" integer NOT NULL,
     "pointY" integer NOT NULL,
     rank integer NOT NULL
@@ -1158,6 +1245,20 @@ ALTER TABLE ONLY mycoplasma_home_picturetype ALTER COLUMN id SET DEFAULT nextval
 -- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
 --
 
+ALTER TABLE ONLY mycoplasma_home_recentlyviewedpicture ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_recentlyviewedpicture_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
+--
+
+ALTER TABLE ONLY mycoplasma_home_tag ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_taggroup_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
+--
+
 ALTER TABLE ONLY mycoplasma_home_tagcolor ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_tagcolor_id_seq'::regclass);
 
 
@@ -1165,7 +1266,7 @@ ALTER TABLE ONLY mycoplasma_home_tagcolor ALTER COLUMN id SET DEFAULT nextval('m
 -- Name: id; Type: DEFAULT; Schema: public; Owner: mycoplasma
 --
 
-ALTER TABLE ONLY mycoplasma_home_taggroup ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_taggroup_id_seq'::regclass);
+ALTER TABLE ONLY mycoplasma_home_taggroup ALTER COLUMN id SET DEFAULT nextval('mycoplasma_home_taggroup_id_seq1'::regclass);
 
 
 --
@@ -1810,6 +1911,12 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 619	Can add picture prop	207	add_pictureprop
 620	Can change picture prop	207	change_pictureprop
 621	Can delete picture prop	207	delete_pictureprop
+622	Can add recently viewed picture	208	add_recentlyviewedpicture
+623	Can change recently viewed picture	208	change_recentlyviewedpicture
+624	Can delete recently viewed picture	208	delete_recentlyviewedpicture
+625	Can add tag	209	add_tag
+626	Can change tag	209	change_tag
+627	Can delete tag	209	delete_tag
 \.
 
 
@@ -1820,8 +1927,8 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 COPY auth_user (id, username, first_name, last_name, email, password, is_staff, is_active, is_superuser, last_login, date_joined) FROM stdin;
 2	balishmf	Mitchell	Balish	balishmf@muohio.edu	sha1$c8bd2$bb8b0e9c26f254a8ed0d2bf17b7676719bc6a892	t	t	t	2011-07-18 15:51:51.368252-04	2011-07-05 11:02:33-04
 4	siebenmc				sha1$6ac49$43a6ac6e4a27ec163b79a38a04989675e3c298a7	t	t	f	2012-02-20 14:03:22.33559-05	2011-08-15 14:55:57-04
-3	trial_not_staff	Someone	Else	someone@somewhere.com	sha1$4527b$c101b9dd88dfa532a63920cbd0ea26277418dbce	f	t	f	2012-10-08 14:03:52.423679-04	2011-07-15 10:48:21-04
-1	oberliat	Andrew	Oberlin	oberliat@muohio.edu	sha1$c51ba$9d439c085bd5d4e2a867ee85c8175fc5fb850aad	t	t	t	2012-10-15 13:41:23.759265-04	2011-06-14 17:23:27-04
+3	trial_not_staff	Someone	Else	someone@somewhere.com	sha1$c7cd3$f90c1945b8788f6e0ebcbb328ab6fae2fc63e737	f	t	f	2012-10-18 16:31:55.051707-04	2011-07-15 10:48:21-04
+1	oberliat	Andrew	Oberlin	oberliat@muohio.edu	sha1$c51ba$9d439c085bd5d4e2a867ee85c8175fc5fb850aad	t	t	t	2012-11-02 14:30:24.188731-04	2011-06-14 17:23:27-04
 \.
 
 
@@ -2130,6 +2237,18 @@ COPY django_admin_log (id, action_time, user_id, content_type_id, object_id, obj
 295	2012-10-11 13:56:57.767637-04	1	17	8781	(343,213) Test tag group	3	
 296	2012-10-11 13:56:57.782676-04	1	17	8780	(200,300) Test tag group	3	
 297	2012-10-11 13:57:11.763817-04	1	16	1	Test tag group	3	
+298	2012-10-15 16:00:17.758461-04	1	202	149	multiuploader_images/9d3a6cc6b9734a3354192ca8daa705d4_1.png	3	
+299	2012-10-15 16:00:17.804162-04	1	202	148	multiuploader_images/9d3a6cc6b9734a3354192ca8daa705d4.png	3	
+300	2012-10-15 16:02:43.344142-04	1	202	150	multiuploader_images/8978a2e09c84af067ec38b8abb493a81.png	3	
+301	2012-10-17 14:49:56.393549-04	1	205	42	oberliat: pictures/9d3a6cc6b9734a3354192ca8daa705d4_3.png	3	
+302	2012-10-17 14:49:56.460465-04	1	205	41	oberliat: pictures/9d3a6cc6b9734a3354192ca8daa705d4_2.png	3	
+303	2012-10-17 14:49:56.468787-04	1	205	40	oberliat: pictures/9d3a6cc6b9734a3354192ca8daa705d4_1.png	3	
+304	2012-10-17 14:49:56.477356-04	1	205	39	oberliat: pictures/9d3a6cc6b9734a3354192ca8daa705d4.png	3	
+305	2012-10-17 14:58:25.196395-04	1	205	46	pictures/9d3a6cc6b9734a3354192ca8daa705d4_3.png	3	
+306	2012-10-17 14:58:25.21533-04	1	205	45	pictures/9d3a6cc6b9734a3354192ca8daa705d4_2.png	3	
+307	2012-10-17 14:58:25.223533-04	1	205	44	pictures/9d3a6cc6b9734a3354192ca8daa705d4_1.png	3	
+308	2012-10-17 14:58:25.231906-04	1	205	43	pictures/9d3a6cc6b9734a3354192ca8daa705d4.png	3	
+309	2012-11-05 15:09:35.86253-05	1	16	1	Andy's Super Awesome Tag Group	1	
 \.
 
 
@@ -2340,6 +2459,8 @@ COPY django_content_type (id, name, app_label, model) FROM stdin;
 205	picture	mycoplasma_home	picture
 206	picture type	mycoplasma_home	picturetype
 207	picture prop	mycoplasma_home	pictureprop
+208	recently viewed picture	mycoplasma_home	recentlyviewedpicture
+209	tag	mycoplasma_home	tag
 \.
 
 
@@ -2400,17 +2521,22 @@ ab243bed41ce2f69cea4cf185a3ca1a5	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQ
 8625d6100f8160f610d763b592d10ae5	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-04-22 21:28:41.534735-04
 5480664dab4d28d39e2e8ead6e7842fc	MDIyMmZiZDhmZjc3MjFiODFkMDNkM2Q4NTUyZGUwZmRmNmEzMGU2NzqAAn1xAShYGAAAAGh5b3Jo\naW5pc19odWJfMV91aWQ1MTY5NXECVQE2VQ1fYXV0aF91c2VyX2lkcQNLAVgYAAAAaHlvcmhpbmlz\nIGh1YiAxIHVpZDUxNjk1cQRVATZVEl9hdXRoX3VzZXJfYmFja2VuZHEFVSlkamFuZ28uY29udHJp\nYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEGY2RqYW5nby5kYi5tb2RlbHMuYmFzZQptb2Rl\nbF91bnBpY2tsZQpxB2NteWNvcGxhc21hX2hvbWUuY2hhZG8KT3JnYW5pc20KcQhdY2RqYW5nby5k\nYi5tb2RlbHMuYmFzZQpzaW1wbGVfY2xhc3NfZmFjdG9yeQpxCYdScQp9cQsoVQdjb21tZW50cQxV\nAFUGX3N0YXRlcQ1jZGphbmdvLmRiLm1vZGVscy5iYXNlCk1vZGVsU3RhdGUKcQ4pgXEPfXEQKFUG\nYWRkaW5ncRGJVQJkYnESVQVjaGFkb3ETdWJVC29yZ2FuaXNtX2lkcRROVQxhYmJyZXZpYXRpb25x\nFVgbAAAATS4gaHlvcmhpbmlzIGh1YiAxIHVpZDUxNjk1cRZVC2NvbW1vbl9uYW1lcRdYIwAAAE15\nY29wbGFzbWEgaHlvcmhpbmlzIGh1YiAxIHVpZDUxNjk1cRhVBWdlbnVzcRlVCk15Y29wbGFzbWFx\nGlUHc3BlY2llc3EbaAR1YlUBMFgXAAAAYWdhbGFjdGlhZV9wZzJfdWlkNjE2MTlxHFUBNmgHaAhd\naAmHUnEdfXEeKFUHY29tbWVudHEfVQBVBl9zdGF0ZXEgaA4pgXEhfXEiKFUGYWRkaW5ncSOJVQJk\nYnEkVQVjaGFkb3EldWJVC29yZ2FuaXNtX2lkcSZLPlUMYWJicmV2aWF0aW9ucSdYGgAAAE0uIGFn\nYWxhY3RpYWVfcGcyX3VpZDYxNjE5cShVC2NvbW1vbl9uYW1lcSlYIgAAAE15Y29wbGFzbWEgYWdh\nbGFjdGlhZV9wZzJfdWlkNjE2MTlxKlUFZ2VudXNxK1UKTXljb3BsYXNtYXEsVQdzcGVjaWVzcS1o\nHHViVQEwdS4=\n	2012-04-27 14:39:52.102036-04
 c8d6d2ea687187707126c09ecfee98ff	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-05-02 21:58:16.723026-04
+4bd75cc14f9572cd188b13251bf7fb0f	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-29 15:22:27.051489-04
+cb43767944415b18ca56bc4c272aa554	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-11-01 16:33:41.296627-04
 f61827c83b9bbb8e738b36078b433067	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-09-06 16:20:41.442395-04
 29663f2f6bf20aa00a0defb5a0696705	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-09-10 11:26:43.988977-04
 7872b3f06b3809bf70faad57c90da488	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-09-21 15:31:31.586186-04
 b8a5bd619d9701662c752a45f53cc25d	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-10 15:23:50.876331-04
 451803deac939c4847347251a772d799	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-22 13:10:34.481433-04
+9c10971131be10df29c0ef4c10b0e7ea	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-30 13:29:17.584675-04
 f7491f88b24198177f851976a4a5d6e2	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-22 14:40:57.504987-04
-4153119e40c12a711502d06d0a352dac	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-25 13:34:19.98802-04
 4297c663a7b30b637b1bfcfe577c342b	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-29 12:44:55.991284-04
 46e969c8f952430f8db8b3b705463fbf	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-29 12:46:34.021142-04
 8bcbf90e1bcd950b0ba6fa5e62d47455	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-29 13:30:54.63688-04
 657aee02d56964a0fe9c75839d50812d	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-29 13:41:23.794792-04
+3ad8bafd4f68b24716807beb9984c7f2	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-10-30 13:33:26.406119-04
+0682987e40b26dbb50b32babc63b5060	NWQ0YTI1YWRiMDIyNzVmOWI4YThjZTRiNzE5NDYxZjQxOGMxN2ZmZDqAAn1xAShVCnRlc3Rjb29r\naWVxAlUGd29ya2VkcQNVEl9hdXRoX3VzZXJfYmFja2VuZHEEVSlkamFuZ28uY29udHJpYi5hdXRo\nLmJhY2tlbmRzLk1vZGVsQmFja2VuZHEFVQ1fYXV0aF91c2VyX2lkcQZLAXUu\n	2012-11-15 09:36:46.228803-05
+c51e38e224614a45ac446c0021c0d82d	MDcyYjJlODM1NGUxMDk5ZGJhNTRjZDlhYzhiMDZkODdiOTQxMTdmMzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQRLAXUu\n	2012-11-16 14:30:24.241453-05
 \.
 
 
@@ -2558,6 +2684,23 @@ COPY mycoplasma_home_picturetype (id, description, "imageType") FROM stdin;
 
 
 --
+-- Data for Name: mycoplasma_home_recentlyviewedpicture; Type: TABLE DATA; Schema: public; Owner: mycoplasma
+--
+
+COPY mycoplasma_home_recentlyviewedpicture (picture_id, user_id, "lastDateViewed", id) FROM stdin;
+33	3	2012-10-18 16:30:43.429259-04	1
+\.
+
+
+--
+-- Data for Name: mycoplasma_home_tag; Type: TABLE DATA; Schema: public; Owner: mycoplasma
+--
+
+COPY mycoplasma_home_tag (id, description, color_id, user_id, group_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: mycoplasma_home_tagcolor; Type: TABLE DATA; Schema: public; Owner: mycoplasma
 --
 
@@ -2570,7 +2713,8 @@ COPY mycoplasma_home_tagcolor (id, red, green, blue) FROM stdin;
 -- Data for Name: mycoplasma_home_taggroup; Type: TABLE DATA; Schema: public; Owner: mycoplasma
 --
 
-COPY mycoplasma_home_taggroup (id, description, picture_id, color_id) FROM stdin;
+COPY mycoplasma_home_taggroup (name, user_id, "dateCreated", "lastModified", id, picture_id) FROM stdin;
+Andy's Super Awesome Tag Group	1	2012-11-05 15:09:35.851847-05	2012-11-05 15:09:35.851896-05	1	32
 \.
 
 
@@ -2578,7 +2722,7 @@ COPY mycoplasma_home_taggroup (id, description, picture_id, color_id) FROM stdin
 -- Data for Name: mycoplasma_home_tagpoint; Type: TABLE DATA; Schema: public; Owner: mycoplasma
 --
 
-COPY mycoplasma_home_tagpoint (id, group_id, "pointX", "pointY", rank) FROM stdin;
+COPY mycoplasma_home_tagpoint (id, tag_id, "pointX", "pointY", rank) FROM stdin;
 \.
 
 
@@ -2833,6 +2977,27 @@ sorl-thumbnail||image||b4f90036b3851db79a25ccd690526d91	{"storage": "django.core
 sorl-thumbnail||thumbnails||a948e204735bcb62b29a450f57772a0a	["b4f90036b3851db79a25ccd690526d91"]
 sorl-thumbnail||image||7a518c5d85ec9facc11c619bc57ec397	{"storage": "django.core.files.storage.FileSystemStorage", "name": "multiuploader_images/df82521e9738d275d478c09e2c3a6f10.png", "size": [920, 175]}
 sorl-thumbnail||image||fd9b81678a0bd7f162e5643a3209c258	{"storage": "django.core.files.storage.FileSystemStorage", "name": "cache/e6/b0/e6b00e666dd9c8539fef7de1765525ed.jpg", "size": [80, 15]}
+sorl-thumbnail||image||67f2b8508d1b2ec028e22298437b5ac3	{"storage": "django.core.files.storage.FileSystemStorage", "name": "multiuploader_images/9d3a6cc6b9734a3354192ca8daa705d4_1.png", "size": [1600, 1200]}
+sorl-thumbnail||image||e724f3efc0c03d3beb88718c95934a35	{"storage": "django.core.files.storage.FileSystemStorage", "name": "cache/c8/9c/c89c4594ff253ce1d1189cffb77f8859.jpg", "size": [80, 60]}
+sorl-thumbnail||thumbnails||67f2b8508d1b2ec028e22298437b5ac3	["e724f3efc0c03d3beb88718c95934a35"]
+sorl-thumbnail||image||45d6ed8986c59d722ff2406191355525	{"storage": "django.core.files.storage.FileSystemStorage", "name": "multiuploader_images/8978a2e09c84af067ec38b8abb493a81.png", "size": [1600, 1200]}
+sorl-thumbnail||image||88ea7047f02073ca07fc4844f3a6d62d	{"storage": "django.core.files.storage.FileSystemStorage", "name": "cache/b2/53/b253b1c3ddc52ac9adf6fe1a1615e24f.jpg", "size": [80, 60]}
+sorl-thumbnail||thumbnails||45d6ed8986c59d722ff2406191355525	["88ea7047f02073ca07fc4844f3a6d62d"]
+sorl-thumbnail||image||39f6fc59e786c23610fd1a95a3466fbd	{"storage": "django.core.files.storage.FileSystemStorage", "name": "pictures/9d3a6cc6b9734a3354192ca8daa705d4_1.png", "size": [1600, 1200]}
+sorl-thumbnail||image||63637180278a87c03c199bff9e8f028f	{"storage": "django.core.files.storage.FileSystemStorage", "name": "cache/87/91/8791387de12736e7025692f9939b3314.jpg", "size": [80, 60]}
+sorl-thumbnail||thumbnails||39f6fc59e786c23610fd1a95a3466fbd	["63637180278a87c03c199bff9e8f028f"]
+sorl-thumbnail||image||fdd10f49105b8c8aa0ea7963e85e8f60	{"storage": "django.core.files.storage.FileSystemStorage", "name": "pictures/9d3a6cc6b9734a3354192ca8daa705d4_2.png", "size": [1600, 1200]}
+sorl-thumbnail||image||82941b756b4319ddad051ebf3fc98935	{"storage": "django.core.files.storage.FileSystemStorage", "name": "cache/b4/ed/b4ed420d1a68aa79e569feb9f2dd64cb.jpg", "size": [80, 60]}
+sorl-thumbnail||thumbnails||fdd10f49105b8c8aa0ea7963e85e8f60	["82941b756b4319ddad051ebf3fc98935"]
+sorl-thumbnail||image||8bedab6a06012a96a39a0174ff3a7af8	{"storage": "django.core.files.storage.FileSystemStorage", "name": "pictures/9d3a6cc6b9734a3354192ca8daa705d4_3.png", "size": [1600, 1200]}
+sorl-thumbnail||image||eeb8358e2feecfc781605e25e71dbf42	{"storage": "django.core.files.storage.FileSystemStorage", "name": "cache/33/a9/33a960afa319402095be768ce2666eb9.jpg", "size": [80, 60]}
+sorl-thumbnail||thumbnails||8bedab6a06012a96a39a0174ff3a7af8	["eeb8358e2feecfc781605e25e71dbf42"]
+sorl-thumbnail||image||572d66dba28e119759cfe69452a0752f	{"storage": "django.core.files.storage.FileSystemStorage", "name": "pictures/8978a2e09c84af067ec38b8abb493a81.png", "size": [1600, 1200]}
+sorl-thumbnail||image||99b00c038de40a7ffd4f028c3c79f3bf	{"storage": "django.core.files.storage.FileSystemStorage", "name": "cache/7f/05/7f05ba73349392d9643843884f9a7b34.jpg", "size": [80, 60]}
+sorl-thumbnail||thumbnails||572d66dba28e119759cfe69452a0752f	["99b00c038de40a7ffd4f028c3c79f3bf"]
+sorl-thumbnail||image||d25a8b95f0ddaaa98ca3c337c74da89d	{"storage": "django.core.files.storage.FileSystemStorage", "name": "pictures/9d3a6cc6b9734a3354192ca8daa705d4.png", "size": [1600, 1200]}
+sorl-thumbnail||image||74ce4fd08d4bb16233b7566b88629ed9	{"storage": "django.core.files.storage.FileSystemStorage", "name": "cache/88/fe/88fe2f27e67b333e5ef5adbaeb7d66bb.jpg", "size": [80, 60]}
+sorl-thumbnail||thumbnails||d25a8b95f0ddaaa98ca3c337c74da89d	["74ce4fd08d4bb16233b7566b88629ed9"]
 \.
 
 
@@ -3069,6 +3234,30 @@ ALTER TABLE ONLY mycoplasma_home_picturetype
 
 
 --
+-- Name: mycoplasma_home_recentlyviewedpicture_pkey; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
+--
+
+ALTER TABLE ONLY mycoplasma_home_recentlyviewedpicture
+    ADD CONSTRAINT mycoplasma_home_recentlyviewedpicture_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mycoplasma_home_recentlyviewedpicture_uniqueness; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
+--
+
+ALTER TABLE ONLY mycoplasma_home_recentlyviewedpicture
+    ADD CONSTRAINT mycoplasma_home_recentlyviewedpicture_uniqueness UNIQUE (picture_id, user_id);
+
+
+--
+-- Name: mycoplasma_home_tag_pkey; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
+--
+
+ALTER TABLE ONLY mycoplasma_home_tag
+    ADD CONSTRAINT mycoplasma_home_tag_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: mycoplasma_home_tagcolor_pkey; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
@@ -3090,6 +3279,14 @@ ALTER TABLE ONLY mycoplasma_home_taggroup
 
 ALTER TABLE ONLY mycoplasma_home_tagpoint
     ADD CONSTRAINT mycoplasma_home_tagpoint_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: name_unique; Type: CONSTRAINT; Schema: public; Owner: mycoplasma; Tablespace: 
+--
+
+ALTER TABLE ONLY mycoplasma_home_taggroup
+    ADD CONSTRAINT name_unique UNIQUE (name);
 
 
 --
@@ -3150,17 +3347,10 @@ CREATE INDEX mycoplasma_home_pictureprops_type_id_id ON mycoplasma_home_picturep
 
 
 --
--- Name: mycoplasma_home_taggroup_picture_id; Type: INDEX; Schema: public; Owner: mycoplasma; Tablespace: 
---
-
-CREATE INDEX mycoplasma_home_taggroup_picture_id ON mycoplasma_home_taggroup USING btree (picture_id);
-
-
---
 -- Name: mycoplasma_home_tagpoint_group_id; Type: INDEX; Schema: public; Owner: mycoplasma; Tablespace: 
 --
 
-CREATE INDEX mycoplasma_home_tagpoint_group_id ON mycoplasma_home_tagpoint USING btree (group_id);
+CREATE INDEX mycoplasma_home_tagpoint_group_id ON mycoplasma_home_tagpoint USING btree (tag_id);
 
 
 --
@@ -3287,16 +3477,8 @@ ALTER TABLE ONLY mycoplasma_home_pictureprop
 -- Name: mycoplasma_home_taggroup_color_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
 --
 
-ALTER TABLE ONLY mycoplasma_home_taggroup
+ALTER TABLE ONLY mycoplasma_home_tag
     ADD CONSTRAINT mycoplasma_home_taggroup_color_fkey FOREIGN KEY (color_id) REFERENCES mycoplasma_home_tagcolor(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: mycoplasma_home_taggroup_picture_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
---
-
-ALTER TABLE ONLY mycoplasma_home_taggroup
-    ADD CONSTRAINT mycoplasma_home_taggroup_picture_id_fkey FOREIGN KEY (picture_id) REFERENCES mycoplasma_home_picture(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -3304,7 +3486,7 @@ ALTER TABLE ONLY mycoplasma_home_taggroup
 --
 
 ALTER TABLE ONLY mycoplasma_home_tagpoint
-    ADD CONSTRAINT mycoplasma_home_tagpoint_group_id_fkey FOREIGN KEY (group_id) REFERENCES mycoplasma_home_taggroup(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT mycoplasma_home_tagpoint_group_id_fkey FOREIGN KEY (tag_id) REFERENCES mycoplasma_home_tag(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -3313,6 +3495,46 @@ ALTER TABLE ONLY mycoplasma_home_tagpoint
 
 ALTER TABLE ONLY mycoplasma_home_picture
     ADD CONSTRAINT "originalUser_fkey" FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: picture_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
+--
+
+ALTER TABLE ONLY mycoplasma_home_recentlyviewedpicture
+    ADD CONSTRAINT picture_fkey FOREIGN KEY (picture_id) REFERENCES mycoplasma_home_picture(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: picture_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
+--
+
+ALTER TABLE ONLY mycoplasma_home_taggroup
+    ADD CONSTRAINT picture_fkey FOREIGN KEY (picture_id) REFERENCES mycoplasma_home_picture(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
+--
+
+ALTER TABLE ONLY mycoplasma_home_recentlyviewedpicture
+    ADD CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
+--
+
+ALTER TABLE ONLY mycoplasma_home_tag
+    ADD CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mycoplasma
+--
+
+ALTER TABLE ONLY mycoplasma_home_taggroup
+    ADD CONSTRAINT user_fkey FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
