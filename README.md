@@ -38,7 +38,8 @@ Prerequisites: (THIS IS THE HARDEST PART)
     	and make sure that the link below is still valid
     	-- go to: http://github.com/chapmanb/bcbb/
     	-- download the source here as a zip file
-    	-- unzip this file and in the gff directory run setup.py
+    	-- unzip this file and in the gff directory run:
+    		sudo python setup.py install
 
 Instructions:
 
