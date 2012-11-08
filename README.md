@@ -31,6 +31,14 @@ Prerequisites: (THIS IS THE HARDEST PART)
     Pip - aptitude install python-pip
     
     Sorl-thumbnail - pip install sorl-thumbnail
+    
+    BioPython - aptitude install python-biopython
+    
+    GFFParser - go to this page: http://biopython.org/wiki/GFF_Parsing
+    	and make sure that the link below is still valid
+    	-- go to: http://github.com/chapmanb/bcbb/
+    	-- download the source here as a zip file
+    	-- unzip this file and in the gff directory run setup.py
 
 Instructions:
 
