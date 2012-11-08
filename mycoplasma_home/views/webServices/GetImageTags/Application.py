@@ -11,16 +11,16 @@ from mycoplasma_home.views.api import ImagesAPI
 
 class Application(WebServiceApplicationBase):
 	def doProcessRender(self, request):
-		errorMessage = ImagesAPI.NO_ERROR
-		tagTuples = list()
-		
 		if request.REQUEST.has_key('tagGroupKey'):
 			# the key for lookup and the image it is attached to
 			tagGroupKey = request.REQUEST['tagGroupKey']
-			
+			tags = ImagesAPI.getImageTags(tagGroupKey, user=request.user, isKey=True)
+			self.setJsonObject(tags)
 		else:
-			errorMessage = 
-		self.setJsonObject(renderObj)
+			self.setJsonObject({
+				'error' : True,
+				'errorMessage' : ImagesAPI.NO_TAG_GROUP_KEY
+			})
 '''
 	Used for mapping to the url in urls.py
 '''

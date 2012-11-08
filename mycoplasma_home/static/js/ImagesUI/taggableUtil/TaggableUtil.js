@@ -94,3 +94,21 @@ TaggableUtil.getOtherRectPoints = function(points) {
 	}
 	return [pointOne, pointTwo]; 
 };
+
+TaggableUtil.toDate = function(dateTime) {
+	var date = dateTime.split(" ");
+	var time = date[1];
+	date = date[0].split("-");
+	time = time.split(":");
+	
+	var year = parseInt(date[0]);
+	var month = parseInt(date[1]);
+	var day = parseInt(date[3]);
+	
+	var hours = parseInt(time[0]);
+	var minutes = parseInt(time[1]);
+	var seconds = parseInt(time[2]);
+	var milliseconds = 0;
+	
+	return new Date(year, month, day, hours, minutes, seconds, milliseconds);
+};

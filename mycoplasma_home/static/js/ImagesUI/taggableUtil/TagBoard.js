@@ -13,11 +13,12 @@ function TagBoard(tagBoard, originalData, image, organisms, siteUrl, defaultInfo
 	this.board = tagBoard;
 	this.image = image;
 	this.organisms = organisms;
-	this.tags = this.__convertOriginalDataToTags(originalData);
+	this.tagGroups = this.__convertOriginalDataToTagGroups(originalData);
 	this.stage = null;
 	this.layer = null;
 	this.locked = false;
 	this.selectedTag = null;
+	this.currentTagGroup = 0;
 	this.siteUrl = siteUrl;
 	this.defaultInfoViewCallback = defaultInfoViewCallback;
 };
@@ -32,14 +33,14 @@ TagBoard.prototype.addTag = function(color, points, description) {
 	// saves the tag and then adds the 
 	tag.save(
 		Util.scopeCallback(this, function() {
-			this.tags.push(tag);
+			this.tagGroups[this.currentTagGroup].addTag(tag);
 		})
 	);
 };
 
 TagBoard.prototype.redraw = function() {
 	this.locked =  false;
-	var id = this.image.attr('id');;
+	var id = this.image.attr('id');
 	
 	// check to see if a stage has been initialized
 	if (!this.stage) {
@@ -58,9 +59,10 @@ TagBoard.prototype.redraw = function() {
 	
 	this.layer = new Kinetic.Layer();
 	
+	var tags = this.tagGroups[this.currentTagGroup].getTags();
 	// Draws the tags on the board and sets up mouseover and mouseout events
-	for (var i = 0; i < this.tags.length; i++) {
-		this.layer.add(this.__createPolyFromTag(this.tags[i], i));
+	for (var i = 0; i < tags.length; i++) {
+		this.layer.add(this.__createPolyFromTag(tags[i], i));
 	}
 	
 	this.stage.add(this.layer);
@@ -165,7 +167,7 @@ TagBoard.prototype.polyOnMouseOver = function(event) {
 		
 		// sets the selected tag for showing information
 		var shapeId = event.shape.getId();
-		this.selectedTag = this.tags[shapeId];
+		this.selectedTag = this.tagGroups[this.currentTagGroup].getTags()[shapeId];
 		//this.defaultInfoViewCallback(tags, shapeId, id);
 	}
 };
@@ -175,12 +177,12 @@ TagBoard.prototype.__getPolyPos = function(poly) {
 	return [ pos[0] + poly.pos[0], pos[1] + poly.pos[1]];
 };
 
-TagBoard.prototype.__convertOriginalDataToTags = function(originalData) {
-	var tags = [];
+TagBoard.prototype.__convertOriginalDataToTagGroups = function(originalData) {
+	var tagGroups = [];
 	
-	for (tag in originalData) {
-		tags.push(new Tag(tag.color, tag.points, tag.description));
+	for (group in originalData['tagGroups']) {
+		tagGroups.push(new TagGroup(group, this.image.attr('id'), this.siteUrl));
 	}
 	
-	return tags;
+	return tagGroups;
 };

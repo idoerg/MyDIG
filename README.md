@@ -7,6 +7,7 @@ Prerequisites: (THIS IS THE HARDEST PART)
     Django - Web framework used for website -- https://docs.djangoproject.com/en/1.3/topics/install/
     
     PostgreSQL - database system used for website -- aptitude install postgresql-8.4
+    			- for Django make sure that in pg_hba.conf that 
     
     MySQL - database system used with a GO database clone
     

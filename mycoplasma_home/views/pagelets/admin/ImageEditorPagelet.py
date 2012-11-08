@@ -7,9 +7,9 @@
 '''
 
 from renderEngine.PageletBase import PageletBase
-from django.forms.models import model_to_dict
 import simplejson as json
-from mycoplasma_home.models import Picture, Tag, TagPoint, PictureDefinitionTag, Organism
+from mycoplasma_home.views.api import ImagesAPI
+from mycoplasma_home.models import Picture
 from django.core.exceptions import ObjectDoesNotExist
 
 class ImageEditorPagelet(PageletBase):
@@ -25,40 +25,13 @@ class ImageEditorPagelet(PageletBase):
 
         try:
             imageKey = request.REQUEST['imageKey']
-            image = Picture.objects.get(pk__exact=imageKey)    
-            
-            defTags = PictureDefinitionTag.objects.filter(picture__exact=image)
-            
-            organisms = []
-            
-            for tag in defTags:
-                try:
-                    organisms.append(model_to_dict(Organism.objects.get(pk__exact=tag.organism_id), fields=['organism_id', 'common_name']))
-                except ObjectDoesNotExist:
-                    None
-            
-            tags = Tag.objects.filter(picture__exact=image)
-            
-            tagTuples = list()
-            
-            for tag in tags:
-                tagPoints = TagPoint.objects.filter(tag__exact = tag).order_by('rank')
-                points = []
-                
-                for tagPoint in tagPoints:
-                    points.append([tagPoint.pointX, tagPoint.pointY])
-                
-                color = [tag.color.red, tag.color.green, tag.color.blue]
-                
-                tagTuples.append({
-                    'color' : color,
-                    'points' : points,
-                    'description' : tag.description
-                })
+            image = Picture.objects.get(pk__exact=imageKey)
+            tagGroups = ImagesAPI.getImageTagGroups(image, user=request.user, getTags=True, isKey=False)
+            organisms = ImagesAPI.getImageMetadata(image, user=request.user, isKey=False)['organisms']
     
             return {
                 'organisms' : json.dumps(organisms),
-                'tags' : tagTuples,
+                'tagGroups' : json.dumps(tagGroups),
                 'image' : image
             }
         except ObjectDoesNotExist:

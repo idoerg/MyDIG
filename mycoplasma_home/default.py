@@ -92,6 +92,7 @@ class Tag(models.Model):
     description = models.CharField(max_length=50)
     color = models.ForeignKey(TagColor)
     user = models.ForeignKey(User)
+    group = models.ForeignKey(TagGroup)
     def __unicode__(self):
         return self.description
     
@@ -101,7 +102,7 @@ class TagPoint(models.Model):
     pointY = models.IntegerField()
     rank = models.IntegerField()
     def __unicode__(self):
-        return "(" + str(self.pointX) + "," + str(self.pointY) + ") " + self.group.description
+        return "(" + str(self.pointX) + "," + str(self.pointY) + ") " + self.tag.description
         
 class BlastUpload(models.Model):
     fasta_file = models.FileField(upload_to="fasta_files/")
