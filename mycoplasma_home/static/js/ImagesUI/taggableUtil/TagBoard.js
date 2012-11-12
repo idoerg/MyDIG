@@ -18,7 +18,12 @@ function TagBoard(tagBoard, originalData, image, organisms, siteUrl, defaultInfo
 	this.layer = null;
 	this.locked = false;
 	this.selectedTag = null;
-	this.currentTagGroup = 0;
+	if (len(this.tagGroups) > 0):
+		this.currentTagGroups = {
+			this.tagGroups[0].getKey() : this.tagGroups[0]
+		};
+	else:
+		this.currentTagGroups = {};
 	this.siteUrl = siteUrl;
 	this.defaultInfoViewCallback = defaultInfoViewCallback;
 };
@@ -58,14 +63,17 @@ TagBoard.prototype.redraw = function() {
 	}
 	
 	this.layer = new Kinetic.Layer();
-	
-	var tags = this.tagGroups[this.currentTagGroup].getTags();
-	// Draws the tags on the board and sets up mouseover and mouseout events
-	for (var i = 0; i < tags.length; i++) {
-		this.layer.add(this.__createPolyFromTag(tags[i], i));
+	for (var key in this.currentTagGroups) {
+	  if (this.currentTagGroups.hasOwnProperty(key)) {
+		  var tags = this.currentTagGroups[key].getTags();
+		  // Draws the tags on the board and sets up mouseover and mouseout events
+		  for (var i = 0; i < tags.length; i++) {
+			  this.layer.add(this.__createPolyFromTag(tags[i], i));
+		  }
+		  
+		  this.stage.add(this.layer);
+	  }
 	}
-	
-	this.stage.add(this.layer);
 };
 
 TagBoard.prototype.__createPolyFromTag = function(tag, i) {
@@ -140,9 +148,21 @@ TagBoard.prototype.polyOnClick = function(event) {
 
 TagBoard.prototype.polyOnMouseOut = function(event) {
 	if (!this.locked) {
-		// draws the polygon as invisible again
-		event.shape.attrs.fill = "";
-		event.shape.attrs.stroke = "rgba(255,255,255,0)";
+		var mousePos = this.stage.getMousePosition(event);
+		
+		var collidingShapes = this.stage.getIntersections(mousePos);
+		
+		for (var i = 0; i < collidingShapes.length; i++) {
+			// draws the shape on mouse over
+			collidingShapes[i].attrs.fill = "";
+			collidingShapes[i].attrs.stroke = "rgba(255,255,255,0)";
+			var shape = event.shape;
+			// positions the tag tooltip
+			var pos = this.__getPolyPos(event.shape);
+			pos[0] -= $('#taggable-tooltip').html(shape.description).width()/2;
+			pos[1] -= $(window).scrollTop() - 20;
+			$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show();
+		}
 		
 		// hides the tooltip and redraws the layer
 		$('#taggable-tooltip').hide();
@@ -152,17 +172,23 @@ TagBoard.prototype.polyOnMouseOut = function(event) {
 };
 
 TagBoard.prototype.polyOnMouseOver = function(event) {
-	if (!this.locked) {
-		// draws the shape on mouse over
-		event.shape.attrs.fill = event.shape.color;
-		event.shape.attrs.stroke = "black";
-		var shape = event.shape;
+	if (!this.locked) {		
+		var mousePos = this.stage.getMousePosition(event);
 		
-		// positions the tag tooltip
-		var pos = this.__getPolyPos(event.shape);
-		pos[0] -= $('#taggable-tooltip').html(shape.description).width()/2;
-		pos[1] -= $(window).scrollTop() - 20;
-		$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show(); 
+		var collidingShapes = this.stage.getIntersections(mousePos);
+		
+		for (var i = 0; i < collidingShapes.length; i++) {
+			// draws the shape on mouse over
+			collidingShapes[i].attrs.fill = event.shape.color;
+			collidingShapes[i].attrs.stroke = "black";
+			var shape = event.shape;
+			// positions the tag tooltip
+			var pos = this.__getPolyPos(event.shape);
+			pos[0] -= $('#taggable-tooltip').html(shape.description).width()/2;
+			pos[1] -= $(window).scrollTop() - 20;
+			$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show();
+		}
+ 
 		this.layer.draw();
 		
 		// sets the selected tag for showing information
@@ -174,7 +200,7 @@ TagBoard.prototype.polyOnMouseOver = function(event) {
 
 TagBoard.prototype.__getPolyPos = function(poly) {
 	var pos = TaggableUtil.findPosition(this.board[0]);
-	return [ pos[0] + poly.pos[0], pos[1] + poly.pos[1]];
+	return [pos[0] + poly.pos[0], pos[1] + poly.pos[1]];
 };
 
 TagBoard.prototype.__convertOriginalDataToTagGroups = function(originalData) {
@@ -185,4 +211,40 @@ TagBoard.prototype.__convertOriginalDataToTagGroups = function(originalData) {
 	}
 	
 	return tagGroups;
+};
+
+TagBoard.prototype.addToCurrentTagGroups = function(tagGroup) {
+	this.currentTagGroups[tagGroup.key] = tagGroup;
+	this.redraw();
+};
+
+TagBoard.prototype.removeFromCurrentTagGroups = function(tagGroup) {
+	delete this.currentTagGroups[tagGroup.key];
+	this.redraw();
+};
+
+TagBoard.prototype.addNewTagGroup = function(name) {
+	var self = this;
+	$.ajax({
+		url: this.siteUrl + 'administration/addNewTagGroup',
+		type: 'POST',
+		dataType: 'json',
+		data: {
+			name: name
+		},
+		success: function(data, textStatus, jqXHR) {
+			if (!data.error) {				
+				// add a new tag group
+				var newTagGroup = new TagGroup(data.tagGroup, self.image.attr('id'), self.siteUrl);
+				self.tagGroups.push(newTagGroup);
+				self.addToCurrentTagGroups(newTagGroup);
+			}
+			else {
+				alert(data.errorMessage);
+			}
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			
+		}
+	});
 };

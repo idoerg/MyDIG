@@ -247,27 +247,28 @@ class GFFRewriter:
                             for ancestor in ancestorsAway:
                                 if (colorHash.has_key(ancestor[1])):
                                     tmpList.append(ancestor)
-                        
-                        # Go through the list of ancestor candidates searching for molecular function first
-                        # then biological process then cellular component (will also hold out for a better molecular function
-                        # than 'binding' or 'structural molecule activity' because those are not particularly helpful)
-                        currentChosenAncestor = None
-                        for ancestorCandidate in tmpList:
-                            if (currentChosenAncestor != None):
-                                if (ancestorCandidate[2] == "molecular_function"):
-                                    if (currentChosenAncestor[0] == "binding" or currentChosenAncestor[0] == "structural molecule activity"):
-                                        currentChosenAncestor = ancestorCandidate
-                                elif (ancestorCandidate[2] == "biological_process"):
-                                    if (currentChosenAncestor[2] == "cellular_component"):
-                                        currentChosenAncestor = ancestorCandidate   
-                            else: 
-                                currentChosenAncestor = ancestorCandidate
-                        
-                        color = colorHash[currentChosenAncestor[1]]
-                        
-                        
-                        outfile.write(line.strip("\n") + ";color=" + hex(color) + "\n")
-                    
+                        if (len(tmpList) > 0):
+                            # Go through the list of ancestor candidates searching for molecular function first
+                            # then biological process then cellular component (will also hold out for a better molecular function
+                            # than 'binding' or 'structural molecule activity' because those are not particularly helpful)
+                            currentChosenAncestor = None
+                            for ancestorCandidate in tmpList:
+                                if (currentChosenAncestor != None):
+                                    if (ancestorCandidate[2] == "molecular_function"):
+                                        if (currentChosenAncestor[0] == "binding" or currentChosenAncestor[0] == "structural molecule activity"):
+                                            currentChosenAncestor = ancestorCandidate
+                                    elif (ancestorCandidate[2] == "biological_process"):
+                                        if (currentChosenAncestor[2] == "cellular_component"):
+                                            currentChosenAncestor = ancestorCandidate   
+                                else: 
+                                    currentChosenAncestor = ancestorCandidate
+                            
+                            color = colorHash[currentChosenAncestor[1]]
+                            
+                            
+                            outfile.write(line.strip("\n") + ";color=" + hex(color) + "\n")
+                        else:
+                            outfile.write(line.strip("\n") + ";color=Unknown\n")
                     else:
                         outfile.write(line.strip("\n") + ";color=Unknown\n")
                 else:

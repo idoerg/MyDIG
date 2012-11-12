@@ -47,25 +47,32 @@ Instructions:
 
 2. Change name of folder from MyDIG to mycoplasma_site
 
-3. Add Alias to apache2.conf (or httpd.conf) file
+3. Change the owner of this folder (recursively) to www-data:www-data
+   Change the owner of /etc/gbrowse2 (recursively) to www-data:www-data
+
+4. Add Alias to apache2.conf (or httpd.conf) file
     -typically located in /etc/apache2/
     -command: WSGIScriptAlias / /var/www/mycoplasma_site/apache/django.wsgi
 
-4. Create a user for the psql databases with username/passwords given in settings.py and grant
+5. Create a user for the psql databases with username/passwords given in settings.py and grant
 all privileges to this user on the databases
 
-5. Create the same user in MySQL. Clone the GO database at http://www.geneontology.org/GO.downloads.ontology.shtml.
+6. Create the same user in MySQL. Clone the GO database at http://www.geneontology.org/GO.downloads.ontology.shtml.
 get the database dump for MySQL that is updated daily
 
-6. Once all databases created, in /var/www/mycoplasma_site/ run: python manage.py syncdb
+7. Once all databases created, in /var/www/mycoplasma_site/ run: python manage.py syncdb
 
-7. Alter the table "organism" in the chado database using the statement: ALTER TABLE organism DROP CONSTRAINT "organism_c1". 
+8. Alter the table "organism" in the chado database using the statement: ALTER TABLE organism DROP CONSTRAINT "organism_c1". 
 Otherwise, the database will not allow the same species in value in the species column, which we need.
 
-*8. Test to see what is working: If GBrowse is not working check your machine's URL for GBrowse then go into 
+9. Make sure there is a value in chado in the db table: there should be an entry with db_id=41, name=_global. Also make sure
+that there is a /var/www/mycoplasma_site/mycoplasma_home/genomeFiles/current folder and a /var/www/mycoplasma_site/mycoplasma_home/genomeFiles/new
+folder. Then run databaseUpdater/GenomeDB/GenomeUpdater.py
+
+*10. Test to see what is working: If GBrowse is not working check your machine's URL for GBrowse then go into 
     /var/www/mycoplasma_site/mycoplasma_home/templates/public/gbrowse.html and replace the iframe src with that URL
    
- 9. In your terminal, move to the directory /var/www/mycoplasma_site/databaseUpdater. Run the following command:
+ 11. In your terminal, move to the directory /var/www/mycoplasma_site/databaseUpdater. Run the following command:
  					python GenomeUpdater.py
  					
- 10. Add the cron job for pruning to crontab to run every Saturday at 3:00am (should already be configured in the cron tab sh for pruning)
+ 12. Add the cron job for pruning to crontab to run every Saturday at 3:00am (should already be configured in the cron tab sh for pruning)
