@@ -46,7 +46,8 @@ TaggerUI.prototype.createStructure = function() {
 	// create the toolbar
 	var id = this.image.attr('id');
 	
-	this.parent.prepend(this.__renderToolbar(id));
+	var menu = this.__getToolbar(id);	
+	this.parent.prepend(menu.getUI());
 	this.__renderGeneLinksMenu();
 	
 	if ($('#taggable-tooltip').length == 0) {
@@ -69,8 +70,18 @@ TaggerUI.prototype.createStructure = function() {
 	// creates the drawing API
 	this.drawingAPI = new DrawingAPI(drawingBoard, tagBoard, this.siteUrl, this.originalData, this.image, this.organisms);
 	
-	var self = this;
+	var $tagGroupSelect = this.parent.find('#' + id + '-tag-groups');
+	var groups = this.drawingAPI.getTagBoard().getTagGroups();
+	for (key in groups) {
+		var group = groups[key];
+		$tagGroupSelect.append($('<option />', {
+			'text' : group.getName(),
+			'name' : group.getKey()
+		}));
+	}
 	
+	var self = this;
+	/*
 	// events for clicking the start and stop drawing buttons
 	$('#' + id + '-begin-tagging').live('click', function() {
 		$(this).siblings('.add-tag-hidden').removeClass('add-tag-hidden').addClass('add-tag');
@@ -116,7 +127,7 @@ TaggerUI.prototype.createStructure = function() {
 	$('#' + id + '-submit-tag').on('click', function() {
 		self.drawingAPI.saveTag();
 	});
-	
+	*/
 	var left = parseInt(this.image.css('left').split('px')[0]);
 	var top = parseInt(this.image.css('top').split('px')[0]);
 	
@@ -157,7 +168,8 @@ TaggerUI.prototype.resizeCanvas = function() {
 	}
 };
 
-TaggerUI.prototype.__renderToolbar = function(id) {
+TaggerUI.prototype.__getToolbar = function(id) {
+	/*
 	var colorButtons = '';
 	for (var i = 0; i < this.colors.length; i++) {
 		colorButtons += '<button class="change-color toolbar-item" style="background-color: ' + this.colors[i].colorRGB + '"></button>';
@@ -200,10 +212,33 @@ TaggerUI.prototype.__renderToolbar = function(id) {
 					</tr> \
 				</tbody> \
 			</table> \
-			<button id="' + id + '-submit-tag" class="submit-tag toolbar-item">Submit Tag</button> \
+			<button id="' + id + '-submit-tag" class="submit-tag taggable-button toolbar-item">Submit Tag</button> \
+		</span> \
+		<span style="float: right; margin-top: 13px;"> \
+			<select id="' + id + '-tag-groups"></select> \
+			<button id="' + id + '-new-tag-group" class="taggable-button">New Tag Group</button> \
 		</span> \
 	</div>');
 	return $render;
+	*/
+	var menu = new Menu();
+	
+	// create tools menu section
+	var tools = new MenuSection('Tools', this.imagesUrl + 'tag.png');
+	tools.addMenuItem('download', 'Download Image Data', 'ui-icon ui-icon-disk', false);
+	tools.addMenuItem('zoomIn', 'Zoom In', 'ui-icon ui-icon-zoomin', false);
+	tools.addMenuItem('zoomOut', 'Zoom Out', 'ui-icon ui-icon-zoomout', false);
+	menu.addNewSection('tools', tools);
+	
+	// create tag groups menu section
+	var tagGroups = new MenuSection('Tag Groups', this.imagesUrl + 'tag.png');
+	menu.addNewSection('tagGroups', tagGroups);
+	
+	// create tag groups menu section
+	var tags = new MenuSection('Tags', this.imagesUrl + 'tag.png');
+	menu.addNewSection('tags', tags);
+	
+	return menu;
 };
 
 /**

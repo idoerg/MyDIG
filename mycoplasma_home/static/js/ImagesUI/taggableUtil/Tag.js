@@ -3,6 +3,7 @@ function Tag(colorArr, tagPoints, description, imageKey, siteUrl) {
 	this.points = tagPoints;
 	this.description = description;
 	this.imageKey = imageKey;
+	this.siteUrl = siteUrl;
 	this.saveUrl = siteUrl + 'administration/saveTag';
 	this.geneLinks = [];
 };
@@ -64,6 +65,10 @@ Tag.prototype.save = function(callback) {
 			savingDialog.error();
 		}
 	});
+};
+
+Tag.prototype.copy = function() {
+	return new Tag(this.getColor(), this.getPoints(), this.description, this.imageKey, this.siteUrl);
 };
 
 function TagSavingDialog() {

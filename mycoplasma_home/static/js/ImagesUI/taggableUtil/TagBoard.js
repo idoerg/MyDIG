@@ -18,12 +18,11 @@ function TagBoard(tagBoard, originalData, image, organisms, siteUrl, defaultInfo
 	this.layer = null;
 	this.locked = false;
 	this.selectedTag = null;
-	if (len(this.tagGroups) > 0):
-		this.currentTagGroups = {
-			this.tagGroups[0].getKey() : this.tagGroups[0]
-		};
-	else:
-		this.currentTagGroups = {};
+	this.currentTagGroups = {};
+	if (this.tagGroups.length > 0) {
+		var key = this.tagGroups[0].getKey();
+		this.currentTagGroups[key] = this.tagGroups[0];
+	}
 	this.siteUrl = siteUrl;
 	this.defaultInfoViewCallback = defaultInfoViewCallback;
 };
@@ -32,13 +31,21 @@ TagBoard.prototype.getBoard = function() {
 	return this.board;
 };
 
+TagBoard.prototype.getTagGroups = function() {
+	return this.tagGroups;
+};
+
 TagBoard.prototype.addTag = function(color, points, description) {
 	var tag = new Tag(color, points, description, this.image.attr('id'), this.siteUrl);
 	
 	// saves the tag and then adds the 
 	tag.save(
 		Util.scopeCallback(this, function() {
-			this.tagGroups[this.currentTagGroup].addTag(tag);
+			for (key in this.currentTagGroups) {
+				if (this.currentTagGroups.hasOwnProperty(key)) {
+					this.currentTagGroups[key].addTag(tag.copy());
+				}
+			}
 		})
 	);
 };
@@ -207,7 +214,7 @@ TagBoard.prototype.__convertOriginalDataToTagGroups = function(originalData) {
 	var tagGroups = [];
 	
 	for (group in originalData['tagGroups']) {
-		tagGroups.push(new TagGroup(group, this.image.attr('id'), this.siteUrl));
+		tagGroups.push(new TagGroup(originalData['tagGroups'][group], this.image.attr('id'), this.siteUrl));
 	}
 	
 	return tagGroups;

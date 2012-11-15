@@ -103,7 +103,7 @@ TaggableUtil.toDate = function(dateTime) {
 	
 	var year = parseInt(date[0]);
 	var month = parseInt(date[1]);
-	var day = parseInt(date[3]);
+	var day = parseInt(date[2]);
 	
 	var hours = parseInt(time[0]);
 	var minutes = parseInt(time[1]);

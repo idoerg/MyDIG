@@ -47,8 +47,8 @@ Instructions:
 
 2. Change name of folder from MyDIG to mycoplasma_site
 
-3. Change the owner of this folder (recursively) to www-data:www-data
-   Change the owner of /etc/gbrowse2 (recursively) to www-data:www-data
+3. Change the owner of this folder (recursively) to <username>:<username>
+   Change the owner of /etc/gbrowse2 (recursively) to <username>:<username>
 
 4. Replace the GBrowse.conf in /etc/gbrowse2 with the GBrowse.conf in the configuration folder
    Also, move the mycoplasmaTemplate.conf file into the /etc/gbrowse2 folder

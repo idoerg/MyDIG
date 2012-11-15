@@ -22,6 +22,18 @@ function TagGroup(group, imageKey, siteUrl) {
 	}
 };
 
+TagGroup.prototype.getName = function() {
+	return this.name;
+};
+
+TagGroup.prototype.getKey = function() {
+	return this.key;
+};
+
 TagGroup.prototype.getTags = function() {
 	return this.tags;
+};
+
+TagGroup.prototype.addTag = function(tag) {
+	this.tags.push(tag);
 };
