@@ -154,6 +154,10 @@ TaggingMenu.prototype.onPolyClick = function(callback) {
 	this.drawPolyButton.on('click', callback);
 };
 
+TaggingMenu.prototype.onSubmitClick = function(callback) {
+	this.submitTagButton.on('click', callback);
+};
+
 TaggingMenu.prototype.getUI = function() {
 	return this.ui;
 };

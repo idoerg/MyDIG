@@ -44,6 +44,15 @@ TaggerUI.prototype.createStructure = function() {
 	
 	this.__renderGeneLinksMenu();
 	
+	var pageBlock = new PageBlock();
+	var saveTagDialog = new SaveTagDialog(pageBlock);
+	var newTagGroupDialog = new NewTagGroupDialog(pageBlock);
+	
+	var dialogs = {
+		'saveTags' : saveTagDialog,
+		'newTagGroup' : newTagGroupDialog
+	};
+	
 	if ($('#taggable-tooltip').length == 0) {
 		this.parent.parent().append('<div id="taggable-tooltip"></div>');
 	}
@@ -62,7 +71,7 @@ TaggerUI.prototype.createStructure = function() {
 	}).prependTo(this.image.parent());
 	
 	// creates the drawing API
-	this.drawingAPI = new DrawingAPI(drawingBoard, tagBoard, this.siteUrl, this.originalData, this.image, this.organisms);
+	this.drawingAPI = new DrawingAPI(drawingBoard, tagBoard, dialogs, this.siteUrl, this.originalData, this.image, this.organisms);
 	
 	var $tagGroupSelect = this.parent.find('#' + id + '-tag-groups');
 	var groups = this.drawingAPI.getTagBoard().getTagGroups();
@@ -80,6 +89,10 @@ TaggerUI.prototype.createStructure = function() {
 	this.menu.getSection('tags').getMenuItem('addNewTag').onClick(function() {
 		self.drawingAPI.startTagging();
 		self.taggingMenu.show();
+	});
+	
+	this.menu.getSection('tagGroups').getMenuItem('addNewTagGroup').onClick(function() {
+		newTagGroupDialog.show();
 	});
 	
 	this.taggingMenu.onCancelClick(function() {
@@ -113,12 +126,12 @@ TaggerUI.prototype.createStructure = function() {
 		self.drawingAPI.startTagging();
 	});
 	
-	/*
+	
 	// submits the currently drawn tag
-	$('#' + id + '-submit-tag').on('click', function() {
+	this.taggingMenu.onSubmitClick(function() {
 		self.drawingAPI.saveTag();
 	});
-	*/
+	
 	var left = parseInt(this.image.css('left').split('px')[0]);
 	var top = parseInt(this.image.css('top').split('px')[0]);
 	
@@ -223,7 +236,7 @@ TaggerUI.prototype.getToolbar = function(id) {
 	
 	// create tag groups menu section
 	var tagGroups = new MenuSection('Tag Groups', this.imagesUrl + 'tag.png');
-	tagGroups.addMenuItem('addNewGroup', 'Add New Group', 'ui-icon ui-icon-plusthick', false);
+	tagGroups.addMenuItem('addNewTagGroup', 'Add New Tag Group', 'ui-icon ui-icon-plusthick', false);
 	tagGroups.addMenuItem('changeCurrentGroups', 'Change Current Tag Groups', 'ui-icon ui-icon-pencil', false);
 	menu.addNewSection('tagGroups', tagGroups);
 	

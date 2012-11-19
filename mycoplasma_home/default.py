@@ -73,7 +73,7 @@ class RecentlyViewedPicture(models.Model):
         return (self.picture.imageName.name) + " viewed by " + self.user.username
 
 class TagGroup(models.Model):
-    name = models.TextField()
+    name = models.TextField(unique=True)
     user = models.ForeignKey(User)
     picture = models.ForeignKey(Picture)
     dateCreated = models.DateTimeField(auto_now_add=True, editable=False)

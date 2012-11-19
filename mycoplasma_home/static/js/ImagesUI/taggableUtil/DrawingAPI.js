@@ -6,11 +6,13 @@
  * @param tagBoard
  * @return
  */
-function DrawingAPI(drawingBoard, tagBoard, siteUrl, originalData, image, organisms) {
+function DrawingAPI(drawingBoard, tagBoard, dialogs, siteUrl, originalData, image, organisms) {
 	this.tagBoard = new TagBoard(tagBoard, originalData, image, organisms, siteUrl);
 	this.drawingBoard = new DrawingBoard(drawingBoard, image);
 	this.organisms = organisms;
 	this.image = image;
+	this.dialogs = dialogs;
+	this.dialogs['newTagGroup'].setTagBoard(this.tagBoard);
 };
 
 /*
@@ -117,12 +119,5 @@ DrawingAPI.prototype.saveTag = function() {
 		colorArr[i] = $.trim(colorArr[i])
 	}
 	
-	// gets the current description
-	var description = $('#' + id + '-description-form .desc').val();
-	
-	// adds the current drawn tag to the local tags object
-	this.getTagBoard().addTag(colorArr, tagPoints, description);
-	
-	// updates the tag board
-	this.getTagBoard().redraw();
+	this.dialogs['saveTags'].show(this.tagBoard, colorArr, tagPoints, this.dialogs['newTagGroup']);
 };

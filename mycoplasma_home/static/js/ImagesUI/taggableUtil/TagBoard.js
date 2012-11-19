@@ -237,6 +237,7 @@ TagBoard.prototype.addNewTagGroup = function(name) {
 		type: 'POST',
 		dataType: 'json',
 		data: {
+			imageKey: self.image.attr('id'),
 			name: name
 		},
 		success: function(data, textStatus, jqXHR) {
@@ -254,4 +255,8 @@ TagBoard.prototype.addNewTagGroup = function(name) {
 			
 		}
 	});
+};
+
+TagBoard.prototype.getCurrentTagGroups = function() {
+	return this.currentTagGroups;
 };
