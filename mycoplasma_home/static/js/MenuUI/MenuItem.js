@@ -27,6 +27,10 @@ function MenuItem(text, icon, isImage) {
 	this.ui.append(this.text);
 };
 
+MenuItem.prototype.onClick = function(callback) {
+	$(this.ui).click(callback);
+};
+
 MenuItem.prototype.getUI = function() {
 	return this.ui;
 };

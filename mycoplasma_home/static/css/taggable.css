@@ -30,18 +30,18 @@
 	cursor: pointer;
 }
 
-.draw-type {
+.tagging-menu-button {
 	border: 1px solid #AAAAAA;
 	background-color: #EEEEEE;
 	vertical-align: top;
 	border-radius: 5px;
 }
 
-.draw-type img {
+.tagging-menu-button img {
 	height: 23px;
 }
 
-.draw-type:hover {
+.tagging-menu-button:hover {
 	cursor: pointer;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEEEEE), to(#CCCCCC));
 	background-image: -moz-linear-gradient(top, #EEEEEE, #CCCCCC); /* for firefox 3.6+ */
@@ -102,12 +102,6 @@
 	margin-right: 5px;
 }
 
-.submit-tag {
-	height: 28px;
-	margin-left: 60px;
-	margin-top: 15px;
-}
-
 .taggable-button:hover {
 	cursor: pointer;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEEEEE), to(#CCCCCC));
@@ -157,4 +151,43 @@ th {
 	margin-top: -125px;
 	border-radius: 7px;
 	z-index: 7000;
+}
+
+.tagging-menu-box {
+	width: 150px;
+	z-index: 11000;
+	background-color: white;
+	border-radius: 7px;
+	border: 1px solid #CCC;
+	position: absolute !important;
+	left: 25px;
+	top: 357px;
+	cursor: default;
+	display: none;
+	box-shadow: -1px 2px 6px 1px #333333;
+}
+
+.tagging-menu-box > div {
+	padding: 5px;	
+}
+
+.tagging-menu-box-title {
+	text-align: center;
+	font-size: 15px;
+	background-color: #CCC;
+	border-radius: 7px 7px 0px 0px;
+}
+
+.tagging-menu-box-section-title {
+	border-bottom: 1px solid #CCCCCC;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.tagging-menu-box-section-body {
+	text-align: center;
+}
+
+.tagging-menu-color-container {
+	margin-bottom: 4px;
 }

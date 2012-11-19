@@ -30,6 +30,10 @@ function MenuSection(text, icon) {
 	this.ui.append(this.menu);
 };
 
+MenuSection.prototype.getMenuItem = function(key) {
+	return this.menuDict[key];
+};
+
 MenuSection.prototype.addMenuItem = function(name, text, icon, isImage) {
 	var menuItem = new MenuItem(text, icon, isImage);
 	this.menuItems.push(menuItem);

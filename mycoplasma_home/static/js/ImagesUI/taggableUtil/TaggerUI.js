@@ -15,16 +15,6 @@ function TaggerUI(image, parent, originalData, organisms, genomicInfo, imagesUrl
 	this.title = "";
 	this.callback = callback;
 	this.alreadyLoaded = alreadyLoaded;
-	this.colors = [
-   		{ colorRGB : 'rgb(255, 0, 0)'},
-		{ colorRGB : 'rgb(0, 0, 255)'},
-		{ colorRGB : 'rgb(0, 255, 255)'},
-		{ colorRGB : 'rgb(0, 98, 0)'},
-		{ colorRGB : 'rgb(0, 255, 0)'},
-		{ colorRGB : 'rgb(255, 255, 0)'},
-		{ colorRGB : 'rgb(192, 192, 192)'},
-		{ colorRGB : 'rgb(0, 0, 0)'}
-	];
 	this.created = false;
 	
 	for (var i = 0; i < organisms.length; i++) {
@@ -46,8 +36,12 @@ TaggerUI.prototype.createStructure = function() {
 	// create the toolbar
 	var id = this.image.attr('id');
 	
-	var menu = this.__getToolbar(id);	
-	this.parent.prepend(menu.getUI());
+	this.menu = this.getToolbar(id);
+	this.taggingMenu = this.getTaggingMenu(id);
+	
+	this.parent.prepend(this.menu.getUI());
+	this.parent.prepend(this.taggingMenu.getUI());
+	
 	this.__renderGeneLinksMenu();
 	
 	if ($('#taggable-tooltip').length == 0) {
@@ -81,24 +75,19 @@ TaggerUI.prototype.createStructure = function() {
 	}
 	
 	var self = this;
-	/*
+	
 	// events for clicking the start and stop drawing buttons
-	$('#' + id + '-begin-tagging').live('click', function() {
-		$(this).siblings('.add-tag-hidden').removeClass('add-tag-hidden').addClass('add-tag');
-		$(this).addClass('add-tag-hidden').removeClass('add-tag');
-		$('#' + id + '-toolbar-table-container').toggle();
+	this.menu.getSection('tags').getMenuItem('addNewTag').onClick(function() {
 		self.drawingAPI.startTagging();
+		self.taggingMenu.show();
 	});
 	
-	$('#' + id + '-end-tagging').live('click', function() {
-		$(this).siblings('.add-tag-hidden').removeClass('add-tag-hidden').addClass('add-tag');
-		$(this).addClass('add-tag-hidden').removeClass('add-tag');
-		$('#' + id + '-toolbar-table-container').toggle();
+	this.taggingMenu.onCancelClick(function() {
 		self.drawingAPI.endTagging();
-	});
+	});	
 	
 	// changes the color of the currently drawn tag or just of the paint brush itself
-	$('#' + id + '-color-toolbar button').on('click', function() {
+	this.taggingMenu.onColorClick(function() {
 		var color = $(this).css('background-color');
 		
 		var newFillStyle = "";
@@ -112,17 +101,19 @@ TaggerUI.prototype.createStructure = function() {
 		self.drawingAPI.getDrawingBoard().redraw();
 	});
 	
+
 	// buttons for switching between drawing in rectangular form and polygonal form
-	$('#' + id + '-draw-rect').on('click', function() {
+	this.taggingMenu.onRectClick(function() {
 		self.drawingAPI.setShape('rect');
 		self.drawingAPI.startTagging();
 	});
 	
-	$('#' + id + '-draw-poly').on('click', function() {
+	this.taggingMenu.onPolyClick(function() {
 		self.drawingAPI.setShape('poly');
 		self.drawingAPI.startTagging();
 	});
 	
+	/*
 	// submits the currently drawn tag
 	$('#' + id + '-submit-tag').on('click', function() {
 		self.drawingAPI.saveTag();
@@ -168,7 +159,7 @@ TaggerUI.prototype.resizeCanvas = function() {
 	}
 };
 
-TaggerUI.prototype.__getToolbar = function(id) {
+TaggerUI.prototype.getToolbar = function(id) {
 	/*
 	var colorButtons = '';
 	for (var i = 0; i < this.colors.length; i++) {
@@ -224,7 +215,7 @@ TaggerUI.prototype.__getToolbar = function(id) {
 	var menu = new Menu();
 	
 	// create tools menu section
-	var tools = new MenuSection('Tools', this.imagesUrl + 'tag.png');
+	var tools = new MenuSection('Tools', this.imagesUrl + 'tools.png');
 	tools.addMenuItem('download', 'Download Image Data', 'ui-icon ui-icon-disk', false);
 	tools.addMenuItem('zoomIn', 'Zoom In', 'ui-icon ui-icon-zoomin', false);
 	tools.addMenuItem('zoomOut', 'Zoom Out', 'ui-icon ui-icon-zoomout', false);
@@ -232,14 +223,23 @@ TaggerUI.prototype.__getToolbar = function(id) {
 	
 	// create tag groups menu section
 	var tagGroups = new MenuSection('Tag Groups', this.imagesUrl + 'tag.png');
+	tagGroups.addMenuItem('addNewGroup', 'Add New Group', 'ui-icon ui-icon-plusthick', false);
+	tagGroups.addMenuItem('changeCurrentGroups', 'Change Current Tag Groups', 'ui-icon ui-icon-pencil', false);
 	menu.addNewSection('tagGroups', tagGroups);
 	
 	// create tag groups menu section
 	var tags = new MenuSection('Tags', this.imagesUrl + 'tag.png');
+	tags.addMenuItem('addNewTag', 'Add New Tag', 'ui-icon ui-icon-plusthick', false);
+	tags.addMenuItem('editTag', 'Edit Tag', 'ui-icon ui-icon-pencil', false);
+	tags.addMenuItem('deleteTag', 'Delete Tag', 'ui-icon ui-icon-trash', false);
 	menu.addNewSection('tags', tags);
 	
 	return menu;
 };
+
+TaggerUI.prototype.getTaggingMenu = function(id) {
+	return new TaggingMenu(id, this.imagesUrl);
+}
 
 /**
  * Renders the Gene Links Menu UI which is in charge of adding new links 
