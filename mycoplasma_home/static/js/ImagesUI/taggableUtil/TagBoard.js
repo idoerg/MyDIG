@@ -35,18 +35,34 @@ TagBoard.prototype.getTagGroups = function() {
 	return this.tagGroups;
 };
 
-TagBoard.prototype.addTag = function(color, points, description) {
-	var tag = new Tag(color, points, description, this.image.attr('id'), this.siteUrl);
+TagBoard.prototype.addTag = function(color, points, description, callback, errorCallback) {
+	var tag = new Tag(color, points, description, this.image.attr('id'), this.siteUrl, null);
+	
+	var keys = [];
+	
+	for (key in this.currentTagGroups) {
+		if (this.currentTagGroups.hasOwnProperty(key)) {
+			keys.push(key);
+		}
+	}
 	
 	// saves the tag and then adds the 
 	tag.save(
 		Util.scopeCallback(this, function() {
 			for (key in this.currentTagGroups) {
 				if (this.currentTagGroups.hasOwnProperty(key)) {
-					this.currentTagGroups[key].addTag(tag.copy());
+					var tagCopy = tag.copy();
+					tagCopy.setTagGroupKey(key);
+					this.currentTagGroups[key].addTag(tagCopy);
 				}
 			}
-		})
+			
+			callback();
+		}),
+		function(errorMessage) {
+			errorCallback(errorMessage);
+		},
+		keys
 	);
 };
 

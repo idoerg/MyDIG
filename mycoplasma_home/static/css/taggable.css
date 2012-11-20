@@ -206,17 +206,38 @@ th {
 
 .tagging-dialog-title {
 	background-color: #CCCCCC;
-    border-bottom: 1px solid #CCCCCC;
+    border-bottom: 1px solid #AAA;
     border-radius: 7px 7px 0 0;
     margin-bottom: 15px;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 7px;
     padding-bottom: 5px;
+    font-variant: small-caps;
+}
+
+.tagging-dialog-title .close-button {
+	float: right;	
+}
+
+.tagging-dialog-title .close-button {
+	cursor: pointer;	
 }
 
 .tagging-dialog-contents {
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
+}
+
+.submit-tag-group-table {
+	width: 100%;
+}
+
+.submit-tag-group-table td {
+	text-align: left;
+}
+
+.submit-tag-group-table td.tag-group-cell {
+	text-align: right;
 }

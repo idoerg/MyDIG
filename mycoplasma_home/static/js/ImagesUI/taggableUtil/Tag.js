@@ -1,5 +1,6 @@
-function Tag(colorArr, tagPoints, description, imageKey, siteUrl) {
+function Tag(colorArr, tagPoints, description, imageKey, siteUrl, tagGroup) {
 	this.color = colorArr;
+	this.tagGroup = tagGroup;
 	this.points = tagPoints;
 	this.description = description;
 	this.imageKey = imageKey;
@@ -38,10 +39,7 @@ Tag.prototype.getFormattedColor = function() {
  * 
  * @param callback: function to run when the saving of the tag has been confirmed.
  */
-Tag.prototype.save = function(callback) {
-	var savingDialog = new TagSavingDialog();
-	savingDialog.start();
-	
+Tag.prototype.save = function(callback, errorCallback, tagGroupKeys) {
 	$.ajax({
 		url : this.saveUrl,
 		type : 'POST',
@@ -49,62 +47,23 @@ Tag.prototype.save = function(callback) {
 			color : this.color,
 			points : this.points,
 			description : this.description,
-			geneLinks : this.geneLinks
+			tagGroupKeys : tagGroupKeys
 		},
 		dataType : 'json',
 		success : function(data, textStatus, jqXHR) {
 			if (!data.error) {
-				savingDialog.success();
 				callback();
 			}
 			else {
-				savingDialog.error();
+				errorCallback(data.errorMessage);
 			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
-			savingDialog.error();
+			errorCallback(textStatus);
 		}
 	});
 };
 
 Tag.prototype.copy = function() {
 	return new Tag(this.getColor(), this.getPoints(), this.description, this.imageKey, this.siteUrl);
-};
-
-function TagSavingDialog() {
-	this.dialog = $('<div />', {
-		'class' : 'tag-saving-dialog',
-	});
-	
-	this.block = $('<div />');
-	
-	this.contents = $('<div />', {
-		'class' : 'tag-saving-contents'
-	});
-	
-	this.dialog.append(this.contents);
-};
-
-TagSavingDialog.prototype.start = function() {
-	this.block.addClass('page-block');
-	this.block.height($(window).height());
-	this.block.width($(window).width());
-	
-	var block = this.block;
-	
-	$(window).resize(function() {
-		block.height($(this).height());
-		block.width($(this).width());
-	});
-	
-	$('body').append(this.block);
-	$('body').append(this.dialog);
-};
-
-TagSavingDialog.prototype.success = function() {
-	alert("Success");
-};
-
-TagSavingDialog.prototype.error = function() {
-	alert("Error");
 };

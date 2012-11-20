@@ -10,6 +10,12 @@ function SaveTagDialog(pageBlock) {
 		'text' : 'Submit Tag'
 	});
 	
+	this.closeButton = $('<span />', {
+		'class' : 'ui-icon ui-icon-circle-close close-button'
+	});
+	
+	this.title.append(this.closeButton);
+	
 	this.contents = $('<div />', {
 		'class' : 'tagging-dialog-contents'
 	});
@@ -22,7 +28,7 @@ function SaveTagDialog(pageBlock) {
 	
 	this.nameUI.append($('<span />', {
 		'text' : 'Tag Name',
-		'style' : 'margin-right: 10px'
+		'style' : 'margin-right: 10px; padding-left: 4px;'
 	}));
 	
 	this.name = $('<input />', {
@@ -65,18 +71,28 @@ function SaveTagDialog(pageBlock) {
 	
 	this.submitTagButton.on('click', Util.scopeCallback(this, this.onSubmit));
 	this.cancelButton.on('click', Util.scopeCallback(this, this.hide));
+	this.closeButton.on('click', Util.scopeCallback(this, this.hide));
 	
 	$('body').append(this.dialog);
+};
+
+SaveTagDialog.prototype.onSuccess = function() {
+	alert("Success");
+	this.hide();
+};
+
+SaveTagDialog.prototype.onError = function(errorMessage) {
+	alert("Error: " + errorMessage);
+	this.hide();
 };
 
 SaveTagDialog.prototype.onSubmit = function() {
 	var description = $.trim(this.name.val());
 	
-	if (description) {
-		alert('Called submit');
-		
+	if (description) {		
 		// adds the current drawn tag to the local tags object
-		this.tagBoard.addTag(this.colorArr, this.tagPoints, description);
+		this.tagBoard.addTag(this.colorArr, this.tagPoints, description, 
+			Util.scopeCallback(this, this.onSuccess), Util.scopeCallback(this, this.onError));
 		
 		// updates the tag board
 		this.tagBoard.redraw();
@@ -86,6 +102,7 @@ SaveTagDialog.prototype.onSubmit = function() {
 SaveTagDialog.prototype.hide = function() {
 	this.dialog.hide();
 	this.block.hide();
+	this.name.val("");
 };
 
 SaveTagDialog.prototype.show = function(tagBoard, colorArr, tagPoints, newTagGroupDialog) {
@@ -114,12 +131,13 @@ SaveTagDialog.prototype.showHelper = function(tagBoard) {
 			var group = currentTagGroups[key];
 			var newRow = $('<tr />');
 			if (i == 0) {
-				newRow.append('<td />', {
-					'text' : 'Adding Tag to Tag Groups:'
-				});
+				newRow.append($('<td />', {
+					'text' : 'Tag Groups:  '
+				}));
 			}
 			newRow.append($('<td />', {
-				'text' : group.getName()
+				'text' : group.getName(),
+				'class' : 'tag-group-cell',
 			}));
 			tbody.append(newRow);
 			i++;

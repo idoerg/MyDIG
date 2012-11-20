@@ -11,6 +11,12 @@ function NewTagGroupDialog(pageBlock) {
 		'text' : 'Add New Tag Group'
 	});
 	
+	this.closeButton = $('<span />', {
+		'class' : 'ui-icon ui-icon-circle-close close-button'
+	});
+	
+	this.title.append(this.closeButton);
+	
 	this.contents = $('<div />', {
 		'class' : 'tagging-dialog-contents'
 	});
@@ -60,6 +66,7 @@ function NewTagGroupDialog(pageBlock) {
 	
 	this.submitTagGroupButton.on('click', Util.scopeCallback(this, this.onSubmit));
 	this.cancelButton.on('click', Util.scopeCallback(this, this.onCancel));
+	this.closeButton.on('click', Util.scopeCallback(this, this.onCancel));
 	
 	$('body').append(this.dialog);
 };
