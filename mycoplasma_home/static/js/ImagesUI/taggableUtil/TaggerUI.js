@@ -95,6 +95,10 @@ TaggerUI.prototype.createStructure = function() {
 		newTagGroupDialog.show();
 	});
 	
+	this.menu.getSection('tools').getMenuItem('toggleTags').onClick(function() {
+		self.drawingAPI.getTagBoard().toggleTags();
+	});
+	
 	this.taggingMenu.onCancelClick(function() {
 		self.drawingAPI.endTagging();
 	});	
@@ -173,58 +177,6 @@ TaggerUI.prototype.resizeCanvas = function() {
 };
 
 TaggerUI.prototype.getToolbar = function(id) {
-	/*
-	var colorButtons = '';
-	for (var i = 0; i < this.colors.length; i++) {
-		colorButtons += '<button class="change-color toolbar-item" style="background-color: ' + this.colors[i].colorRGB + '"></button>';
-	}
-	var $render = $('<div class="toolbar-container"> \
-		<span> \
-			<img class="toolbar-icon" src="' + this.imagesUrl + 'tag.png"></img> \
-		</span> \
-		<span> \
-			<img id="' + id + '-begin-tagging" class="add-tag toolbar-item" src="' + this.imagesUrl + 'button-play_green.png"></img> \
-			<img id="' + id + '-end-tagging" class="add-tag-hidden toolbar-item" src="' + this.imagesUrl + 'button-pause_red.png"></img> \
-		</span> \
-		<span id="' + id + '-toolbar-table-container" class="toolbar-table-container" style="display: none;"> \
-			<table cellspacing="0" cellpadding="0"> \
-				<thead> \
-					<tr> \
-						<th>Description</th> \
-						<th>Colors</th> \
-						<th>Draw Mode</th> \
-					</tr> \
-				</thead> \
-				<tbody> \
-					<tr> \
-						<td> \
-							<form id="' + id + '-description-form" class="desc-form toolbar-item"> \
-								<input type="text" name="desc" class="desc" /> \
-							</form> \
-						</td> \
-						<td id="' + id + '-color-toolbar">' + 
-							colorButtons + 
-						'</td> \
-						<td> \
-							<button id="' + id + '-draw-rect" class="draw-rect draw-type toolbar-item"> \
-								<img height="20px" src="' + this.imagesUrl + 'rectButtonIcon.png"></img> \
-							</button> \
-							<button id="'+ id + '-draw-poly" class="draw-poly draw-type toolbar-item"> \
-								<img height="20px" src="' + this.imagesUrl + 'polygonButtonIcon.png"> \
-							</button> \
-						</td> \
-					</tr> \
-				</tbody> \
-			</table> \
-			<button id="' + id + '-submit-tag" class="submit-tag taggable-button toolbar-item">Submit Tag</button> \
-		</span> \
-		<span style="float: right; margin-top: 13px;"> \
-			<select id="' + id + '-tag-groups"></select> \
-			<button id="' + id + '-new-tag-group" class="taggable-button">New Tag Group</button> \
-		</span> \
-	</div>');
-	return $render;
-	*/
 	var menu = new Menu();
 	
 	// create tools menu section
@@ -232,6 +184,7 @@ TaggerUI.prototype.getToolbar = function(id) {
 	tools.addMenuItem('download', 'Download Image Data', 'ui-icon ui-icon-disk', false);
 	tools.addMenuItem('zoomIn', 'Zoom In', 'ui-icon ui-icon-zoomin', false);
 	tools.addMenuItem('zoomOut', 'Zoom Out', 'ui-icon ui-icon-zoomout', false);
+	tools.addMenuItem('toggleTags', 'Toggle All Tag Visibility', this.imageUrl + 'eye.png', true);
 	menu.addNewSection('tools', tools);
 	
 	// create tag groups menu section
@@ -246,6 +199,12 @@ TaggerUI.prototype.getToolbar = function(id) {
 	tags.addMenuItem('editTag', 'Edit Tag', 'ui-icon ui-icon-pencil', false);
 	tags.addMenuItem('deleteTag', 'Delete Tag', 'ui-icon ui-icon-trash', false);
 	menu.addNewSection('tags', tags);
+	
+	// create gene links menu section
+	var geneLinks = new MenuSection('Gene Links', this.imagesUrl + 'tag.png');
+	geneLinks.addMenuItem('addNewLink', 'Add New Link To Tag', 'ui-icon ui-icon-plusthick', false);
+	geneLinks.addMenuItem('deleteLink', 'Delete Link From Tag', 'ui-icon ui-icon-trash', false);
+	menu.addNewSection('geneLinks', geneLinks);
 	
 	return menu;
 };

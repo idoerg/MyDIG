@@ -18,6 +18,7 @@ function TagBoard(tagBoard, originalData, image, organisms, siteUrl, defaultInfo
 	this.layer = null;
 	this.locked = false;
 	this.selectedTag = null;
+	this.tagsVisible = true;
 	this.currentTagGroups = {};
 	if (this.tagGroups.length > 0) {
 		var key = this.tagGroups[0].getKey();
@@ -99,6 +100,11 @@ TagBoard.prototype.redraw = function() {
 	}
 };
 
+TagBoard.prototype.toggleTags = function() {
+	this.tagsVisible = !this.tagsVisible;
+	this.redraw();
+};
+
 TagBoard.prototype.__createPolyFromTag = function(tag, i) {
 	// gets the color unless it is black, because that is code for transparent drawing
 	var color = tag.getFormattedColor();
@@ -118,10 +124,15 @@ TagBoard.prototype.__createPolyFromTag = function(tag, i) {
 		drawPoints[3] = otherPoints[1];
 	}
 	
+	var fill = "";
+	if (this.tagsVisible) {
+		fill = color;
+	}
+	
 	// creates a polygon with the points for this tag
 	var poly = new Kinetic.Polygon({
 		points: $.map( drawPoints, function(n){return n;}),
-		fill: "",
+		fill: fill,
 		stroke: "rgba(255,255,255,0)",
 		strokeWidth: 1
 	});
@@ -177,7 +188,7 @@ TagBoard.prototype.polyOnMouseOut = function(event) {
 		
 		for (var i = 0; i < collidingShapes.length; i++) {
 			// draws the shape on mouse over
-			collidingShapes[i].attrs.fill = "";
+			collidingShapes[i].attrs.fill = this.tagsVisible ? collidingShapes[i].color : "";
 			collidingShapes[i].attrs.stroke = "rgba(255,255,255,0)";
 			var shape = event.shape;
 			// positions the tag tooltip
@@ -202,7 +213,7 @@ TagBoard.prototype.polyOnMouseOver = function(event) {
 		
 		for (var i = 0; i < collidingShapes.length; i++) {
 			// draws the shape on mouse over
-			collidingShapes[i].attrs.fill = event.shape.color;
+			collidingShapes[i].attrs.fill = collidingShapes[i].color;
 			collidingShapes[i].attrs.stroke = "black";
 			var shape = event.shape;
 			// positions the tag tooltip
