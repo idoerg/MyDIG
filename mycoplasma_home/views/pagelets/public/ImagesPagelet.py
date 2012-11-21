@@ -5,7 +5,7 @@
 	Date: July 26, 2012
 '''
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.default import PictureProp
+from mycoplasma_home.models import PictureProp
 
 class ImagesPagelet(PageletBase):
 	'''

@@ -5,7 +5,7 @@
 	Date: July 23, 2012
 '''
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.chado import Organism
+from mycoplasma_home.models import Organism
 
 class HomePagelet(PageletBase):
 	'''
