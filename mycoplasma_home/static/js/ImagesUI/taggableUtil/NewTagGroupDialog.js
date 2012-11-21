@@ -82,11 +82,18 @@ NewTagGroupDialog.prototype.addSubmitCallback = function(callback) {
 NewTagGroupDialog.prototype.onSubmit = function() {
 	var name = $.trim(this.name.val());
 	if (name && this.tagBoard) {
-		this.tagBoard.addNewTagGroup(name);
-		if (this.submitCallback != null) {
-			this.submitCallback(this.tagBoard);
-			this.submitCallback = null;
-		}
+		var self = this;
+		this.tagBoard.addNewTagGroup(name, 
+			function() {
+				self.hide();
+				if (self.submitCallback != null) {
+					self.submitCallback(this.tagBoard);
+					self.submitCallback = null;
+				}
+			},
+			function(errorMessage) {
+				alert(errorMessage);
+			});
 	}
 };
 

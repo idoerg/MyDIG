@@ -126,7 +126,6 @@ class Landmark(models.Model):
     def __unicode__(self):
         return self.name
 
-
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
 #     * Rearrange models' order
@@ -1780,3 +1779,11 @@ class TmpCdsHandlerRelationship(models.Model):
     class Meta:
         db_table = u'tmp_cds_handler_relationship'
 
+### ------------------------------- ###
+#   Gene Links to link the Two DB's   #
+### ------------------------------- ###
+
+class GeneLink(models.Model):
+    tag = models.ForeignKey(Tag)
+    feature = models.ForeignKey(Feature)
+    

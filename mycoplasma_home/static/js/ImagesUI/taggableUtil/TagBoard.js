@@ -257,7 +257,7 @@ TagBoard.prototype.removeFromCurrentTagGroups = function(tagGroup) {
 	this.redraw();
 };
 
-TagBoard.prototype.addNewTagGroup = function(name) {
+TagBoard.prototype.addNewTagGroup = function(name, callback, errorCallback) {
 	var self = this;
 	$.ajax({
 		url: this.siteUrl + 'administration/addNewTagGroup',
@@ -273,13 +273,16 @@ TagBoard.prototype.addNewTagGroup = function(name) {
 				var newTagGroup = new TagGroup(data.tagGroup, self.image.attr('id'), self.siteUrl);
 				self.tagGroups.push(newTagGroup);
 				self.addToCurrentTagGroups(newTagGroup);
+				if (callback) {
+					callback();
+				}
 			}
 			else {
-				alert(data.errorMessage);
+				errorCallback(data.errorMessage);
 			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
-			
+			errorCallback(textStatus);
 		}
 	});
 };
