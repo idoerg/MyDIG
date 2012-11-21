@@ -7,7 +7,7 @@
 '''
 from renderEngine.AjaxRegisteredApplicationBase import AjaxRegisteredApplicationBase
 from django.views.decorators.csrf import csrf_exempt
-from mycoplasma_home.models import TagColor, Picture, TagGroup, TagPoint
+from mycoplasma_home.models import TagColor, Tag, TagGroup, TagPoint
 from django.core.exceptions import ObjectDoesNotExist
 
 class Application(AjaxRegisteredApplicationBase):
@@ -23,10 +23,19 @@ class Application(AjaxRegisteredApplicationBase):
 				
 				if (len(color) >= 3):
 					# first check if the color exists
-					(color, ) = TagColor.objects.get_or_create(red=color[0], blue=color[1], green=color[2])
+					(tagColor, ) = TagColor.objects.get_or_create(red=color[0], blue=color[1], green=color[2])
 					for key in tagGroupKeys:
 						try:
 							tagGroup = TagGroup.objects.get(pk__exact=key)
+							if (tagGroup.picture.isPrivate and request.user == tagGroup.user) or not tagGroup.picture.isPrivate:
+								newTag = Tag(description=description, color=tagColor, group=tagGroup, user=request.user)
+								newTag.save()
+								
+								for (counter, point) in enumerate(points):
+									newTagPoint = TagPoint(tag=newTag, pointX=point[0], pointY=point[1], rank=counter+1)
+									newTagPoint.save()
+							else:
+								errorMessage = "Incorrect permissions for editing this image or tag group"
 						except ObjectDoesNotExist:
 							errorTagGroups.append(key)
 					
@@ -38,7 +47,9 @@ class Application(AjaxRegisteredApplicationBase):
 			errorMessage = "Incorrect method for saving a tag"
 
 		if (errorMessage == "" and len(errorTagGroups) == 0):
-			pass
+			self.setJsonObject({
+				'error' : False
+			})
 		elif len(errorTagGroups) > 0:
 			self.setJsonObject({
 				'error' : True,
