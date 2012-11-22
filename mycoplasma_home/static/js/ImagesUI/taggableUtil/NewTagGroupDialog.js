@@ -87,11 +87,12 @@ NewTagGroupDialog.prototype.onSubmit = function() {
 			function() {
 				self.hide();
 				if (self.submitCallback != null) {
-					self.submitCallback(this.tagBoard);
+					self.submitCallback(self.tagBoard);
 					self.submitCallback = null;
 				}
 			},
 			function(errorMessage) {
+				self.hide();
 				alert(errorMessage);
 			});
 	}
