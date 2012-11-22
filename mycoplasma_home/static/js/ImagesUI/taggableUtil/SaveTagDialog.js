@@ -130,11 +130,13 @@ SaveTagDialog.prototype.showHelper = function(tagBoard) {
 		if (currentTagGroups.hasOwnProperty(key)) {
 			var group = currentTagGroups[key];
 			var newRow = $('<tr />');
+			var text = ' ';
 			if (i == 0) {
-				newRow.append($('<td />', {
-					'text' : 'Tag Groups:  '
-				}));
+				text = 'Tag Groups:';
 			}
+			newRow.append($('<td />', {
+				'text' : text
+			}));
 			newRow.append($('<td />', {
 				'text' : group.getName(),
 				'class' : 'tag-group-cell',
