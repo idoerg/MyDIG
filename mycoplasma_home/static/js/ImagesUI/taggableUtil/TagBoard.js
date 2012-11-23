@@ -230,12 +230,13 @@ TagBoard.prototype.boardMouseMove = function(event) {
 			// draws the shape on mouse over
 			collidingShapes[i].attrs.fill = collidingShapes[i].color;
 			collidingShapes[i].attrs.stroke = "black";
+			/*
 			var shape = event.shape;
 			// positions the tag tooltip
 			var pos = this.__getPolyPos(event.shape);
 			pos[0] -= $('#taggable-tooltip').html(shape.description).width()/2;
 			pos[1] -= $(window).scrollTop() - 20;
-			$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show();
+			$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show();*/
 		}
  
 		this.layer.draw();
