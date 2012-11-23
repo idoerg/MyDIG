@@ -6,7 +6,6 @@ def getMultiDict(post, name):
 
             # split the string into different components
             parts = [p[:-1] for p in rest.split('[')][1:]
-            print parts
             listId = int(parts[0])
 
             # add a new dictionary if it doesn't exist yet
