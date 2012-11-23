@@ -1,7 +1,7 @@
 import re
 
 def getMultiListPost(request, name):
-    dic = []
+    dic = {}
     parts = []
     namePattern = re.compile(name + r'\[([0-9]+)\]')
     for k in request.POST.keys():
