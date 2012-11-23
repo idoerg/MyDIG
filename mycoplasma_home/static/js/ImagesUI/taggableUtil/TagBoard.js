@@ -54,7 +54,7 @@ TagBoard.prototype.addTag = function(color, points, description, callback, error
 			for (key in this.currentTagGroups) {
 				if (this.currentTagGroups.hasOwnProperty(key)) {
 					var tagCopy = tag.copy();
-					tagCopy.setTagGroupKey(key);
+					tagCopy.setTagGroup(this.currentTagGroups[key]);
 					this.currentTagGroups[key].addTag(tagCopy);
 				}
 			}

@@ -9,6 +9,10 @@ function Tag(colorArr, tagPoints, description, imageKey, siteUrl, tagGroup) {
 	this.geneLinks = [];
 };
 
+Tag.prototype.setTagGroup = function(tagGroup) {
+	this.tagGroup = tagGroup;
+};
+
 Tag.prototype.getColor = function() {
 	return this.color;
 };
