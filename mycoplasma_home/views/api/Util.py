@@ -1,17 +1,18 @@
-def getMultiDict(post, name):
-    dic = {}
-    for k in post.keys():
-        if k.startswith(name):
-            rest = k[len(name):]
+import re
 
-            # split the string into different components
-            parts = [p[:-1] for p in rest.split('[')][1:]
-            listId = int(parts[0])
+def getMultiListPost(request, name):
+    dic = []
+    parts = []
+    namePattern = re.compile(name + r'\[([0-9]+)\]')
+    for k in request.POST.keys():
+        match = namePattern.search(k)
+        if (match):    
+            parts.append({
+                'entire' : match.group(0),
+                'key' : match.group(1)
+            })
 
-            # add a new dictionary if it doesn't exist yet
-            if listId not in dic:
-                dic[listId] = {}
+    for part in parts:
+        dic[int(part['key'])] = request.POST.getlist(part['entire'] + '[]')
 
-            # add the information to the dictionary
-            dic[listId][parts[1]] = post.get(k)
     return dic

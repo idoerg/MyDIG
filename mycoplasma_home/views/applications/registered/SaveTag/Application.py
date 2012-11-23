@@ -6,7 +6,7 @@
 	Date: July 23, 2012
 '''
 from renderEngine.AjaxRegisteredApplicationBase import AjaxRegisteredApplicationBase
-from mycoplasma_home.views.api.Util import getMultiDict
+from mycoplasma_home.views.api.Util import getMultiListPost
 from django.views.decorators.csrf import csrf_exempt
 from mycoplasma_home.models import TagColor, Tag, TagGroup, TagPoint
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,7 +19,7 @@ class Application(AjaxRegisteredApplicationBase):
 			try:
 				tagGroupKeys = request.POST.getlist('tagGroupKeys[]')
 				description = request.POST['description']
-				points = getMultiDict(request.POST, 'points')
+				points = getMultiListPost(request, 'points')
 				color = request.POST.getlist('color[]')
 				
 				if (len(color) >= 3):
@@ -36,7 +36,7 @@ class Application(AjaxRegisteredApplicationBase):
 								
 								for key, point in points.items():
 									#errorMessage += '( ' + str(point[0]) + ',' + str(point[1]) + ')'
-									newTagPoint = TagPoint(tag=newTag, pointX=point['0'], pointY=point['1'], rank=int(key)+1)
+									newTagPoint = TagPoint(tag=newTag, pointX=point[0], pointY=point[1], rank=int(key)+1)
 									newTagPoint.save()
 							else:
 								errorMessage = "Incorrect permissions for editing this image or tag group"
