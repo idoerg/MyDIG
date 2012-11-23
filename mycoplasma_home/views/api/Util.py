@@ -1,5 +1,5 @@
 def getMultiDict(post, name):
-    dic = []
+    dic = {}
     for k in post.keys():
         if k.startswith(name):
             rest = k[len(name):]
