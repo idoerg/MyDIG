@@ -59,6 +59,8 @@ TagBoard.prototype.addTag = function(color, points, description, callback, error
 				}
 			}
 			
+			this.redraw();
+			
 			callback();
 		}),
 		function(errorMessage) {

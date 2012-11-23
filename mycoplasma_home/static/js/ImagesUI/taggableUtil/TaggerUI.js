@@ -184,7 +184,7 @@ TaggerUI.prototype.getToolbar = function(id) {
 	tools.addMenuItem('download', 'Download Image Data', 'ui-icon ui-icon-disk', false);
 	tools.addMenuItem('zoomIn', 'Zoom In', 'ui-icon ui-icon-zoomin', false);
 	tools.addMenuItem('zoomOut', 'Zoom Out', 'ui-icon ui-icon-zoomout', false);
-	tools.addMenuItem('toggleTags', 'Toggle All Tag Visibility', this.imageUrl + 'eye.png', true);
+	tools.addMenuItem('toggleTags', 'Toggle All Tag Visibility', this.imagesUrl + 'eye.png', true);
 	menu.addNewSection('tools', tools);
 	
 	// create tag groups menu section
