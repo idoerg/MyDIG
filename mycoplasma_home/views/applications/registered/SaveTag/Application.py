@@ -31,7 +31,9 @@ class Application(AjaxRegisteredApplicationBase):
 								newTag = Tag(description=description, color=tagColor, group=tagGroup, user=request.user)
 								newTag.save()
 								
+								errorMessage = ""
 								for (counter, point) in enumerate(points):
+									errorMessage += '( ' + str(point[0]) + ',' + str(point[1]) + ')'
 									newTagPoint = TagPoint(tag=newTag, pointX=point[0], pointY=point[1], rank=counter+1)
 									newTagPoint.save()
 							else:
@@ -48,7 +50,8 @@ class Application(AjaxRegisteredApplicationBase):
 
 		if (errorMessage == "" and len(errorTagGroups) == 0):
 			self.setJsonObject({
-				'error' : False
+				'error' : False,
+				'errorMessage' : errorMessage
 			})
 		elif len(errorTagGroups) > 0:
 			self.setJsonObject({
