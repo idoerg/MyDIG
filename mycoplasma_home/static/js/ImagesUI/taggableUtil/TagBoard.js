@@ -26,7 +26,7 @@ function TagBoard(tagBoard, originalData, image, organisms, siteUrl, defaultInfo
 	}
 	this.siteUrl = siteUrl;
 	this.defaultInfoViewCallback = defaultInfoViewCallback;
-	this.lastMousePos = null;
+	this.visibleShapes = [];
 };
 
 TagBoard.prototype.getBoard = function() {
@@ -212,24 +212,23 @@ TagBoard.prototype.boardMouseMove = function(event) {
 	if (!this.locked) {		
 		var mousePos = this.stage.getMousePosition(event);
 		
-		if (!this.tagsVisible) {
-			var previousShapes = this.stage.getIntersections(mousePos);
-			
-			for (var i = 0; i < previousShapes.length; i++) {
+		if (!this.tagsVisible && this.visibleShapes.length > 0) {
+			for (var i = 0; i < this.visibleShapes.length; i++) {
 				// draws the shape on mouse over
-				previousShapes[i].attrs.fill = "";
-				previousShapes[i].attrs.stroke = "rgb(255,255,255,0)";
+				this.visibleShapes[i].attrs.fill = "";
+				this.visibleShapes[i].attrs.stroke = "rgb(255,255,255,0)";
 			}
+			this.tagsVisible.length = 0;
 		}
 		
 		this.lastMousePos = mousePos;
 		
-		var collidingShapes = this.stage.getIntersections(mousePos);
+		this.visibleShapes = this.stage.getIntersections(mousePos);
 		
-		for (var i = 0; i < collidingShapes.length; i++) {
+		for (var i = 0; i < this.visibleShapes.length; i++) {
 			// draws the shape on mouse over
-			collidingShapes[i].attrs.fill = collidingShapes[i].color;
-			collidingShapes[i].attrs.stroke = "black";
+			this.visibleShapes[i].attrs.fill = this.visibleShapes[i].color;
+			this.visibleShapes[i].attrs.stroke = "black";
 			/*
 			var shape = event.shape;
 			// positions the tag tooltip
