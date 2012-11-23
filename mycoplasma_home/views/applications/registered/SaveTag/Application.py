@@ -16,10 +16,10 @@ class Application(AjaxRegisteredApplicationBase):
 		errorTagGroups = []
 		if (request.method == "POST"):
 			try:
-				tagGroupKeys = request.POST['tagGroupKeys']
+				tagGroupKeys = request.POST.getlist('tagGroupKeys[]')
 				description = request.POST['description']
-				points = request.POST['points']
-				color = request.POST['color']
+				points = request.POST.getlist('points[]')
+				color = request.POST.getlist('color[]')
 				
 				if (len(color) >= 3):
 					# first check if the color exists
