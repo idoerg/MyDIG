@@ -26,6 +26,7 @@ function TagBoard(tagBoard, originalData, image, organisms, siteUrl, defaultInfo
 	}
 	this.siteUrl = siteUrl;
 	this.defaultInfoViewCallback = defaultInfoViewCallback;
+	this.lastMousePos = null;
 };
 
 TagBoard.prototype.getBoard = function() {
@@ -181,10 +182,8 @@ TagBoard.prototype.polyOnClick = function(event) {
 };
 
 TagBoard.prototype.polyOnMouseOut = function(event) {
-	if (!this.locked) {
-		var mousePos = this.stage.getMousePosition(event);
-		
-		var collidingShapes = this.stage.getIntersections(mousePos);
+	if (!this.locked && this.lastMousePos != null) {
+		var collidingShapes = this.stage.getIntersections(this.lastMousePos);
 		
 		for (var i = 0; i < collidingShapes.length; i++) {
 			// draws the shape on mouse over
@@ -208,6 +207,7 @@ TagBoard.prototype.polyOnMouseOut = function(event) {
 TagBoard.prototype.polyOnMouseOver = function(event) {
 	if (!this.locked) {		
 		var mousePos = this.stage.getMousePosition(event);
+		this.lastMousePos = mousePos;
 		
 		var collidingShapes = this.stage.getIntersections(mousePos);
 		
