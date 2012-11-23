@@ -32,10 +32,7 @@ class Application(AjaxRegisteredApplicationBase):
 								newTag = Tag(description=description, color=tagColor, group=tagGroup, user=request.user)
 								newTag.save()
 								
-								errorMessage = str(points)
-								
 								for key, point in points.items():
-									#errorMessage += '( ' + str(point[0]) + ',' + str(point[1]) + ')'
 									newTagPoint = TagPoint(tag=newTag, pointX=point[0], pointY=point[1], rank=int(key)+1)
 									newTagPoint.save()
 							else:
@@ -47,8 +44,6 @@ class Application(AjaxRegisteredApplicationBase):
 					errorMessage = "Incorrect format for color"	
 			except KeyError as e:
 				errorMessage = "Missing arguments in save for key: " + str(e)
-				if (points):
-					errorMessage += ' in ' + str(points)
 		else:
 			errorMessage = "Incorrect method for saving a tag"
 

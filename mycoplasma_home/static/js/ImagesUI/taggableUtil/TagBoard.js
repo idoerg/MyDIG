@@ -227,7 +227,7 @@ TagBoard.prototype.polyOnMouseOver = function(event) {
 		
 		// sets the selected tag for showing information
 		var shapeId = event.shape.getId();
-		this.selectedTag = this.tagGroups[this.currentTagGroup].getTags()[shapeId];
+		//this.selectedTag = this.tagGroups[this.currentTagGroup].getTags()[shapeId];
 		//this.defaultInfoViewCallback(tags, shapeId, id);
 	}
 };
