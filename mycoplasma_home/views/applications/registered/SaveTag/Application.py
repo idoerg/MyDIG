@@ -42,7 +42,7 @@ class Application(AjaxRegisteredApplicationBase):
 				else:
 					errorMessage = "Incorrect format for color"	
 			except KeyError as e:
-				errorMessage = "Missing arguments in save for key: " + e
+				errorMessage = "Missing arguments in save for key: " + str(e)
 		else:
 			errorMessage = "Incorrect method for saving a tag"
 
