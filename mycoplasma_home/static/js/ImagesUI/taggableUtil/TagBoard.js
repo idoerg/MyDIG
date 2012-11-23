@@ -101,6 +101,8 @@ TagBoard.prototype.redraw = function() {
 		  this.stage.add(this.layer);
 	  }
 	}
+	
+	this.board.on('mousemove', Util.scopeCallback(this, this.boardMouseMove));
 };
 
 TagBoard.prototype.toggleTags = function() {
@@ -167,10 +169,10 @@ TagBoard.prototype.__createPolyFromTag = function(tag, i) {
 	poly.pos = [(leftMin + leftMax)/2, topMax];
 	
 	// shows the polygon and its tooltip
-	poly.on('mouseover', Util.scopeCallback(this, this.polyOnMouseOver));
+	//poly.on('mouseover', Util.scopeCallback(this, this.polyOnMouseOver));
 	
 	// hides the polygon and its tooltip
-	poly.on('mouseout', Util.scopeCallback(this, this.polyOnMouseOut));
+	//poly.on('mouseout', Util.scopeCallback(this, this.polyOnMouseOut));
 	
 	// toggles the mouseout event for this poly
 	// and the mouseover events for all other poly's
@@ -203,6 +205,45 @@ TagBoard.prototype.polyOnMouseOut = function(event) {
 		$('#taggable-tooltip').hide();
 		this.layer.draw();
 		
+	}
+};
+
+TagBoard.prototype.boardMouseMove = function(event) {
+	if (!this.locked) {		
+		var mousePos = this.stage.getMousePosition(event);
+		
+		if (!this.tagsVisible) {
+			var previousShapes = this.stage.getIntersections(mousePos);
+			
+			for (var i = 0; i < previousShapes.length; i++) {
+				// draws the shape on mouse over
+				previousShapes[i].attrs.fill = "";
+				previousShapes[i].attrs.stroke = "rgb(255,255,255,0)";
+			}
+		}
+		
+		this.lastMousePos = mousePos;
+		
+		var collidingShapes = this.stage.getIntersections(mousePos);
+		
+		for (var i = 0; i < collidingShapes.length; i++) {
+			// draws the shape on mouse over
+			collidingShapes[i].attrs.fill = collidingShapes[i].color;
+			collidingShapes[i].attrs.stroke = "black";
+			var shape = event.shape;
+			// positions the tag tooltip
+			var pos = this.__getPolyPos(event.shape);
+			pos[0] -= $('#taggable-tooltip').html(shape.description).width()/2;
+			pos[1] -= $(window).scrollTop() - 20;
+			$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show();
+		}
+ 
+		this.layer.draw();
+		
+		// sets the selected tag for showing information
+		var shapeId = event.shape.getId();
+		//this.selectedTag = this.tagGroups[this.currentTagGroup].getTags()[shapeId];
+		//this.defaultInfoViewCallback(tags, shapeId, id);
 	}
 };
 

@@ -56,7 +56,9 @@
 
 .toolbar-menu-icon {
 	display: inline-block;
-	margin-right: 5px;
+    height: 15px;
+    margin-right: 5px;
+    vertical-align: middle;
 }
 
 .toolbar-menu-text {
