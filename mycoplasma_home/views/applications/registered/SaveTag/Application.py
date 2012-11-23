@@ -31,9 +31,9 @@ class Application(AjaxRegisteredApplicationBase):
 								newTag = Tag(description=description, color=tagColor, group=tagGroup, user=request.user)
 								newTag.save()
 								
-								errorMessage = ""
+								errorMessage = str(points)
 								for (counter, point) in enumerate(points):
-									errorMessage += '( ' + str(point[0]) + ',' + str(point[1]) + ')'
+									#errorMessage += '( ' + str(point[0]) + ',' + str(point[1]) + ')'
 									newTagPoint = TagPoint(tag=newTag, pointX=point[0], pointY=point[1], rank=counter+1)
 									newTagPoint.save()
 							else:
