@@ -23,7 +23,7 @@ class Application(AjaxRegisteredApplicationBase):
 				
 				if (len(color) >= 3):
 					# first check if the color exists
-					(tagColor, ) = TagColor.objects.get_or_create(red=color[0], blue=color[1], green=color[2])
+					(tagColor, created) = TagColor.objects.get_or_create(red=color[0], blue=color[1], green=color[2])
 					for key in tagGroupKeys:
 						try:
 							tagGroup = TagGroup.objects.get(pk__exact=key)
