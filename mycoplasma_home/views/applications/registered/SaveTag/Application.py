@@ -24,7 +24,7 @@ class Application(AjaxRegisteredApplicationBase):
 				
 				if (len(color) >= 3):
 					# first check if the color exists
-					(tagColor, created) = TagColor.objects.get_or_create(red=color[0], blue=color[1], green=color[2])
+					(tagColor, created) = TagColor.objects.get_or_create(red=color[0], green=color[1], blue=color[2])
 					for key in tagGroupKeys:
 						try:
 							tagGroup = TagGroup.objects.get(pk__exact=key)
@@ -47,7 +47,7 @@ class Application(AjaxRegisteredApplicationBase):
 		else:
 			errorMessage = "Incorrect method for saving a tag"
 
-		if (errorMessage == "" and len(errorTagGroups) == 0):
+		if (errorMessage == None and len(errorTagGroups) == 0):
 			self.setJsonObject({
 				'error' : False,
 				'errorMessage' : errorMessage
