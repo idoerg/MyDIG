@@ -272,6 +272,8 @@ TagBoard.prototype.boardMouseMove = function(event) {
 					geneLinkRow.append(geneLinkLabel);
 					newTagInfo.append(geneLinkRow);
 				}
+				
+				this.tagInfo.append(newTagInfo);
 			}
 			else if (info.length > 1) {
 				info = info.slice(0, 1);
