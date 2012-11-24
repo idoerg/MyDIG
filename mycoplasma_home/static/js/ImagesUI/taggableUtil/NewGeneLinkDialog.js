@@ -46,7 +46,7 @@ function NewGeneLinkDialog(pageBlock, organisms, siteUrl) {
 			'text' : organism.common_name,
 			'value' : organism.organism_id
 		});
-		self.append(option);
+		self.organism.append(option);
 	});
 	
 	var organismLabel = $('<span />', {
