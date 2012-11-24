@@ -20,6 +20,7 @@ class Application(AjaxRegisteredApplicationBase):
 				tagKeys = request.POST.getlist('tagKeys[]')
 				organism = None
 				feature = None
+				multiFeatures = False
 				errorTagKeys = []
 				try:
 					organism = Organism.objects.get(organism_id__exact=organismId)
@@ -27,14 +28,16 @@ class Application(AjaxRegisteredApplicationBase):
 					errorMessage = "No organism with the id: " + organismId
 					
 				if (organism != None):
-					try:
-						feature = Feature.objects.filter(organism=organism, name=geneName)
-					except ObjectDoesNotExist:
+					features = Feature.objects.filter(organism=organism, name=geneName)
+					if (not features):
 						try:
-							feature = Feature.objects.filter(organism=organism, uniquename=geneName)
+							feature = Feature.objects.get(organism=organism, uniquename=geneName)
 						except ObjectDoesNotExist:
 							errorMessage = "No gene, " + str(geneName) + ", exists for the organism " + str(organism.common_name)
-					
+					elif(len(features) == 1):
+						feature = features[0]
+					else:
+						multiFeatures = True
 					if (feature != None):
 						featureJson = None
 						for tagKey in tagKeys:
@@ -51,6 +54,7 @@ class Application(AjaxRegisteredApplicationBase):
 									errorTagKeys.append([tagKey, 'Gene link with this key already exists for the gene ' + str(feature.name)])
 							except ObjectDoesNotExist:
 								errorTagKeys.append([tagKey, 'Tag with this key does not exist'])
+								
 						if (featureJson != None):
 							self.setJsonObject({
 								'error' : False,
@@ -64,7 +68,15 @@ class Application(AjaxRegisteredApplicationBase):
 								'errorTagKeys' : errorTagKeys,
 								'errorMessage' : 'No changes were made to the database'
 							})
-						
+					else:
+						if multiFeatures:
+							self.setJsonObject({
+								'error' : True,
+								'errorMessage' : 'No changes were made to the database. Multiple features have the name ' + str(geneName) + 
+									'. Try again with one of the following: ' + ', '.join([val.uniquename for val in features])
+							})
+						else:
+							errorMessage = "No matching features for the name: " + str(geneName)
 			except KeyError as e:
 				errorMessage = "Error on key " + str(e)
 		else:
