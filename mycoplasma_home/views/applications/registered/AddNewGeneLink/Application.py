@@ -54,6 +54,7 @@ class Application(AjaxRegisteredApplicationBase):
 						if (featureJson != None):
 							self.setJsonObject({
 								'error' : False,
+								'feature' : featureJson,
 								'errorTagKeys' : errorTagKeys,
 								'errorMessage' : 'Success'
 							})

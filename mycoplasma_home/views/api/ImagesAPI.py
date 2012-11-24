@@ -174,6 +174,7 @@ def getImageTags(tagGroupKey, user=None, isKey=True):
 				color = [tag.color.red, tag.color.green, tag.color.blue]
 				
 				tagTuples.append({
+					'id' : tag.pk,
 					'color' : color,
 					'points' : points,
 					'description' : tag.description
