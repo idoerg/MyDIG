@@ -4,22 +4,22 @@
 	Dependencies:
 		1. All of the dependencies taggable.js 
 **/
-function TaggerUI(image, parent, originalData, organisms, genomicInfo, imagesUrl, siteUrl, alreadyLoaded, callback) {
+function TaggerUI(image, parent, originalData, imageMetadata, genomicInfo, imagesUrl, siteUrl, alreadyLoaded, callback) {
 	this.image = image;
 	this.parent = parent;
 	this.originalData = originalData;
 	this.genomicInfo = genomicInfo;
 	this.imagesUrl = imagesUrl;
 	this.siteUrl = siteUrl;
-	this.organisms = organisms;
+	this.imageMetadata = imageMetadata;
 	this.title = "";
 	this.callback = callback;
 	this.alreadyLoaded = alreadyLoaded;
 	this.created = false;
 	
-	for (var i = 0; i < organisms.length; i++) {
-		this.title += organisms[i].common_name;
-		if (i < organisms.length - 1) {
+	for (var i = 0; i < imageMetadata.organisms.length; i++) {
+		this.title += imageMetadata.organisms[i].common_name;
+		if (i < imageMetadata.organisms.length - 1) {
 			this.title += ", ";
 		}
 	}
@@ -71,7 +71,7 @@ TaggerUI.prototype.createStructure = function() {
 	}).prependTo(this.image.parent());
 	
 	// creates the drawing API
-	this.drawingAPI = new DrawingAPI(drawingBoard, tagBoard, dialogs, this.siteUrl, this.originalData, this.image, this.organisms);
+	this.drawingAPI = new DrawingAPI(drawingBoard, tagBoard, dialogs, this.siteUrl, this.originalData, this.image, this.imageMetadata);
 	
 	var $tagGroupSelect = this.parent.find('#' + id + '-tag-groups');
 	var groups = this.drawingAPI.getTagBoard().getTagGroups();
@@ -267,5 +267,50 @@ TaggerUI.prototype.__renderGeneLinksMenu = function() {
  * which will be shown when no tag is moused over or clicked
  */
 TaggerUI.prototype.__renderSpeciesInfo = function() {
-	return $('<div />');
+	var speciesInfo = $('<table />', {
+		
+	});
+	
+	// description of image
+	var descriptionRow = $('<tr />');
+	var descriptionLabel = $('<td />', {
+		'text' : 'Description:'
+	});
+	var description = $('<td />', {
+		'text' : this.imageMetadata.description
+	});
+	
+	descriptionRow.append(descriptionLabel);
+	descriptionRow.append(description);
+	
+	speciesInfo.append(descriptionRow);
+
+	// upload date data
+	var uploadDateRow = $('<tr />');
+	var uploadDateLabel = $('<td />', {
+		'text' : 'Uploaded on:'
+	});
+	var uploadDate = $('<td />', {
+		'text' : this.imageMetadata.uploadDate
+	});
+	
+	uploadDateRow.append(uploadDateLabel);
+	uploadDateRow.append(uploadDate);
+	
+	speciesInfo.append(uploadDateRow);
+	
+	// uploader data
+	var uploaderRow = $('<tr />');
+	var uploaderLabel = $('<td />', {
+		'text' : 'Uploaded by:'
+	});
+	var uploader = $('<td />', {
+		'text' : this.imageMetadata.uploadedBy
+	});
+	
+	uploaderRow.append(uploaderLabel);
+	uploaderRow.append(uploader);
+	
+	speciesInfo.append(uploaderRow);
+	return speciesInfo;
 };

@@ -27,10 +27,10 @@ class ImageEditorPagelet(PageletBase):
             imageKey = request.REQUEST['imageKey']
             image = Picture.objects.get(pk__exact=imageKey)
             tagGroups = ImagesAPI.getImageTagGroups(image, user=request.user, getTags=True, isKey=False)
-            organisms = ImagesAPI.getImageMetadata(image, user=request.user, isKey=False)['organisms']
+            imageMetadata = ImagesAPI.getImageMetadata(image, user=request.user, isKey=False)
     
             return {
-                'organisms' : json.dumps(organisms),
+                'imageMetadata' : json.dumps(imageMetadata),
                 'tagGroups' : json.dumps(tagGroups),
                 'image' : image
             }

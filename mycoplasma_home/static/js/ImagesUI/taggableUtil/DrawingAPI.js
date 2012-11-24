@@ -6,10 +6,10 @@
  * @param tagBoard
  * @return
  */
-function DrawingAPI(drawingBoard, tagBoard, dialogs, siteUrl, originalData, image, organisms) {
-	this.tagBoard = new TagBoard(tagBoard, originalData, image, organisms, siteUrl);
+function DrawingAPI(drawingBoard, tagBoard, dialogs, siteUrl, originalData, image, imageMetadata) {
+	this.tagBoard = new TagBoard(tagBoard, originalData, image, imageMetadata, siteUrl);
 	this.drawingBoard = new DrawingBoard(drawingBoard, image);
-	this.organisms = organisms;
+	this.imageMetadata = imageMetadata;
 	this.image = image;
 	this.dialogs = dialogs;
 	this.dialogs['newTagGroup'].setTagBoard(this.tagBoard);

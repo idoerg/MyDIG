@@ -32,7 +32,7 @@
             </div>
         </div>
         <input id="tagGroups" value="{{ tagGroups }}" type="hidden" />
-        <input id="organisms" value="{{ organisms }}" type="hidden" />
+        <input id="imageMetadata" value="{{ imageMetadata }}" type="hidden" />
     </div>
 </body>
 <script type="text/javascript">
@@ -42,6 +42,6 @@
         imagesUrl: '{{ STATIC_URL }}images/',
         siteUrl: '{{ SITE_URL }}',
         genomicInfo: $('#image_container').find('.info-container'),
-        organisms: $.parseJSON(unescape($.trim($('#organisms').val())))
+        imageMetadata: $.parseJSON(unescape($.trim($('#imageMetadata').val())))
     });
 </script>

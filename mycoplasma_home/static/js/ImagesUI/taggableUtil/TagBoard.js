@@ -9,10 +9,10 @@
  						4. Tag.js in the taggableUtil package
  -------------------------------------------------------------------------------------
 */
-function TagBoard(tagBoard, originalData, image, organisms, siteUrl, defaultInfoViewCallback) {
+function TagBoard(tagBoard, originalData, image, imageMetadata, siteUrl, defaultInfoViewCallback) {
 	this.board = tagBoard;
 	this.image = image;
-	this.organisms = organisms;
+	this.imageMetadata = imageMetadata;
 	this.tagGroups = this.__convertOriginalDataToTagGroups(originalData);
 	this.stage = null;
 	this.layer = null;

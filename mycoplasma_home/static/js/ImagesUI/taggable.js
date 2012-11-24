@@ -45,7 +45,7 @@
 			return this.each(function() {
 				// the object that keeps track of the tagging application
 				var taggableObj = new TaggerUI(
-					$(this), settings.parent, settings.originalData, settings.organisms,
+					$(this), settings.parent, settings.originalData, settings.imageMetadata,
 					settings.genomicInfo, settings.imagesUrl, settings.siteUrl,
 					settings.alreadyloaded, settings.callback
 				);
