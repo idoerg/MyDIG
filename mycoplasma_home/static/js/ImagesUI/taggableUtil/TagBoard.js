@@ -232,9 +232,13 @@ TagBoard.prototype.boardMouseMove = function(event) {
 			var tag = this.visibleShapes[i].tag;
 			var info = this.tagInfo.find('#' + tag.getId() + '-info');
 			if (info.length == 0) {
-				var newTagInfo = $('<table />', {
+				var newTagInfo = $('<div />', {
 					'class' : 'tag-info',
 					'id' : tag.getId() + '-info'
+				});
+					
+				var newTagInfoTable = $('<table />', {
+					
 				});
 				
 				var descriptionRow = $('<tr />');
@@ -247,7 +251,7 @@ TagBoard.prototype.boardMouseMove = function(event) {
 				
 				descriptionRow.append(descriptionLabel);
 				descriptionRow.append(description);
-				newTagInfo.append(descriptionRow);
+				newTagInfoTable.append(descriptionRow);
 				
 				if (tag.getGeneLinks().length > 0) {
 					for (geneLink in tag.getGeneLinks()) {
@@ -261,15 +265,16 @@ TagBoard.prototype.boardMouseMove = function(event) {
 						
 						geneLinkRow.append(geneLinkLabel);
 						geneLinkRow.append(geneLink);
-						newTagInfo.append(geneLinkRow);
+						newTagInfoTable.append(geneLinkRow);
+						newTagInfo.append(newTagInfoTable);
 					}
 				}
 				else {
-					var geneLinkRow = $('<tr />');
-					var geneLinkLabel = $('<td />', {
+					var geneLinkRow = $('<div />', {
 						'text' : 'There are no gene links for this tag.'
 					});
-					geneLinkRow.append(geneLinkLabel);
+					
+					newTagInfo.append(newTagInfoTable);
 					newTagInfo.append(geneLinkRow);
 				}
 				
