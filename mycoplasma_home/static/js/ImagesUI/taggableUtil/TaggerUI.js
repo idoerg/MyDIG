@@ -250,7 +250,7 @@ TaggerUI.prototype.__renderGeneLinksMenu = function() {
  * which will be shown when no tag is moused over or clicked
  */
 TaggerUI.prototype.__renderSpeciesInfo = function() {
-	var speciesInfo = $('<table />', {
+	var speciesInfo = $('<table cellspacing="0" />', {
 		
 	});
 	
@@ -269,7 +269,9 @@ TaggerUI.prototype.__renderSpeciesInfo = function() {
 	speciesInfo.append(descriptionRow);
 
 	// upload date data
-	var uploadDateRow = $('<tr />');
+	var uploadDateRow = $('<tr />', {
+		'class' : 'even'
+	});
 	var uploadDateLabel = $('<td />', {
 		'text' : 'Uploaded on:'
 	});
