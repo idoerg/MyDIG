@@ -275,3 +275,33 @@ th {
 	padding-bottom: 0;
 	padding-right: 20px;
 }
+
+.geneLinksInfoTitle {
+	border-bottom: 1px solid #CCCCCC;
+    display: block;
+    font-size: 22px;
+    font-variant: small-caps;
+    font-weight: bold;
+    text-align: center;
+    display: none;
+}
+
+.geneLinksInfo table {
+    width: 100%;
+}
+
+.geneLinksInfo table tbody tr td {
+	padding-bottom: 2px;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-right: 5px;
+}
+
+.tag-info {
+	border: 1px solid #CCCCCC;
+    margin-top: 10px;
+}
+
+.tag-info div {
+	text-align: center;
+}
