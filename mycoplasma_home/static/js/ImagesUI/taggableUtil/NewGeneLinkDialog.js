@@ -23,6 +23,8 @@ function NewGeneLinkDialog(pageBlock, organisms, siteUrl) {
 		'class' : 'tagging-dialog-contents'
 	});
 	
+	var geneNameContainer = $('<div />');
+	
 	this.geneName = $('<input />', {
 		'type' : 'text'
 	});
@@ -32,8 +34,11 @@ function NewGeneLinkDialog(pageBlock, organisms, siteUrl) {
 		'style' : 'margin-right: 10px'
 	});
 	
-	this.contents.append(nameLabel);
-	this.contents.append(this.geneName);
+	geneNameContainer.append(nameLabel);
+	geneNameContainer.append(this.geneName);
+	this.contents.append(geneNameContainer);
+	
+	var organismContainer = $('<div />');
 	
 	this.organism = $('<select />', {
 		'type' : 'text'
@@ -54,8 +59,9 @@ function NewGeneLinkDialog(pageBlock, organisms, siteUrl) {
 		'style' : 'margin-right: 10px'
 	});
 	
-	this.contents.append(organismLabel);
-	this.contents.append(this.organism);
+	organismContainer.append(organismLabel);
+	organismContainer.append(this.organism);
+	this.contents.append(organismContainer);
 	
 	this.finalizeUI = $('<div />', {
 		'class' : 'tagging-dialog-contents'
