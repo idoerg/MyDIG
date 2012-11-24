@@ -6,8 +6,8 @@
  * @param tagBoard
  * @return
  */
-function DrawingAPI(drawingBoard, tagBoard, dialogs, siteUrl, originalData, image, imageMetadata) {
-	this.tagBoard = new TagBoard(tagBoard, originalData, image, imageMetadata, siteUrl);
+function DrawingAPI(drawingBoard, tagBoard, dialogs, siteUrl, originalData, image, imageMetadata, genomicInfo) {
+	this.tagBoard = new TagBoard(tagBoard, originalData, image, imageMetadata, genomicInfo, siteUrl);
 	this.drawingBoard = new DrawingBoard(drawingBoard, image);
 	this.imageMetadata = imageMetadata;
 	this.image = image;

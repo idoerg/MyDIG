@@ -1,4 +1,5 @@
-function Tag(colorArr, tagPoints, description, imageKey, siteUrl, tagGroup) {
+function Tag(id, colorArr, tagPoints, description, imageKey, siteUrl, tagGroup) {
+	this.id = id;
 	this.color = colorArr;
 	this.tagGroup = tagGroup;
 	this.points = tagPoints;
@@ -11,6 +12,14 @@ function Tag(colorArr, tagPoints, description, imageKey, siteUrl, tagGroup) {
 
 Tag.prototype.setTagGroup = function(tagGroup) {
 	this.tagGroup = tagGroup;
+};
+
+Tag.prototype.setId = function(id) {
+	this.id = id;
+};
+
+Tag.prototype.getId = function() {
+	return this.id;
 };
 
 Tag.prototype.getColor = function() {

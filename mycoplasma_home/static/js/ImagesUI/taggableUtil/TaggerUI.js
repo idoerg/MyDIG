@@ -71,7 +71,7 @@ TaggerUI.prototype.createStructure = function() {
 	}).prependTo(this.image.parent());
 	
 	// creates the drawing API
-	this.drawingAPI = new DrawingAPI(drawingBoard, tagBoard, dialogs, this.siteUrl, this.originalData, this.image, this.imageMetadata);
+	this.drawingAPI = new DrawingAPI(drawingBoard, tagBoard, dialogs, this.siteUrl, this.originalData, this.image, this.imageMetadata, this.genomicInfo);
 	
 	var $tagGroupSelect = this.parent.find('#' + id + '-tag-groups');
 	var groups = this.drawingAPI.getTagBoard().getTagGroups();
@@ -228,37 +228,20 @@ TaggerUI.prototype.__renderGeneLinksMenu = function() {
 	
 	this.genomicInfo.html(genomicInfoTitle);
 	
-	// adds the geneLinks menu
-	var geneLinksMenu = $('<div />', {
-		'class' : 'geneLinksMenu'
-	});
-	
-	// adds the form for adding a new gene link
-	geneLinksMenu.append($('<div />', {
-		'class' : 'geneLinkContainer'
-	}));
-	
-	var newLinkInput = $('<input />', {
-		type : 'text',
-		id : 'newLink' + id
-	});
-	
-	var formButton = $('<button />', {
-		text : 'Add New Gene Link'
-	});
-	
-	geneLinksMenu.append($('<div />', {
-		'class' : 'newGeneLinkForm'
-	}).append(newLinkInput).append(formButton));
-	
-	this.genomicInfo.append(geneLinksMenu);
-	
 	var speciesInfo = $('<div />', {
 		'class' : 'speciesInfo'
 	});
 	
 	speciesInfo.append(this.__renderSpeciesInfo());
 	this.genomicInfo.append(speciesInfo);
+	
+	// adds the geneLinks menu
+	var geneLinksInfo = $('<div />', {
+		'class' : 'geneLinksInfo'
+	});
+	
+	this.genomicInfo.append(geneLinksInfo);
+	
 	this.genomicInfo.attr('id', id + 'GeneLinkContainer');
 };
 

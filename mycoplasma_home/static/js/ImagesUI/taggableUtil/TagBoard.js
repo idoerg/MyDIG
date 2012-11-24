@@ -9,15 +9,15 @@
  						4. Tag.js in the taggableUtil package
  -------------------------------------------------------------------------------------
 */
-function TagBoard(tagBoard, originalData, image, imageMetadata, siteUrl, defaultInfoViewCallback) {
+function TagBoard(tagBoard, originalData, image, imageMetadata, genomeInfo, siteUrl) {
 	this.board = tagBoard;
 	this.image = image;
 	this.imageMetadata = imageMetadata;
+	this.nextId = 0;
 	this.tagGroups = this.__convertOriginalDataToTagGroups(originalData);
 	this.stage = null;
 	this.layer = null;
 	this.locked = false;
-	this.selectedTag = null;
 	this.tagsVisible = true;
 	this.currentTagGroups = {};
 	if (this.tagGroups.length > 0) {
@@ -25,7 +25,7 @@ function TagBoard(tagBoard, originalData, image, imageMetadata, siteUrl, default
 		this.currentTagGroups[key] = this.tagGroups[0];
 	}
 	this.siteUrl = siteUrl;
-	this.defaultInfoViewCallback = defaultInfoViewCallback;
+	this.tagInfo = genomeInfo.find('.geneLinksInfo');
 	this.visibleShapes = [];
 };
 
@@ -38,7 +38,7 @@ TagBoard.prototype.getTagGroups = function() {
 };
 
 TagBoard.prototype.addTag = function(color, points, description, callback, errorCallback) {
-	var tag = new Tag(color, points, description, this.image.attr('id'), this.siteUrl, null);
+	var tag = new Tag(null, color, points, description, this.image.attr('id'), this.siteUrl, null);
 	
 	var keys = [];
 	
@@ -55,6 +55,8 @@ TagBoard.prototype.addTag = function(color, points, description, callback, error
 				if (this.currentTagGroups.hasOwnProperty(key)) {
 					var tagCopy = tag.copy();
 					tagCopy.setTagGroup(this.currentTagGroups[key]);
+					tagCopy.setId(this.nextId);
+					this.nextId++;
 					this.currentTagGroups[key].addTag(tagCopy);
 				}
 			}
@@ -143,8 +145,7 @@ TagBoard.prototype.__createPolyFromTag = function(tag, i) {
 	});
 	
 	// sets the color and description for this polygon
-	poly.color = color;
-	poly.description = tag.getDescription();
+	poly.tag = tag;
 	poly.setId(i);
 	
 	// finds the position of the tooltip for this polygon
@@ -221,14 +222,64 @@ TagBoard.prototype.boardMouseMove = function(event) {
 			this.tagsVisible.length = 0;
 		}
 		
-		this.lastMousePos = mousePos;
-		
 		this.visibleShapes = this.stage.getIntersections(mousePos);
+		this.tagInfo.find('.tag-info').removeClass('tag-info').addClass('tag-info-old');
 		
 		for (var i = 0; i < this.visibleShapes.length; i++) {
 			// draws the shape on mouse over
 			this.visibleShapes[i].attrs.fill = this.visibleShapes[i].color;
 			this.visibleShapes[i].attrs.stroke = "black";
+			var tag = this.visibleShapes[i].tag;
+			var info = this.tagInfo.find('#' + tag.getId() + '-info');
+			if (info.length == 0) {
+				var newTagInfo = $('<table />', {
+					'class' : 'tag-info',
+					'id' : tag.getId() + '-info'
+				});
+				
+				var descriptionRow = $('<tr />');
+				var descriptionLabel = $('<td />', {
+					'text' : 'Description:'
+				});
+				var description = $('<td />', {
+					'text' : tag.getDescription()
+				});
+				
+				descriptionRow.append(descriptionLabel);
+				descriptionRow.append(description);
+				newTagInfo.append(descriptionRow);
+				
+				if (tag.getGeneLinks().length > 0) {
+					for (geneLink in tag.getGeneLinks()) {
+						var geneLinkRow = $('<tr />');
+						var geneLinkLabel = $('<td />', {
+							'text' : 'Gene Links:'
+						});
+						var geneLink = $('<td />', {
+							'text' : tag.getDescription()
+						});
+						
+						geneLinkRow.append(geneLinkLabel);
+						geneLinkRow.append(geneLink);
+						newTagInfo.append(geneLinkRow);
+					}
+				}
+				else {
+					var geneLinkRow = $('<tr />');
+					var geneLinkLabel = $('<td />', {
+						'text' : 'There are no gene links for this tag.'
+					});
+					geneLinkRow.append(geneLinkLabel);
+					newTagInfo.append(geneLinkRow);
+				}
+			}
+			else if (info.length > 1) {
+				info = info.slice(0, 1);
+				info.removeClass('tag-info-old').addClass('tag-info');
+			}
+			else {
+				info.removeClass('tag-info-old').addClass('tag-info');
+			}
 			/*
 			var shape = event.shape;
 			// positions the tag tooltip
@@ -237,6 +288,8 @@ TagBoard.prototype.boardMouseMove = function(event) {
 			pos[1] -= $(window).scrollTop() - 20;
 			$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show();*/
 		}
+		
+		this.tagInfo.find('.tag-info-old').remove();
  
 		this.layer.draw();
 		
@@ -284,7 +337,13 @@ TagBoard.prototype.__convertOriginalDataToTagGroups = function(originalData) {
 	var tagGroups = [];
 	
 	for (group in originalData['tagGroups']) {
-		tagGroups.push(new TagGroup(originalData['tagGroups'][group], this.image.attr('id'), this.siteUrl));
+		var newGroup = new TagGroup(originalData['tagGroups'][group], this.image.attr('id'), this.siteUrl);
+		for (tag in newGroup.getTags()) {
+			tag.setId(this.nextId);
+			this.nextId++;
+		}
+		tagGroups.push(newGroup);
+		
 	}
 	
 	return tagGroups;
