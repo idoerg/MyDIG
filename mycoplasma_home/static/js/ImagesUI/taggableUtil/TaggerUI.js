@@ -47,10 +47,12 @@ TaggerUI.prototype.createStructure = function() {
 	var pageBlock = new PageBlock();
 	var saveTagDialog = new SaveTagDialog(pageBlock);
 	var newTagGroupDialog = new NewTagGroupDialog(pageBlock);
+	var newGeneLinkDialog = new NewGeneLinkDialog(pageBlock, this.imageMetadata.organisms);
 	
 	var dialogs = {
 		'saveTags' : saveTagDialog,
-		'newTagGroup' : newTagGroupDialog
+		'newTagGroup' : newTagGroupDialog,
+		'newGeneLink' : newGeneLinkDialog
 	};
 	
 	if ($('#taggable-tooltip').length == 0) {
@@ -97,6 +99,16 @@ TaggerUI.prototype.createStructure = function() {
 	
 	this.menu.getSection('tools').getMenuItem('toggleTags').onClick(function() {
 		self.drawingAPI.getTagBoard().toggleTags();
+	});
+	
+	this.menu.getSection('geneLinks').getMenuItem('addNewLink').onClick(function() {
+		var selectedTags = this.drawingAPI.getTagBoard().getSelectedTags();
+		if (selectedTags.length > 0) {
+			newGeneLinkDialog.show(selectedTags);
+		}
+		else {
+			alert("Please select a tag by clicking on it");
+		}
 	});
 	
 	this.taggingMenu.onCancelClick(function() {

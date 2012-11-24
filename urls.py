@@ -40,7 +40,8 @@ urlpatterns += patterns('mycoplasma_home.views.applications.registered',
     url(r'^administration/deleteImage$', 'DeleteImage.Application.renderAction'),
     url(r'^administration/imageManager/getSlider/$', 'ImageSlider.Application.renderAction'),
     url(r'^administration/addNewTagGroup$', 'AddNewTagGroup.Application.renderAction'),
-    url(r'^administration/saveTag$','SaveTag.Application.renderAction')
+    url(r'^administration/saveTag$','SaveTag.Application.renderAction'),
+    url(r'^administration/addNewGeneLink$','AddNewGeneLink.Application.renderAction')
 )
 '''
 urlpatterns += patterns('mycoplasma_home.views.applications.admin',

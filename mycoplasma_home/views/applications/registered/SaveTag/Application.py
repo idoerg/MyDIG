@@ -15,6 +15,7 @@ class Application(AjaxRegisteredApplicationBase):
 	def doProcessRender(self, request):
 		errorMessage = None
 		errorTagGroups = []
+		tagKeys = {}
 		if (request.method == "POST"):
 			try:
 				tagGroupKeys = request.POST.getlist('tagGroupKeys[]')
@@ -31,6 +32,7 @@ class Application(AjaxRegisteredApplicationBase):
 							if (tagGroup.picture.isPrivate and request.user == tagGroup.user) or not tagGroup.picture.isPrivate:
 								newTag = Tag(description=description, color=tagColor, group=tagGroup, user=request.user)
 								newTag.save()
+								tagKeys[key] = newTag.pk
 								
 								for key, point in points.items():
 									newTagPoint = TagPoint(tag=newTag, pointX=point[0], pointY=point[1], rank=int(key)+1)
@@ -50,6 +52,7 @@ class Application(AjaxRegisteredApplicationBase):
 		if (errorMessage == None and len(errorTagGroups) == 0):
 			self.setJsonObject({
 				'error' : False,
+				'tagKeys' : tagKeys,
 				'errorMessage' : errorMessage
 			})
 		elif len(errorTagGroups) > 0:

@@ -13,7 +13,6 @@ function TagBoard(tagBoard, originalData, image, imageMetadata, genomeInfo, site
 	this.board = tagBoard;
 	this.image = image;
 	this.imageMetadata = imageMetadata;
-	this.nextId = 0;
 	this.tagGroups = this.__convertOriginalDataToTagGroups(originalData);
 	this.stage = null;
 	this.layer = null;
@@ -38,6 +37,14 @@ TagBoard.prototype.getTagGroups = function() {
 	return this.tagGroups;
 };
 
+TagBoard.prototype.getSelectedTags = function() {
+	var tags = [];
+	for (var i = 0; i < this.visibleShapes.length; i++) {
+		tags.push(this.visibleShapes[i].tag);
+	}
+	return tags;
+}
+
 TagBoard.prototype.addTag = function(color, points, description, callback, errorCallback) {
 	var tag = new Tag(null, color, points, description, this.image.attr('id'), this.siteUrl, null);
 	
@@ -51,13 +58,12 @@ TagBoard.prototype.addTag = function(color, points, description, callback, error
 	
 	// saves the tag and then adds the 
 	tag.save(
-		Util.scopeCallback(this, function() {
+		Util.scopeCallback(this, function(tagKeys) {
 			for (key in this.currentTagGroups) {
 				if (this.currentTagGroups.hasOwnProperty(key)) {
 					var tagCopy = tag.copy();
 					tagCopy.setTagGroup(this.currentTagGroups[key]);
-					tagCopy.setId(this.nextId);
-					this.nextId++;
+					tagCopy.setId(tagKeys[key]);
 					this.currentTagGroups[key].addTag(tagCopy);
 				}
 			}
@@ -245,7 +251,7 @@ TagBoard.prototype.boardMouseMove = function(event) {
 					'id' : tag.getId() + '-info'
 				});
 					
-				var newTagInfoTable = $('<table />', {
+				var newTagInfoTable = $('<table cellspacing="0" />', {
 					
 				});
 				
@@ -375,12 +381,7 @@ TagBoard.prototype.__convertOriginalDataToTagGroups = function(originalData) {
 	for (group in originalData['tagGroups']) {
 		var newGroup = new TagGroup(originalData['tagGroups'][group], this.image.attr('id'), this.siteUrl);
 		var self = this;
-		$.each(newGroup.getTags(), function(index, tag) {
-			tag.setId(self.nextId);
-			self.nextId++;
-		});
 		tagGroups.push(newGroup);
-		
 	}
 	
 	return tagGroups;

@@ -1,0 +1,84 @@
+'''
+	Ajax Application for the Image Pagination
+	URL: /image/editor/submit
+	
+	Author: Andrew Oberlin
+	Date: July 23, 2012
+'''
+from renderEngine.AjaxRegisteredApplicationBase import AjaxRegisteredApplicationBase
+from django.views.decorators.csrf import csrf_exempt
+from mycoplasma_home.models import GeneLink, Tag, Feature, Organism
+from django.core.exceptions import ObjectDoesNotExist
+
+class Application(AjaxRegisteredApplicationBase):
+	def doProcessRender(self, request):
+		errorMessage = ""
+		if (request.method == "POST"):
+			try:
+				geneName = request.POST['geneName']
+				organismId = request.POST['organismId']
+				tagKeys = request.POST.getlist('tagKeys[]')
+				organism = None
+				feature = None
+				errorTagKeys = []
+				try:
+					organism = Organism.objects.get(organism_id__exact=organismId)
+				except ObjectDoesNotExist:
+					errorMessage = "No organism with the id: " + organismId
+					
+				if (organism != None):
+					try:
+						feature = Feature.objects.filter(organism=organism, name=geneName)
+					except ObjectDoesNotExist:
+						try:
+							feature = Feature.objects.filter(organism=organism, uniquename=geneName)
+						except ObjectDoesNotExist:
+							errorMessage = "No gene, " + str(geneName) + ", exists for the organism " + str(organism.common_name)
+					
+					if (feature != None):
+						featureJson = None
+						for tagKey in tagKeys:
+							try:
+								tag = Tag.objects.get(pk__exact=tagKey)
+								newGeneLink, created = GeneLink.objects.get_or_create(tag=tag, feature=feature)
+								if (created):
+									if (featureJson == None):
+										featureJson = {
+											'uniquename' : feature.uniquename,
+											'name' : feature.name
+										}
+								else:
+									errorTagKeys.append([tagKey, 'Gene link with this key already exists for the gene ' + str(feature.name)])
+							except ObjectDoesNotExist:
+								errorTagKeys.append([tagKey, 'Tag with this key does not exist'])
+						if (featureJson != None):
+							self.setJsonObject({
+								'error' : False,
+								'errorTagKeys' : errorTagKeys,
+								'errorMessage' : 'Success'
+							})
+						else:
+							self.setJsonObject({
+								'error' : True,
+								'errorTagKeys' : errorTagKeys,
+								'errorMessage' : 'No changes were made to the database'
+							})
+						
+			except KeyError as e:
+				errorMessage = "Error on key " + str(e)
+		else:
+			errorMessage = "Incorrect method for adding a new gene link"
+		
+		if (errorMessage != ""):
+			self.setJsonObject({
+				'error' : True,
+				'errorMessage' : errorMessage
+			})
+
+		
+'''
+	Used for mapping to the url in urls.py
+'''
+@csrf_exempt			
+def renderAction(request):
+	return Application().render(request)

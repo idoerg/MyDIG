@@ -65,7 +65,7 @@ Tag.prototype.save = function(callback, errorCallback, tagGroupKeys) {
 		dataType : 'json',
 		success : function(data, textStatus, jqXHR) {
 			if (!data.error) {
-				callback();
+				callback(data.tagKeys);
 			}
 			else {
 				errorCallback(data.errorMessage);
