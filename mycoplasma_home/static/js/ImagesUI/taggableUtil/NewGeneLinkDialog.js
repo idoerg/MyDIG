@@ -105,7 +105,7 @@ NewGeneLinkDialog.prototype.onSubmit = function() {
 	var geneName = $.trim(this.geneName.val());
 	var organismId = this.organism.val();
 	var tagIds = [];
-	if (geneName && organism && this.selectedTags) {
+	if (geneName && organismId && this.selectedTags) {
 		for (var i = 0; i < this.selectedTags.length; i++) {
 			tagIds.push(this.selectedTags[i].getId());
 		}
