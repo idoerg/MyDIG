@@ -1,6 +1,6 @@
-function NewGeneLinkDialog(pageBlock, organisms, this.siteUrl) {
+function NewGeneLinkDialog(pageBlock, organisms, siteUrl) {
 	this.block = pageBlock;
-	this.submitUrl = this.siteUrl + 'administration/addNewGeneLink';
+	this.submitUrl = siteUrl + 'administration/addNewGeneLink';
 	
 	this.dialog = $('<div />', {
 		'class' : 'tagging-dialog',
