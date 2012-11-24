@@ -225,6 +225,13 @@ TagBoard.prototype.boardMouseMove = function(event) {
 		this.visibleShapes = this.stage.getIntersections(mousePos);
 		this.tagInfo.find('.tag-info').removeClass('tag-info').addClass('tag-info-old');
 		
+		if (this.visibleShapes.length > 0) {
+			this.tagInfo.find('.geneLinksInfoTitle').show();
+		}
+		else {
+			this.tagInfo.find('.geneLinksInfoTitle').hide();
+		}
+		
 		for (var i = 0; i < this.visibleShapes.length; i++) {
 			// draws the shape on mouse over
 			this.visibleShapes[i].attrs.fill = this.visibleShapes[i].tag.getFormattedColor();
