@@ -88,7 +88,7 @@ function NewGeneLinkDialog(pageBlock, organisms, siteUrl) {
 	
 	this.submitCallback = null;
 	
-	this.submitTagGroupButton.on('click', Util.scopeCallback(this, this.onSubmit));
+	this.submitGeneLinkButton.on('click', Util.scopeCallback(this, this.onSubmit));
 	this.cancelButton.on('click', Util.scopeCallback(this, this.onCancel));
 	this.closeButton.on('click', Util.scopeCallback(this, this.onCancel));
 	
