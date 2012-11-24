@@ -33,7 +33,7 @@ function NewGeneLinkDialog(pageBlock, organisms, siteUrl) {
 	});
 	
 	this.contents.append(nameLabel);
-	this.contents.append(this.name);
+	this.contents.append(this.geneName);
 	
 	this.organism = $('<select />', {
 		'type' : 'text'
