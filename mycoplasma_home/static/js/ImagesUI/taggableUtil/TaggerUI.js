@@ -102,7 +102,7 @@ TaggerUI.prototype.createStructure = function() {
 	});
 	
 	this.menu.getSection('geneLinks').getMenuItem('addNewLink').onClick(function() {
-		var selectedTags = this.drawingAPI.getTagBoard().getSelectedTags();
+		var selectedTags = self.drawingAPI.getTagBoard().getSelectedTags();
 		if (selectedTags.length > 0) {
 			newGeneLinkDialog.show(selectedTags);
 		}
