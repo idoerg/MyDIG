@@ -227,7 +227,7 @@ TagBoard.prototype.boardMouseMove = function(event) {
 		
 		for (var i = 0; i < this.visibleShapes.length; i++) {
 			// draws the shape on mouse over
-			this.visibleShapes[i].attrs.fill = this.visibleShapes[i].color;
+			this.visibleShapes[i].attrs.fill = this.visibleShapes[i].tag.getFormattedColor();
 			this.visibleShapes[i].attrs.stroke = "black";
 			var tag = this.visibleShapes[i].tag;
 			var info = this.tagInfo.find('#' + tag.getId() + '-info');
