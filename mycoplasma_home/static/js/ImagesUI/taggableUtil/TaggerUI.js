@@ -245,7 +245,12 @@ TaggerUI.prototype.__renderGeneLinksMenu = function() {
 		'text' : 'Gene Links'
 	});
 	
+	var geneLinksContainer = $('<div />', {
+		'class' : 'tagInfoContainer'
+	});
+	
 	geneLinksInfo.append(geneLinksTitle);
+	geneLinksInfo.append(geneLinksContainer);
 	
 	this.genomicInfo.append(geneLinksInfo);
 	

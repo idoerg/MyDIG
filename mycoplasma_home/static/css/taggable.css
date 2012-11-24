@@ -305,3 +305,11 @@ th {
 .tag-info div {
 	text-align: center;
 }
+
+.geneLinksInfo table tbody tr.even {
+	background-color: Lavender;
+}
+
+.tagInfoContainer {
+	overflow-y: auto;
+}

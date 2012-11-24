@@ -25,7 +25,7 @@ function TagBoard(tagBoard, originalData, image, imageMetadata, genomeInfo, site
 		this.currentTagGroups[key] = this.tagGroups[0];
 	}
 	this.siteUrl = siteUrl;
-	this.tagInfo = genomeInfo.find('.geneLinksInfo');
+	this.tagInfo = genomeInfo.find('.geneLinksInfo .tagInfoContainer');
 	this.visibleShapes = [];
 };
 
@@ -260,7 +260,9 @@ TagBoard.prototype.boardMouseMove = function(event) {
 				descriptionRow.append(description);
 				newTagInfoTable.append(descriptionRow);
 				
-				var colorRow = $('<tr />');
+				var colorRow = $('<tr />', {
+					'class' : 'even'
+				});
 				var colorLabel = $('<td />', {
 					'text' : 'Color:'
 				});
