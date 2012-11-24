@@ -338,10 +338,10 @@ TagBoard.prototype.__convertOriginalDataToTagGroups = function(originalData) {
 	
 	for (group in originalData['tagGroups']) {
 		var newGroup = new TagGroup(originalData['tagGroups'][group], this.image.attr('id'), this.siteUrl);
-		for (tag in newGroup.getTags()) {
+		$.each(newGroup.getTags(), function(index, tag) {
 			tag.setId(this.nextId);
 			this.nextId++;
-		}
+		});
 		tagGroups.push(newGroup);
 		
 	}
