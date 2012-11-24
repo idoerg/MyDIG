@@ -26,6 +26,7 @@ function TagBoard(tagBoard, originalData, image, imageMetadata, genomeInfo, site
 	}
 	this.siteUrl = siteUrl;
 	this.tagInfo = genomeInfo.find('.geneLinksInfo .tagInfoContainer');
+	this.geneLinksInfo = genomeInfo.find('.geneLinksInfo');
 	this.visibleShapes = [];
 };
 
@@ -226,10 +227,10 @@ TagBoard.prototype.boardMouseMove = function(event) {
 		this.tagInfo.find('.tag-info').removeClass('tag-info').addClass('tag-info-old');
 		
 		if (this.visibleShapes.length > 0) {
-			this.tagInfo.find('.geneLinksInfoTitle').show();
+			this.geneLinksInfo.find('.geneLinksInfoTitle').show();
 		}
 		else {
-			this.tagInfo.find('.geneLinksInfoTitle').hide();
+			this.geneLinksInfo.find('.geneLinksInfoTitle').hide();
 		}
 		
 		for (var i = 0; i < this.visibleShapes.length; i++) {
