@@ -263,7 +263,7 @@ TagBoard.prototype.boardMouseMove = function(event) {
 				
 				var colorBox = $('<span />', {
 					'class' : 'color-box',
-					'style' : tag.getFormattedColor()
+					'style' : 'background-color: ' + tag.getFormattedColor()
 				});
 				
 				color.append(colorBox);
