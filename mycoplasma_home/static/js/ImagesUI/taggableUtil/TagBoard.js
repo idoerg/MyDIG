@@ -213,10 +213,10 @@ TagBoard.prototype.boardMouseMove = function(event) {
 	if (!this.locked) {		
 		var mousePos = this.stage.getMousePosition(event);
 		
-		if (!this.tagsVisible && this.visibleShapes.length > 0) {
+		if (this.visibleShapes.length > 0) {
 			for (var i = 0; i < this.visibleShapes.length; i++) {
 				// draws the shape on mouse over
-				this.visibleShapes[i].attrs.fill = "";
+				this.visibleShapes[i].attrs.fill = this.tagsVisible ? this.visibleShapes[i].tag.getFormattedColor() : "";
 				this.visibleShapes[i].attrs.stroke = "rgba(255,255,255,0)";
 			}
 			this.tagsVisible.length = 0;
@@ -252,6 +252,25 @@ TagBoard.prototype.boardMouseMove = function(event) {
 				descriptionRow.append(descriptionLabel);
 				descriptionRow.append(description);
 				newTagInfoTable.append(descriptionRow);
+				
+				var colorRow = $('<tr />');
+				var colorLabel = $('<td />', {
+					'text' : 'Color:'
+				});
+				var color = $('<td />', {
+					'text' : tag.getFormattedColor()
+				});
+				
+				var colorBox = $('<span />', {
+					'class' : 'color-box',
+					'style' : tag.getFormattedColor()
+				});
+				
+				color.append(colorBox);
+				
+				colorRow.append(colorLabel);
+				colorRow.append(color);
+				newTagInfoTable.append(colorRow);
 				
 				if (tag.getGeneLinks().length > 0) {
 					for (geneLink in tag.getGeneLinks()) {
