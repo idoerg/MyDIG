@@ -299,7 +299,8 @@ TagBoard.prototype.boardMouseMove = function(event) {
 						var geneLinkCell = $('<td />');
 						
 						var geneLinkName = $('<span />', {
-							'text' : geneLink.getName()
+							'text' : geneLink.getName(),
+							'style' : 'margin-right: 20px'
 						});
 						var geneLinkUniqueName = $('<span />', {
 							'text' : geneLink.getUniqueName()
