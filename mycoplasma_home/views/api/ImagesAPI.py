@@ -3,7 +3,7 @@
 		Static API functions for dealing with Images
 	--------------------------------------------------
 '''
-from mycoplasma_home.models import Picture, PictureDefinitionTag, Organism, TagGroup, Tag, TagPoint
+from mycoplasma_home.models import Picture, PictureDefinitionTag, Organism, TagGroup, Tag, TagPoint, GeneLink
 from django.forms.models import model_to_dict
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -12,6 +12,8 @@ INVALID_IMAGE_KEY = 'Invalid Image Key Provided'
 NO_IMAGE_KEY = 'No Image Key Provided'
 INVALID_TAG_GROUP_KEY = 'Invalid Tag Group Key Provided'
 NO_TAG_GROUP_KEY = 'No Tag Group Key Provided'
+NO_TAG_KEY = "No Tag Key Provided"
+INVALID_TAG_KEY = "Invalid Tag Key Provided"
 
 
 '''
@@ -85,7 +87,7 @@ def getImageMetadata(imageKey, user=None, isKey=True):
 	@param getTags: Whether or not to get the tags in these groups also
 	@param isKey: Whether the first argument is a key object or not (default: true)
 '''
-def getImageTagGroups(imageKey, user=None, getTags=False, isKey=True):
+def getImageTagGroups(imageKey, user=None, getTags=False, getGeneLinks=False, isKey=True):
 	errorMessage = NO_ERROR
 	tagGroups = []
 	
@@ -114,7 +116,7 @@ def getImageTagGroups(imageKey, user=None, getTags=False, isKey=True):
 				}
 				
 				if (getTags):
-					tags = getImageTags(group, isKey=False)
+					tags = getImageTags(group, user=user, getGeneLinks=getGeneLinks, isKey=False)
 					if (tags['error']):
 						errorMessage = tags['errorMessage']
 					
@@ -140,7 +142,7 @@ def getImageTagGroups(imageKey, user=None, getTags=False, isKey=True):
 	
 	@param tagGroupKey: The primary key for the tag group or the tag group
 ''' 
-def getImageTags(tagGroupKey, user=None, isKey=True):
+def getImageTags(tagGroupKey, user=None, getGeneLinks=False, isKey=True):
 	tagTuples = []
 	errorMessage = NO_ERROR
 	
@@ -173,12 +175,23 @@ def getImageTags(tagGroupKey, user=None, isKey=True):
 				
 				color = [tag.color.red, tag.color.green, tag.color.blue]
 				
-				tagTuples.append({
+				tagTuple = {
 					'id' : tag.pk,
 					'color' : color,
 					'points' : points,
 					'description' : tag.description
-				})
+				}
+				
+				if (getGeneLinks):
+					geneLinks = getGeneLinks(tag, user=user, isKey=False)
+					if (geneLinks['error']):
+						errorMessage = geneLinks['errorMessage']
+					
+					del geneLinks['errorMessage']
+					del geneLinks['error']
+					tagTuple['geneLinks'] = geneLinks['geneLinks']
+				
+				tagTuples.append(tagTuple)
 		else:
 			errorMessage = INVALID_TAG_GROUP_KEY
 	except ObjectDoesNotExist:
@@ -195,4 +208,54 @@ def getImageTags(tagGroupKey, user=None, isKey=True):
 			'error' : True,
 			'errorMessage': errorMessage,	
 		}
+'''
+	Gets the gene links registered to the tag key provided
+	
+	@param tagKey: Key or tag object used to retrieve the gene links
+'''		
+def getGeneLinks(tagKey, user=None, isKey=True):
+	geneLinks = []
+	errorMessage = NO_ERROR
+	
+	try:
+		if (isKey):
+			tag = Tag.objects.get(pk__exact=tagKey)
+		else:
+			tag = tagKey
+		
+		authenticated = True
+		
+		if (tag.group.picture.isPrivate):
+			if (user and user.is_authenticated()):
+				authenticated = tag.group.user == user
+			else:
+				authenticated = False
+				
+		if (authenticated):
+			geneLinkResults = GeneLink.objects.filter(tag=tag)
+			
+			for geneLink in geneLinkResults:
+				geneLinks.append({
+					'uniquename' : geneLink.feature.uniquename,
+					'name' : geneLink.feature.name			
+				})
+		else:
+			errorMessage = INVALID_TAG_KEY
+	except ObjectDoesNotExist:
+		errorMessage = INVALID_TAG_KEY
+		
+	if (errorMessage == NO_ERROR):
+		return {
+			'error' : False,
+			'errorMessage': errorMessage,
+			'geneLinks': geneLinks
+		}
+	else:
+		return {
+			'error' : True,
+			'errorMessage': errorMessage,	
+		}
+	
+	
+	
 	

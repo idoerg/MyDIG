@@ -123,8 +123,9 @@ NewGeneLinkDialog.prototype.onSubmit = function() {
 			dataType : 'json',
 			success : function(data, textStatus, jqXHR) {
 				if (!data.error) {
+					data.feature.organismId = organismId;
 					for (var i = 0; i < self.selectedTags.length; i++) {
-						self.selectedTags[i].addNewGeneLink(data.feature);
+						self.selectedTags[i].addGeneLink(data.feature);
 					}
 				}
 				else {

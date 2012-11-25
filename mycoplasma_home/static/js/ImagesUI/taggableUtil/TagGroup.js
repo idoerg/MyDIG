@@ -18,8 +18,9 @@ function TagGroup(group, imageKey, siteUrl) {
 		var colorArr = tag.color;
 		var tagPoints = tag.points;
 		var description = tag.description;
+		var geneLinks = tag.geneLinks;
 		var id = tag.id;
-		this.tags.push(new Tag(id, colorArr, tagPoints, description, imageKey, siteUrl, this));
+		this.tags.push(new Tag(id, colorArr, tagPoints, description, geneLinks, imageKey, siteUrl, this));
 	}
 };
 

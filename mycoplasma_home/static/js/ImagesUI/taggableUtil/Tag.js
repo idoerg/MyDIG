@@ -1,4 +1,4 @@
-function Tag(id, colorArr, tagPoints, description, imageKey, siteUrl, tagGroup) {
+function Tag(id, colorArr, tagPoints, description, geneLinks, imageKey, siteUrl, tagGroup) {
 	this.id = id;
 	this.color = colorArr;
 	this.tagGroup = tagGroup;
@@ -7,11 +7,15 @@ function Tag(id, colorArr, tagPoints, description, imageKey, siteUrl, tagGroup) 
 	this.imageKey = imageKey;
 	this.siteUrl = siteUrl;
 	this.saveUrl = siteUrl + 'administration/saveTag';
-	this.geneLinks = [];
+	this.geneLinks = this.__convertToGeneLinks(geneLinks);
 };
 
 Tag.prototype.setTagGroup = function(tagGroup) {
 	this.tagGroup = tagGroup;
+};
+
+Tag.prototype.addGeneLink = function(feature) {
+	this.geneLinks.push(new GeneLink(feature));
 };
 
 Tag.prototype.setId = function(id) {
@@ -79,4 +83,14 @@ Tag.prototype.save = function(callback, errorCallback, tagGroupKeys) {
 
 Tag.prototype.copy = function() {
 	return new Tag(this.getColor(), this.getPoints(), this.description, this.imageKey, this.siteUrl);
+};
+
+Tag.prototype.__convertToGeneLinks = function(geneLinksObj) {
+	var geneLinks = [];
+	
+	$.each(geneLinksObj, function(index, feature) {
+		geneLinks.push(new GeneLink(feature));
+	});
+	
+	return geneLinks;
 };
