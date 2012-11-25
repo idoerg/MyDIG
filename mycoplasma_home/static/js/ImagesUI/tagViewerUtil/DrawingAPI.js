@@ -10,6 +10,6 @@ function DrawingAPI(tagBoard, siteUrl, originalData, image, imageMetadata, genom
 	this.tagBoard = new TagBoard(tagBoard, originalData, image, imageMetadata, genomicInfo, siteUrl);
 };
 
-DrawingBoard.prototype.getTagBoard = function() {
+DrawingAPI.prototype.getTagBoard = function() {
 	return this.tagBoard;
 }
