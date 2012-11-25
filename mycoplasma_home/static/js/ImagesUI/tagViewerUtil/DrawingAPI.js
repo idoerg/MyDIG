@@ -8,6 +8,8 @@
  */
 function DrawingAPI(tagBoard, siteUrl, originalData, image, imageMetadata, genomicInfo) {
 	this.tagBoard = new TagBoard(tagBoard, originalData, image, imageMetadata, genomicInfo, siteUrl);
-	this.imageMetadata = imageMetadata;
-	this.image = image;
 };
+
+DrawingBoard.prototype.getTagBoard = function() {
+	return this.tagBoard;
+}
