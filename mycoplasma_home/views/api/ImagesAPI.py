@@ -87,7 +87,7 @@ def getImageMetadata(imageKey, user=None, isKey=True):
 	@param getTags: Whether or not to get the tags in these groups also
 	@param isKey: Whether the first argument is a key object or not (default: true)
 '''
-def getImageTagGroups(imageKey, user=None, getTags=False, getGeneLinks=False, isKey=True):
+def getImageTagGroups(imageKey, user=None, getTags=False, getLinks=False, isKey=True):
 	errorMessage = NO_ERROR
 	tagGroups = []
 	
@@ -116,7 +116,7 @@ def getImageTagGroups(imageKey, user=None, getTags=False, getGeneLinks=False, is
 				}
 				
 				if (getTags):
-					tags = getImageTags(group, user=user, getGeneLinks=getGeneLinks, isKey=False)
+					tags = getImageTags(group, user=user, getLinks=getLinks, isKey=False)
 					if (tags['error']):
 						errorMessage = tags['errorMessage']
 					
@@ -142,7 +142,7 @@ def getImageTagGroups(imageKey, user=None, getTags=False, getGeneLinks=False, is
 	
 	@param tagGroupKey: The primary key for the tag group or the tag group
 ''' 
-def getImageTags(tagGroupKey, user=None, getGeneLinks=False, isKey=True):
+def getImageTags(tagGroupKey, user=None, getLinks=False, isKey=True):
 	tagTuples = []
 	errorMessage = NO_ERROR
 	
@@ -182,7 +182,7 @@ def getImageTags(tagGroupKey, user=None, getGeneLinks=False, isKey=True):
 					'description' : tag.description
 				}
 				
-				if (getGeneLinks):
+				if (getLinks):
 					geneLinks = getGeneLinks(tag, user=user, isKey=False)
 					if (geneLinks['error']):
 						errorMessage = geneLinks['errorMessage']

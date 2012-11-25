@@ -26,7 +26,7 @@ class ImageEditorPagelet(PageletBase):
         try:
             imageKey = request.REQUEST['imageKey']
             image = Picture.objects.get(pk__exact=imageKey)
-            tagGroups = ImagesAPI.getImageTagGroups(image, user=request.user, getTags=True, getGeneLinks=True, isKey=False)
+            tagGroups = ImagesAPI.getImageTagGroups(image, user=request.user, getTags=True, getLinks=True, isKey=False)
             imageMetadata = ImagesAPI.getImageMetadata(image, user=request.user, isKey=False)
     
             return {
