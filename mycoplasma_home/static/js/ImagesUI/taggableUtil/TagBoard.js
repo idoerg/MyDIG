@@ -294,18 +294,21 @@ TagBoard.prototype.boardMouseMove = function(event) {
 						var geneLink = geneLinks[i];
 						var geneLinkRow = $('<tr />');
 						var geneLinkLabel = $('<td />', {
-							'text' : 'Gene Links:'
+							'text' : i == 0 ? 'Gene Links:' : ''
 						});
-						var geneLinkName = $('<td />', {
+						var geneLinkCell = $('<td />');
+						
+						var geneLinkName = $('<span />', {
 							'text' : geneLink.getName()
 						});
-						var geneLinkUniqueName = $('<td />', {
+						var geneLinkUniqueName = $('<span />', {
 							'text' : geneLink.getUniqueName()
 						});
 						
+						geneLinkCell.append(geneLinkName);
+						geneLinkCell.append(geneLinkUniqueName);
 						geneLinkRow.append(geneLinkLabel);
-						geneLinkRow.append(geneLinkName);
-						geneLinkRow.append(geneLinkUniqueName);
+						geneLinkRow.append(geneLinkCell);
 						newTagInfoTable.append(geneLinkRow);
 						newTagInfo.append(newTagInfoTable);
 					}
