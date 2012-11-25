@@ -289,7 +289,9 @@ TagBoard.prototype.boardMouseMove = function(event) {
 				newTagInfoTable.append(colorRow);
 				
 				if (tag.getGeneLinks().length > 0) {
-					for (geneLink in tag.getGeneLinks()) {
+					var geneLinks = tag.getGeneLinks();
+					for (var i = 0; i < geneLinks.length; i++) {
+						var geneLink = geneLinks[i];
 						var geneLinkRow = $('<tr />');
 						var geneLinkLabel = $('<td />', {
 							'text' : 'Gene Links:'
