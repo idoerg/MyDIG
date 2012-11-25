@@ -37,10 +37,8 @@ TaggerUI.prototype.createStructure = function() {
 	var id = this.image.attr('id');
 	
 	this.menu = this.getToolbar(id);
-	this.taggingMenu = this.getTaggingMenu(id);
 	
 	this.parent.prepend(this.menu.getUI());
-	this.parent.prepend(this.taggingMenu.getUI());
 	
 	this.__renderGeneLinksMenu();
 	

@@ -44,14 +44,14 @@
 			// do this for each thing this has been called on
 			return this.each(function() {
 				// the object that keeps track of the tagging application
-				var tagviewerObj = new TaggerUI(
+				var tagViewerObj = new TaggerUI(
 					$(this), settings.parent, settings.originalData, settings.imageMetadata,
 					settings.genomicInfo, settings.imagesUrl, settings.siteUrl,
 					settings.alreadyloaded, settings.callback
 				);
 				
 				// saves the taggable object in the data cache for reference
-				$(this).data('tagViewer', taggableObj);
+				$(this).data('tagViewer', tagViewerObj);
 			});
 		}
 	};
