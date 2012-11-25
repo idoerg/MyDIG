@@ -2,25 +2,43 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/zoomable.css"></link>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/taggable.css"></link>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/menu.css"></link>
     <script type="text/javascript" src="{{ STATIC_URL }}js/kineticjs/kinetic-v3.10.0.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/zoomable.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/tagViewerUtil/TaggableUtil.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/tagViewerUtil/GeneLink.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/tagViewerUtil/Tag.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/tagViewerUtil/TagGroup.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/tagViewerUtil/TagBoard.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/tagViewerUtil/DrawingAPI.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/MenuUI/MenuItem.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/MenuUI/MenuSection.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/MenuUI/Menu.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/DialogUI/PageBlock.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/tagViewerUtil/TaggerUI.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/tagViewer.js"></script>
+    <!-- <script type="text/javascript" src="{{ STATIC_URL }}js/ImagesUI/taggable.min.js"></script> !-->
 </head>
 <body>
     <div id="image_container">
         <div class="zoomable-left">
-            <img id="main_image" src="{{ MEDIA_URL }}{{image.imageName}}" alt="{{ image.altText }}"></img>
+            <img id="{{ image.pk }}" src="{{ MEDIA_URL }}{{image.imageName}}" alt="{{ image.altText }}"></img>
         </div>
         <div class="zoomable-right">
             <div class="info-container">
             </div>
         </div>
-        <input id="tagPoints" value="{{ tags }}" type="hidden" />
+        <input id="tagGroups" value="{{ tagGroups }}" type="hidden" />
+        <input id="imageMetadata" value="{{ imageMetadata }}" type="hidden" />
     </div>
 </body>
 <script type="text/javascript">
-    $('#main_image').tagViewer({
-        originalData : $.parseJSON(unescape($.trim($('#tagPoints').val()))),
-        parent: $('#image_container')
+    $('#{{ image.pk }}').tagViewer({
+        originalData : $.parseJSON(unescape($.trim($('#tagGroups').val()))),
+        parent: $('#image_container'),
+        imagesUrl: '{{ STATIC_URL }}images/',
+        siteUrl: '{{ SITE_URL }}',
+        genomicInfo: $('#image_container').find('.info-container'),
+        imageMetadata: $.parseJSON(unescape($.trim($('#imageMetadata').val())))
     });
 </script>
