@@ -42,12 +42,6 @@ TaggerUI.prototype.createStructure = function() {
 	
 	this.__renderGeneLinksMenu();
 	
-	var dialogs = {
-		'saveTags' : saveTagDialog,
-		'newTagGroup' : newTagGroupDialog,
-		'newGeneLink' : newGeneLinkDialog
-	};
-	
 	if ($('#taggable-tooltip').length == 0) {
 		this.parent.parent().append('<div id="taggable-tooltip"></div>');
 	}
