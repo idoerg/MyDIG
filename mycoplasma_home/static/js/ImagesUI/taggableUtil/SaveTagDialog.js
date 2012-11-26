@@ -93,7 +93,6 @@ SaveTagDialog.prototype.onSubmit = function() {
 		// adds the current drawn tag to the local tags object
 		this.tagBoard.addTag(this.colorArr, this.tagPoints, description, 
 			Util.scopeCallback(this, this.onSuccess), Util.scopeCallback(this, this.onError));
-		
 		// updates the tag board
 		this.tagBoard.redraw();
 	}

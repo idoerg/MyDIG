@@ -82,7 +82,8 @@ Tag.prototype.save = function(callback, errorCallback, tagGroupKeys) {
 };
 
 Tag.prototype.copy = function() {
-	return new Tag(this.getColor(), this.getPoints(), this.description, this.imageKey, this.siteUrl);
+	return new Tag(this.getId(), this.getColor(), this.getPoints(), 
+		this.description, this.getGeneLinks(), this.imageKey, this.siteUrl, this.tagGroup);
 };
 
 Tag.prototype.__convertToGeneLinks = function(geneLinksObj) {

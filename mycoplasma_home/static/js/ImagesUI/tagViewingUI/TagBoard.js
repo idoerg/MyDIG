@@ -49,7 +49,6 @@ TagBoard.prototype.getSelectedTags = function() {
 
 TagBoard.prototype.addTag = function(color, points, description, callback, errorCallback) {
 	var tag = new Tag(null, color, points, description, [], this.image.attr('id'), this.siteUrl, null);
-	
 	var keys = [];
 	
 	for (key in this.currentTagGroups) {
