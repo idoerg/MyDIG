@@ -1786,4 +1786,6 @@ class TmpCdsHandlerRelationship(models.Model):
 class GeneLink(models.Model):
     tag = models.ForeignKey(Tag)
     feature = models.ForeignKey(Feature)
+    def __unicode__(self):
+        return str(self.tag.name) + " and " + str(self.feature.uniquename)
     
