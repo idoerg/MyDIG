@@ -101,6 +101,8 @@ ChangeCurrentTagGroupsDialog.prototype.onSubmit = function() {
 			this.tagBoard.addToCurrentTagGroups(tagGroups[values[i]], isLast);
 		}
 	}
+	
+	this.hide();
 };
 
 ChangeCurrentTagGroupsDialog.prototype.onCancel = function() {
