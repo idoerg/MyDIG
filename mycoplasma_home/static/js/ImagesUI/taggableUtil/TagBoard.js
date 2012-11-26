@@ -46,7 +46,7 @@ TagBoard.prototype.getSelectedTags = function() {
 }
 
 TagBoard.prototype.addTag = function(color, points, description, callback, errorCallback) {
-	var tag = new Tag(null, color, points, description, this.image.attr('id'), this.siteUrl, null);
+	var tag = new Tag(null, color, points, description, [], this.image.attr('id'), this.siteUrl, null);
 	
 	var keys = [];
 	
@@ -347,9 +347,11 @@ TagBoard.prototype.addToCurrentTagGroups = function(tagGroup, redraw) {
 	}
 };
 
-TagBoard.prototype.removeFromCurrentTagGroups = function(tagGroup) {
+TagBoard.prototype.removeFromCurrentTagGroups = function(tagGroup, redraw) {
 	delete this.currentTagGroups[tagGroup.key];
-	this.redraw();
+	if (redraw) {
+		this.redraw();
+	}
 };
 
 TagBoard.prototype.emptyCurrentTagGroups = function() {
