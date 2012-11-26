@@ -102,8 +102,8 @@ class Tag(models.Model):
     
 class TagPoint(models.Model):
     tag = models.ForeignKey(Tag)
-    pointX = models.IntegerField()
-    pointY = models.IntegerField()
+    pointX = models.FloatField()
+    pointY = models.FloatField()
     rank = models.IntegerField()
     def __unicode__(self):
         return "(" + str(self.pointX) + "," + str(self.pointY) + ") " + self.tag.description

@@ -35,7 +35,7 @@ class Application(AjaxRegisteredApplicationBase):
 								tagKeys[key] = newTag.pk
 								
 								for key, point in points.items():
-									newTagPoint = TagPoint(tag=newTag, pointX=point[0], pointY=point[1], rank=int(key)+1)
+									newTagPoint = TagPoint(tag=newTag, pointX=float(point[0]), pointY=float(point[1]), rank=int(key)+1)
 									newTagPoint.save()
 							else:
 								errorMessage = "Incorrect permissions for editing this image or tag group"
