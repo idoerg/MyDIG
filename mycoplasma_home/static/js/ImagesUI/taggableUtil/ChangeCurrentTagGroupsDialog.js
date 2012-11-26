@@ -120,11 +120,15 @@ ChangeCurrentTagGroupsDialog.prototype.show = function() {
 			
 			var checkbox = entryClone.children('.current-tag-group-checkbox');
 			var text = entryClone.children('.current-tag-group-text');
-			checkbox.val(i);
+			$.each(checkbox, function(index, el) {
+				el.val(i);
+			});
 			
 			if (currentTagGroups[tagGroup.getKey()]) {
-				checkbox.setAttribute("checked", "checked");
-				checkbox.checked = true;
+				$.each(checkbox, function(index, el) {
+					el.setAttribute("checked", "checked");
+					el.checked = true;
+				});
 			}
 			
 			text.text(tagGroup.getName());
