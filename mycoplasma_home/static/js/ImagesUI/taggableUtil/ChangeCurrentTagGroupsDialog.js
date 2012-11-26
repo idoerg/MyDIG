@@ -21,7 +21,7 @@ function ChangeCurrentTagGroupsDialog(pageBlock) {
 		'class' : 'tagging-dialog-contents'
 	});
 	
-	this.contentsTable = $('<table cellspacing="0" />');
+	this.contentTable = $('<table cellspacing="0" />');
 	
 	this.entry = $('<td />');
 	
@@ -111,7 +111,7 @@ ChangeCurrentTagGroupsDialog.prototype.hide = function() {
 ChangeCurrentTagGroupsDialog.prototype.show = function() {
 	var tagGroups = this.tagBoard.getTagGroups();
 	var currentTagGroups = this.tagBoard.getCurrentTagGroups();
-	this.contentsTable.empty();
+	this.contentTable.empty();
 	if (this.tagBoard && tagGroups.length > 0) {
 		var contentRow = null;
 		for (var i = 0; i < tagGroups.length; i++) {
