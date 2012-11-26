@@ -89,14 +89,16 @@ ChangeCurrentTagGroupsDialog.prototype.onSubmit = function() {
 		
 		this.tagBoard.emptyCurrentTagGroups();
 		
-		var values = this.contentsTable.find('input:checkbox:checked').map(function() {
+		var values = this.contentTable.find('input:checkbox:checked').map(function() {
 			return this.value;
 		}).get(); 
 		
 		var tagGroups = this.tagBoard.getTagGroups();
 		
+		var isLast;
 		for (var i = 0; i < values.length; i++) {
-			this.tagBoard.addToCurrentTagGroups(tagGroups[values[i]]);
+			isLast = i == values.length - 1;
+			this.tagBoard.addToCurrentTagGroups(tagGroups[values[i]], isLast);
 		}
 	}
 };

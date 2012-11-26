@@ -313,3 +313,7 @@ th {
 .tagInfoContainer {
 	overflow-y: auto;
 }
+
+.current-tag-group-text {
+	font-size: 12px;
+}

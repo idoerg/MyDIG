@@ -340,9 +340,11 @@ TagBoard.prototype.__convertOriginalDataToTagGroups = function(originalData) {
 	return tagGroups;
 };
 
-TagBoard.prototype.addToCurrentTagGroups = function(tagGroup) {
+TagBoard.prototype.addToCurrentTagGroups = function(tagGroup, redraw) {
 	this.currentTagGroups[tagGroup.key] = tagGroup;
-	this.redraw();
+	if (redraw) {
+		this.redraw();
+	}
 };
 
 TagBoard.prototype.removeFromCurrentTagGroups = function(tagGroup) {
