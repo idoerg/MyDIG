@@ -23,6 +23,8 @@ function ChangeCurrentTagGroupsDialog(pageBlock) {
 	
 	this.contentTable = $('<table cellspacing="0" />');
 	
+	this.contents.append(this.contentTable);
+	
 	this.entry = $('<td />');
 	
 	this.entry.append($('<input />', {
