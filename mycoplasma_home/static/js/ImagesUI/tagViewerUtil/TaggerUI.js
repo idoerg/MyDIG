@@ -42,6 +42,7 @@ TaggerUI.prototype.createStructure = function() {
 	
 	this.__renderGeneLinksMenu();
 	
+	var pageBlock = new PageBlock();
 	var changeCurrentTagGroupsDialog = new ChangeCurrentTagGroupsDialog(pageBlock);
 	
 	var dialogs = {
