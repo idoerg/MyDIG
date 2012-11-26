@@ -176,12 +176,6 @@ TagBoard.prototype.__createPolyFromTag = function(tag, i) {
 	
 	poly.pos = [(leftMin + leftMax)/2, topMax];
 	
-	// shows the polygon and its tooltip
-	//poly.on('mouseover', Util.scopeCallback(this, this.polyOnMouseOver));
-	
-	// hides the polygon and its tooltip
-	//poly.on('mouseout', Util.scopeCallback(this, this.polyOnMouseOut));
-	
 	// toggles the mouseout event for this poly
 	// and the mouseover events for all other poly's
 	poly.on('click', Util.scopeCallback(this, this.polyOnClick));
@@ -191,29 +185,6 @@ TagBoard.prototype.__createPolyFromTag = function(tag, i) {
 
 TagBoard.prototype.polyOnClick = function(event) {
 	this.locked = !this.locked;
-};
-
-TagBoard.prototype.polyOnMouseOut = function(event) {
-	if (!this.locked && this.lastMousePos != null) {
-		var collidingShapes = this.stage.getIntersections(this.lastMousePos);
-		
-		for (var i = 0; i < collidingShapes.length; i++) {
-			// draws the shape on mouse over
-			collidingShapes[i].attrs.fill = this.tagsVisible ? collidingShapes[i].color : "";
-			collidingShapes[i].attrs.stroke = "rgba(255,255,255,0)";
-			var shape = event.shape;
-			// positions the tag tooltip
-			var pos = this.__getPolyPos(event.shape);
-			pos[0] -= $('#taggable-tooltip').html(shape.description).width()/2;
-			pos[1] -= $(window).scrollTop() - 20;
-			$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show();
-		}
-		
-		// hides the tooltip and redraws the layer
-		$('#taggable-tooltip').hide();
-		this.layer.draw();
-		
-	}
 };
 
 TagBoard.prototype.boardMouseMove = function(event) {
@@ -352,34 +323,6 @@ TagBoard.prototype.boardMouseMove = function(event) {
 	}
 };
 
-TagBoard.prototype.polyOnMouseOver = function(event) {
-	if (!this.locked) {		
-		var mousePos = this.stage.getMousePosition(event);
-		this.lastMousePos = mousePos;
-		
-		var collidingShapes = this.stage.getIntersections(mousePos);
-		
-		for (var i = 0; i < collidingShapes.length; i++) {
-			// draws the shape on mouse over
-			collidingShapes[i].attrs.fill = collidingShapes[i].color;
-			collidingShapes[i].attrs.stroke = "black";
-			var shape = event.shape;
-			// positions the tag tooltip
-			var pos = this.__getPolyPos(event.shape);
-			pos[0] -= $('#taggable-tooltip').html(shape.description).width()/2;
-			pos[1] -= $(window).scrollTop() - 20;
-			$('#taggable-tooltip').css("left", pos[0] + "px").css("top", pos[1] + "px").show();
-		}
- 
-		this.layer.draw();
-		
-		// sets the selected tag for showing information
-		var shapeId = event.shape.getId();
-		//this.selectedTag = this.tagGroups[this.currentTagGroup].getTags()[shapeId];
-		//this.defaultInfoViewCallback(tags, shapeId, id);
-	}
-};
-
 TagBoard.prototype.__getPolyPos = function(poly) {
 	var pos = TaggableUtil.findPosition(this.board[0]);
 	return [pos[0] + poly.pos[0], pos[1] + poly.pos[1]];
@@ -405,6 +348,14 @@ TagBoard.prototype.addToCurrentTagGroups = function(tagGroup) {
 TagBoard.prototype.removeFromCurrentTagGroups = function(tagGroup) {
 	delete this.currentTagGroups[tagGroup.key];
 	this.redraw();
+};
+
+TagBoard.prototype.emptyCurrentTagGroups = function() {
+	for (var key in this.currentTagGroups) {
+		if (this.currentTagGroups.hasOwnProperty(key)) {
+			delete this.currentTagGroups[key];
+		}
+	}
 };
 
 TagBoard.prototype.addNewTagGroup = function(name, callback, errorCallback) {

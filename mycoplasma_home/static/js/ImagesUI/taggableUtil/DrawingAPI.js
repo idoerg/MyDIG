@@ -13,6 +13,7 @@ function DrawingAPI(drawingBoard, tagBoard, dialogs, siteUrl, originalData, imag
 	this.image = image;
 	this.dialogs = dialogs;
 	this.dialogs['newTagGroup'].setTagBoard(this.tagBoard);
+	this.dialogs['changeCurrentGroups'].setTagBoard(this.tagBoard);
 };
 
 /*
