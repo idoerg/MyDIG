@@ -6,8 +6,10 @@
  * @param tagBoard
  * @return
  */
-function DrawingAPI(tagBoard, siteUrl, originalData, image, imageMetadata, genomicInfo) {
+function DrawingAPI(tagBoard, dialogs, siteUrl, originalData, image, imageMetadata, genomicInfo) {
 	this.tagBoard = new TagBoard(tagBoard, originalData, image, imageMetadata, genomicInfo, siteUrl);
+	this.dialogs = dialogs;
+	this.dialogs['changeCurrentGroups'].setTagBoard(this.tagBoard);
 };
 
 DrawingAPI.prototype.getTagBoard = function() {

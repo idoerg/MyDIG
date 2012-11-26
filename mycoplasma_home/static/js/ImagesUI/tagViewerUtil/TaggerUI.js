@@ -42,6 +42,12 @@ TaggerUI.prototype.createStructure = function() {
 	
 	this.__renderGeneLinksMenu();
 	
+	var changeCurrentTagGroupsDialog = new ChangeCurrentTagGroupsDialog(pageBlock);
+	
+	var dialogs = {
+		'changeCurrentGroups' : changeCurrentTagGroupsDialog
+	};
+	
 	if ($('#taggable-tooltip').length == 0) {
 		this.parent.parent().append('<div id="taggable-tooltip"></div>');
 	}
@@ -55,7 +61,7 @@ TaggerUI.prototype.createStructure = function() {
 	tagBoard.draggable();
 	
 	// creates the drawing API
-	this.drawingAPI = new DrawingAPI(tagBoard, this.siteUrl, this.originalData, this.image, this.imageMetadata, this.genomicInfo);
+	this.drawingAPI = new DrawingAPI(tagBoard, dialogs, this.siteUrl, this.originalData, this.image, this.imageMetadata, this.genomicInfo);
 	
 	var $tagGroupSelect = this.parent.find('#' + id + '-tag-groups');
 	var groups = this.drawingAPI.getTagBoard().getTagGroups();
@@ -75,6 +81,10 @@ TaggerUI.prototype.createStructure = function() {
 		self.drawingAPI.getTagBoard().toggleTags();
 	});
 	
+	this.menu.getSection('tagGroups').getMenuItem('changeCurrentGroups').onClick(function() {
+		changeCurrentTagGroupsDialog.show();
+	});
+	
 	var left = parseInt(this.image.css('left').split('px')[0]);
 	var top = parseInt(this.image.css('top').split('px')[0]);
 	
@@ -86,7 +96,6 @@ TaggerUI.prototype.createStructure = function() {
 	// since the tagBoard has to be above the image we must make it drag the image with it
 	this.drawingAPI.getTagBoard().getBoard().bind('drag', function(event, ui) {
 		self.image.css('left', $(this).css('left')).css('top', $(this).css('top'));
-		self.drawingAPI.getDrawingBoard().getBoard().css('left', $(this).css('left')).css('top', $(this).css('top'));
 	});
 	
 	if (this.callback) {

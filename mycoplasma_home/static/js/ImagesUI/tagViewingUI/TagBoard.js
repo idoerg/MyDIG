@@ -20,8 +20,10 @@ function TagBoard(tagBoard, originalData, image, imageMetadata, genomeInfo, site
 	this.tagsVisible = true;
 	this.currentTagGroups = {};
 	if (this.tagGroups.length > 0) {
-		var key = this.tagGroups[0].getKey();
-		this.currentTagGroups[key] = this.tagGroups[0];
+		for (var i = 0; i < this.tagGroups.length; i++)
+			var key = this.tagGroups[i].getKey();
+			this.currentTagGroups[key] = this.tagGroups[i];
+		}
 	}
 	this.siteUrl = siteUrl;
 	this.tagInfo = genomeInfo.find('.geneLinksInfo .tagInfoContainer');
