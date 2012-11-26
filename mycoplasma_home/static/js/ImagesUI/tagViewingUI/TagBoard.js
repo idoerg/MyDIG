@@ -20,7 +20,7 @@ function TagBoard(tagBoard, originalData, image, imageMetadata, genomeInfo, site
 	this.tagsVisible = true;
 	this.currentTagGroups = {};
 	if (this.tagGroups.length > 0) {
-		for (var i = 0; i < this.tagGroups.length; i++)
+		for (var i = 0; i < this.tagGroups.length; i++) {
 			var key = this.tagGroups[i].getKey();
 			this.currentTagGroups[key] = this.tagGroups[i];
 		}
@@ -45,7 +45,7 @@ TagBoard.prototype.getSelectedTags = function() {
 		tags.push(this.visibleShapes[i].tag);
 	}
 	return tags;
-}
+};
 
 TagBoard.prototype.addTag = function(color, points, description, callback, errorCallback) {
 	var tag = new Tag(null, color, points, description, [], this.image.attr('id'), this.siteUrl, null);
