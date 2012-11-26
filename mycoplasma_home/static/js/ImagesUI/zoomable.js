@@ -203,6 +203,14 @@
 					$(this).load(init);
 				}
 			});
+		},
+		zoom: function(magnitude) {
+			var id = $(this).attr('id');
+			var zoomSlider = $('#' + id + '-zoomable-slider');
+			var newVal = zoomSlider.slider("value") + magnitude;
+			newVal = newVal < 100 ? newVal : 100;
+			newVal = newVal > 0 ? newVal : 0;
+			zoomSlider.slider("value", newVal);
 		}
 	};
 

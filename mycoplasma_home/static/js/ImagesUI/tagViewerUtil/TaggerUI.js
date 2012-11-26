@@ -82,6 +82,14 @@ TaggerUI.prototype.createStructure = function() {
 		self.drawingAPI.getTagBoard().toggleTags();
 	});
 	
+	this.menu.getSection('tools').getMenuItem('zoomIn').onClick(function() {
+		this.image.zoomable("zoom", 1);
+	});
+	
+	this.menu.getSection('tools').getMenuItem('zoomOut').onClick(function() {
+		this.image.zoomable("zoom", -1);
+	});
+	
 	this.menu.getSection('tagGroups').getMenuItem('changeCurrentGroups').onClick(function() {
 		changeCurrentTagGroupsDialog.show();
 	});
