@@ -65,6 +65,8 @@ function DownloadImageDataDialog(pageBlock, image, siteUrl) {
 	this.cancelButton.on('click', Util.scopeCallback(this, this.onCancel));
 	this.closeButton.on('click', Util.scopeCallback(this, this.onCancel));
 	
+	this.dialog.css('left', '35%').css('top', '24%');
+	
 	$('body').append(this.dialog);
 };
 
@@ -127,7 +129,7 @@ DownloadImageDataDialog.prototype.createDataStoreContent = function() {
 	}));
 	
 	cached.append($('<span />', {
-		'text' : '',
+		'text' : 'Cached (Includes Unsaved Data)',
 		'class' : ''
 	}));
 	
@@ -141,7 +143,7 @@ DownloadImageDataDialog.prototype.createDataStoreContent = function() {
 	}));
 	
 	fresh.append($('<span />', {
-		'text' : '',
+		'text' : 'Fresh Data (Saved in Database)',
 		'class' : ''
 	}));
 	
@@ -256,13 +258,13 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	
 	var geneLinks = $('<td />');
 	
-	tagGroups.append($('<input />', {
+	geneLinks.append($('<input />', {
 		'type' : 'checkbox',
 		'name' : 'geneLinks',
 		'checked' : 'checked'
 	}));
 	
-	tagGroups.append($('<span />', {
+	geneLinks.append($('<span />', {
 		'text' : 'Gene Links'
 	}));
 	
