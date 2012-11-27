@@ -273,24 +273,24 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	
 	tagGroups.children('input').click(function() {   
 	    if (!this.checked) {
-	    	imageTags.children('input').attr("checked", "");
-	        geneLinks.children('input').attr("checked", "");
+	    	imageTags.children('input').attr("checked", false);
+	        geneLinks.children('input').attr("checked", false);
 	    }
 	});
 	
 	imageTags.children('input').click(function() {   
 	    if (this.checked) {
-	        tagGroups.children('input').attr("checked", "checked");
+	        tagGroups.children('input').attr("checked", true);
 	    }
 	    else {
-	    	geneLinks.children('input').attr("checked", "");
+	    	geneLinks.children('input').attr("checked", false);
 	    }
 	});
 	
 	geneLinks.children('input').click(function() {   
 	    if (this.checked) {
-	        tagGroups.children('input').attr("checked", "checked");
-	        imageTags.children('input').attr("checked", "checked");
+	        tagGroups.children('input').attr("checked", true);
+	        imageTags.children('input').attr("checked", true);
 	    }
 	});
 	
