@@ -90,39 +90,8 @@ DownloadImageDataDialog.prototype.hide = function() {
 };
 
 DownloadImageDataDialog.prototype.show = function() {
-	var tagGroups = this.tagBoard.getTagGroups();
-	var currentTagGroups = this.tagBoard.getCurrentTagGroups();
-	this.contentTable.empty();
-	if (this.tagBoard && tagGroups.length > 0) {
-		var contentRow = null;
-		for (var i = 0; i < tagGroups.length; i++) {
-			var tagGroup = tagGroups[i];
-			var entryClone = this.entry.clone();
-			
-			var checkbox = entryClone.children('.current-tag-group-checkbox');
-			var text = entryClone.children('.current-tag-group-text');
-			checkbox.val(i);
-			
-			if (currentTagGroups[tagGroup.getKey()]) {
-				checkbox.attr("checked", "checked");
-			}
-			
-			text.text(tagGroup.getName());
-			
-			if (i % 2 == 0) {
-				contentRow = $('<tr />');
-				this.contentTable.append(contentRow);
-			}
-			
-			contentRow.append(entryClone);
-		}
-		
-		this.block.show();
-		this.dialog.show();
-	}
-	else {
-		alert("No tag groups");
-	}
+	this.block.show();
+	this.dialog.show();
 };
 
 DownloadImageDataDialog.prototype.createDataStoreContent = function() {
