@@ -271,14 +271,14 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	includedDataRowThree.append(imageTags);
 	includedDataRowThree.append(geneLinks);
 	
-	tagGroups.click(function() {   
+	tagGroups.children('input').click(function() {   
 	    if (!this.checked) {
 	    	imageTags.attr("checked", "");
 	        geneLinks.attr("checked", "");
 	    }
 	});
 	
-	imageTags.click(function() {   
+	imageTags.children('input').click(function() {   
 	    if (this.checked) {
 	        tagGroups.attr("checked", "checked");
 	    }
@@ -287,7 +287,7 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	    }
 	});
 	
-	geneLinks.click(function() {   
+	geneLinks.children('input').click(function() {   
 	    if (this.checked) {
 	        tagGroups.attr("checked", "checked");
 	        imageTags.attr("checked", "checked");
