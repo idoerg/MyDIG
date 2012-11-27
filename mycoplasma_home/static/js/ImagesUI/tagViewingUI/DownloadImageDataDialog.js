@@ -65,7 +65,7 @@ function DownloadImageDataDialog(pageBlock, image, siteUrl) {
 	this.cancelButton.on('click', Util.scopeCallback(this, this.onCancel));
 	this.closeButton.on('click', Util.scopeCallback(this, this.onCancel));
 	
-	this.dialog.css('left', '35%').css('top', '24%');
+	this.dialog.css('left', '28%').css('top', '25%');
 	
 	$('body').append(this.dialog);
 };
