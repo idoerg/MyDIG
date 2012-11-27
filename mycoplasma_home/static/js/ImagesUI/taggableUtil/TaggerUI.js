@@ -110,7 +110,7 @@ TaggerUI.prototype.createStructure = function() {
 	});
 	
 	this.menu.getSection('tools').getMenuItem('download').onClick(function() {
-		self.downloadImageDataDialog.show();
+		downloadImageDataDialog.show();
 	});
 	
 	this.menu.getSection('tools').getMenuItem('zoomIn').onClick(function() {

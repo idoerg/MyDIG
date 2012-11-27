@@ -92,6 +92,10 @@ TaggerUI.prototype.createStructure = function() {
 		self.image.zoomable("zoom", -1);
 	});
 	
+	this.menu.getSection('tools').getMenuItem('download').onClick(function() {
+		downloadImageDataDialog.show();
+	});
+	
 	this.menu.getSection('tagGroups').getMenuItem('changeCurrentGroups').onClick(function() {
 		changeCurrentTagGroupsDialog.show();
 	});
