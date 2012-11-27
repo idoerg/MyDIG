@@ -14,6 +14,7 @@ function DrawingAPI(drawingBoard, tagBoard, dialogs, siteUrl, originalData, imag
 	this.dialogs = dialogs;
 	this.dialogs['newTagGroup'].setTagBoard(this.tagBoard);
 	this.dialogs['changeCurrentGroups'].setTagBoard(this.tagBoard);
+	this.dialogs['downloadImageData'].setTagBoard(this.tagBoard);
 };
 
 /*

@@ -127,6 +127,7 @@ NewGeneLinkDialog.prototype.onSubmit = function() {
 					for (var i = 0; i < self.selectedTags.length; i++) {
 						self.selectedTags[i].addGeneLink(data.feature);
 					}
+					this.hide();
 				}
 				else {
 					alert(data.errorMessage);

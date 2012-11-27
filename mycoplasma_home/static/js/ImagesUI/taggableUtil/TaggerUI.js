@@ -49,12 +49,14 @@ TaggerUI.prototype.createStructure = function() {
 	var newTagGroupDialog = new NewTagGroupDialog(pageBlock);
 	var newGeneLinkDialog = new NewGeneLinkDialog(pageBlock, this.imageMetadata.organisms, this.siteUrl);
 	var changeCurrentTagGroupsDialog = new ChangeCurrentTagGroupsDialog(pageBlock);
+	var downloadImageDataDialog = new DownloadImageDataDialog(pageBlock, this.image, this.siteUrl);
 	
 	var dialogs = {
 		'saveTags' : saveTagDialog,
 		'newTagGroup' : newTagGroupDialog,
 		'newGeneLink' : newGeneLinkDialog,
-		'changeCurrentGroups' : changeCurrentTagGroupsDialog
+		'changeCurrentGroups' : changeCurrentTagGroupsDialog,
+		'downloadImageData' : downloadImageDataDialog
 	};
 	
 	if ($('#taggable-tooltip').length == 0) {
@@ -105,6 +107,10 @@ TaggerUI.prototype.createStructure = function() {
 	
 	this.menu.getSection('tools').getMenuItem('toggleTags').onClick(function() {
 		self.drawingAPI.getTagBoard().toggleTags();
+	});
+	
+	this.menu.getSection('tools').getMenuItem('download').onClick(function() {
+		self.downloadImageDataDialog.show();
 	});
 	
 	this.menu.getSection('tools').getMenuItem('zoomIn').onClick(function() {

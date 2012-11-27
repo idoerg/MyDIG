@@ -44,9 +44,11 @@ TaggerUI.prototype.createStructure = function() {
 	
 	var pageBlock = new PageBlock();
 	var changeCurrentTagGroupsDialog = new ChangeCurrentTagGroupsDialog(pageBlock);
+	var downloadImageDataDialog = new DownloadImageDataDialog(pageBlock, this.image, this.siteUrl);
 	
 	var dialogs = {
-		'changeCurrentGroups' : changeCurrentTagGroupsDialog
+		'changeCurrentGroups' : changeCurrentTagGroupsDialog,
+		'downloadImageData' : downloadImageDataDialog
 	};
 	
 	if ($('#taggable-tooltip').length == 0) {
