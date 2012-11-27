@@ -74,7 +74,7 @@ def addOrganismToChado(gff, organismName):
         organism = Organism(organism_id=nextId, abbreviation=genus[0] + '. ' + species, genus=genus, species=species, common_name=organismName)                    
         organism.save()
             
-    args= ['--organism', organismName, "--gfffile", gff, "--dbname", settings.DATABASES['chado']['NAME'], "--dbuser", settings.DATABASES['chado']['USER'], "--dbpass", settings.DATABASES['chado']['PASSWORD'], "--random_tmp_dir"]
+    args= ['--organism', organismName, "--gfffile", gff, "--dbname", settings.DATABASES['default']['NAME'], "--dbuser", settings.DATABASES['default']['USER'], "--dbpass", settings.DATABASES['default']['PASSWORD'], "--random_tmp_dir"]
     runProgram('gmod_bulk_load_gff3.pl', args)
         
 '''
