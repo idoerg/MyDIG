@@ -319,5 +319,11 @@ th {
 }
 
 .download-image-data-dialog-content-section-title {
-	font-weight: bold;
+	border-bottom: 1px solid #CCC;
+	margin-top: 15px;
+}
+
+.download-image-data-dialog-content-section table {
+	width: 100%;
+	font-size: 12px;
 }
