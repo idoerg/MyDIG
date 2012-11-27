@@ -231,14 +231,14 @@ class GenomeDBUpdater:
             gffRewriter = GFFRewriter(filename=gff, outfile=gff+".sorted.prepared" , accession=genbank_id)
     
             gffRewriter.addUnknownCvTerms({
-                'user' : settings.DATABASES['chado']['USER'], 
-                'password' : settings.DATABASES['chado']['PASSWORD'], 
-                'db' : settings.DATABASES['chado']['NAME']
+                'user' : settings.DATABASES['default']['USER'], 
+                'password' : settings.DATABASES['default']['PASSWORD'], 
+                'db' : settings.DATABASES['default']['NAME']
             })
         
             gffRewriter.addColor({
-                'user' : settings.DATABASES['chado']['USER'],
-                'password' : settings.DATABASES['chado']['PASSWORD'],
+                'user' : settings.DATABASES['default']['USER'],
+                'password' : settings.DATABASES['default']['PASSWORD'],
                 'db' : 'MyGO'
             })
         
@@ -259,7 +259,7 @@ class GenomeDBUpdater:
             GenomeDBUtil.editGBrowseEntry(gff, dbName, organismDir, organismName)
             
             # now edit the record in Chado
-            args= ['--organism', organismName, "--gfffile", gff, "--dbname", settings.DATABASES['chado']['NAME'], "--dbuser", settings.DATABASES['chado']['USER'], "--dbpass", settings.DATABASES['chado']['PASSWORD'], "--random_tmp_dir"]
+            args= ['--organism', organismName, "--gfffile", gff, "--dbname", settings.DATABASES['default']['NAME'], "--dbuser", settings.DATABASES['default']['USER'], "--dbpass", settings.DATABASES['default']['PASSWORD'], "--random_tmp_dir"]
             runProgram('gmod_bulk_load_gff3.pl', args)
     
     '''
@@ -318,14 +318,14 @@ class GenomeDBUpdater:
                 gffRewriter = GFFRewriter(filename=gff, outfile=gff+".sorted.prepared" , accession=accession)
     
                 gffRewriter.addUnknownCvTerms({
-                    'user' : settings.DATABASES['chado']['USER'], 
-                    'password' : settings.DATABASES['chado']['PASSWORD'], 
-                    'db' : settings.DATABASES['chado']['NAME']
+                    'user' : settings.DATABASES['default']['USER'], 
+                    'password' : settings.DATABASES['default']['PASSWORD'], 
+                    'db' : settings.DATABASES['default']['NAME']
                 })
             
                 gffRewriter.addColor({
-                    'user' : settings.DATABASES['chado']['USER'],
-                    'password' : settings.DATABASES['chado']['PASSWORD'],
+                    'user' : settings.DATABASES['default']['USER'],
+                    'password' : settings.DATABASES['default']['PASSWORD'],
                     'db' : 'MyGO'
                 })
             

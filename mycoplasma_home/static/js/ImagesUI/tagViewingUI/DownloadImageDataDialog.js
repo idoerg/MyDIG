@@ -74,11 +74,9 @@ DownloadImageDataDialog.prototype.setTagBoard = function(tagBoard) {
 	this.tagBoard = tagBoard;
 };
 
-DownloadImageDataDialog.prototype.addSubmitCallback = function(callback) {
-	this.submitCallback = callback;
-};
-
 DownloadImageDataDialog.prototype.onSubmit = function() {
+	var dataStore = $('input[type=radio]:checked', this.dataStoreContent).val();
+	
 	this.hide();
 };
 
@@ -124,7 +122,7 @@ DownloadImageDataDialog.prototype.createDataStoreContent = function() {
 	cached.append($('<input />', {
 		'type' : 'radio',
 		'name' : 'dataStore',
-		'class' : '',
+		'checked' : true,
 		'value' : 'cached'
 	}));
 	
