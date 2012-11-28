@@ -169,7 +169,7 @@ def createNewGBrowseEntry(landmark, dataSource, organismDir, organismName, uri):
 
     try:
         gbrowseConf = open(os.path.join(GBROWSE_DIR, 'GBrowse.conf'), 'a')
-        appendStr = "\n[" + uri + "]\ndescription  = " + organismName + "\npath         = " + organismDir.lower() + ".conf\n"
+        appendStr = "\n[" + str(uri) + "]\ndescription  = " + organismName + "\npath         = " + organismDir.lower() + ".conf\n"
 
         gbrowseConf.write(appendStr)
         gbrowseConf.close()

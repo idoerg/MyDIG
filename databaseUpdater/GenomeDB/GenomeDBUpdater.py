@@ -41,20 +41,20 @@ class GenomeDBUpdater:
 	'''
 	def update(self):
 		# connect to the location of the Mycoplasma genomes
-		self.__connectToNCBI()
+		#self.__connectToNCBI()
 		
 		# get the new files list of this directory
-		newMycoDirs = self.__findMycoplasmaDirs()
+		#newMycoDirs = self.__findMycoplasmaDirs()
 			
 		# download the new Mycoplasma files
-		self.__remoteSync(newMycoDirs)
+		#self.__remoteSync(newMycoDirs)
 		
-		self.ftp.quit()
+		#self.ftp.quit()
 		
 		# perform a simple diff function to find files that have changed
 		dbDiff = self.__findLocalDiffList()
 		
-		self.__createGFFFiles(dbDiff.getNewOrganisms())
+		#self.__createGFFFiles(dbDiff.getNewOrganisms())
 		
 		#self.report.addLogEntry('New organisms found: ' + str(dbDiff.getNewOrganisms()))
 		
