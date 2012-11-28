@@ -320,11 +320,11 @@ class GenomeDBUpdater:
 				
 				gffRewriter = GFFRewriter(filename=gff, outfile=gff+".sorted.prepared" , accession=accession)
 	
-				gffRewriter.addUnknownCvTerms({
+				'''gffRewriter.addUnknownCvTerms({
 					'user' : settings.DATABASES['default']['USER'], 
 					'password' : settings.DATABASES['default']['PASSWORD'], 
 					'db' : settings.DATABASES['default']['NAME']
-				})
+				})'''
 			
 				gffRewriter.addColor({
 					'user' : settings.DATABASES['default']['USER'],
@@ -333,6 +333,7 @@ class GenomeDBUpdater:
 				})
 			
 				error = gffRewriter.getError()
+				print error
 				
 				gff = gff + ".sorted.prepared"
 				

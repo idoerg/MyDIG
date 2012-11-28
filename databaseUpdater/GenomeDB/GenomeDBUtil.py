@@ -77,10 +77,7 @@ def addOrganismToChado(gff, organismName):
     args= ['--organism', organismName, "--gfffile", gff, " ", settings.DATABASES['default']['NAME'], "--dbuser", settings.DATABASES['default']['USER'], "--dbpass", settings.DATABASES['default']['PASSWORD'], "--random_tmp_dir"]
     runProgram('gmod_bulk_load_gff3.pl', args)
     
-    if (nextId):
-        return nextId
-    else:
-        return None
+    return nextId
         
 '''
     Changes a current entry in GBrowse for this gffFile
