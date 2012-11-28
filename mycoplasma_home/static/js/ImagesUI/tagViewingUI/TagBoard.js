@@ -246,7 +246,7 @@ TagBoard.prototype.boardMouseMove = function(event) {
 					'text' : 'Color:'
 				});
 				var color = $('<td />', {
-					'text' : tag.getFormattedColor()
+					'text' : ''
 				});
 				
 				var colorBox = $('<span />', {

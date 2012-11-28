@@ -32,7 +32,7 @@
 	<div id="mycoplasma_selector_menu">
 		<ol id="selectable">
 		{% for organism in all_mycoplasma %}
-			<li class="ui-widget-content" id="{{organism.common_name}}">{{organism.common_name}}</li>
+			<li class="ui-widget-content" id="{{organism.common_name}}"><span>{{organism.common_name}}</span></li>
 		{% endfor %}
 		</ol>
 	</div>
@@ -69,7 +69,7 @@
             }
     });
     
-    $('#mycoplasma_selector_menu ol li').dblclick(function() {
+    $('#mycoplasma_selector_menu ol li span').dblclick(function() {
     	var form = document.createElement("form");
         form.setAttribute("method", "get");
         form.setAttribute("action", "{{ SITE_URL }}search/");
