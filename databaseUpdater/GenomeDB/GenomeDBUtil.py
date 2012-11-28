@@ -74,8 +74,13 @@ def addOrganismToChado(gff, organismName):
         organism = Organism(organism_id=nextId, abbreviation=genus[0] + '. ' + species, genus=genus, species=species, common_name=organismName)                    
         organism.save()
             
-    args= ['--organism', organismName, "--gfffile", gff, "--dbname", settings.DATABASES['default']['NAME'], "--dbuser", settings.DATABASES['default']['USER'], "--dbpass", settings.DATABASES['default']['PASSWORD'], "--random_tmp_dir"]
+    args= ['--organism', organismName, "--gfffile", gff, " ", settings.DATABASES['default']['NAME'], "--dbuser", settings.DATABASES['default']['USER'], "--dbpass", settings.DATABASES['default']['PASSWORD'], "--random_tmp_dir"]
     runProgram('gmod_bulk_load_gff3.pl', args)
+    
+    if (nextId):
+        return nextId
+    else:
+        return None
         
 '''
     Changes a current entry in GBrowse for this gffFile
@@ -123,7 +128,7 @@ def editGBrowseEntry(gffFile, dbName, organismDir, organismName):
     @param dataSource: the absolute path of the data source (sqlite database)
     @param organismName: the name of the organism being added to GBrowse
 '''
-def createNewGBrowseEntry(landmark, dataSource, organismDir, organismName):
+def createNewGBrowseEntry(landmark, dataSource, organismDir, organismName, uri):
     try:
         templateConfFile = open(os.path.join(GBROWSE_DIR, 'mycoplasmaTemplate.conf'), 'r')
         templateConf = templateConfFile.readlines()
@@ -164,7 +169,7 @@ def createNewGBrowseEntry(landmark, dataSource, organismDir, organismName):
 
     try:
         gbrowseConf = open(os.path.join(GBROWSE_DIR, 'GBrowse.conf'), 'a')
-        appendStr = "\n[" + organismDir.lower() + "]\ndescription  = " + organismName + "\npath         = " + organismDir.lower() + ".conf\n"
+        appendStr = "\n[" + uri + "]\ndescription  = " + organismName + "\npath         = " + organismDir.lower() + ".conf\n"
 
         gbrowseConf.write(appendStr)
         gbrowseConf.close()
