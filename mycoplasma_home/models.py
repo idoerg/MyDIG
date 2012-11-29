@@ -383,6 +383,21 @@ class Organism(models.Model):
         db_table = u'organism'
     def __unicode__(self):
         return self.common_name
+    
+class OrganismWithImages(Organism):
+    # READ ONLY MODEL
+    def save(self, **kwargs):
+        raise NotImplementedError
+    
+class OrganismWithGenome(Organism):
+    # READ ONLY MODEL
+    def save(self, **kwargs):
+        raise NotImplementedError
+    
+class OrganismWithTags(Organism):
+    # READ ONLY MODEL
+    def save(self, **kwargs):
+        raise NotImplementedError
 
 class OrganismDbxref(models.Model):
     organism_dbxref_id = models.IntegerField(primary_key=True)

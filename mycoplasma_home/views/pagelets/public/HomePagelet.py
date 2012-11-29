@@ -5,7 +5,7 @@
 	Date: July 23, 2012
 '''
 from renderEngine.PageletBase import PageletBase
-from mycoplasma_home.models import Organism
+from mycoplasma_home.models import Organism, OrganismWithImages, OrganismWithGenome, OrganismWithTags
 
 class HomePagelet(PageletBase):
 	'''
@@ -18,8 +18,14 @@ class HomePagelet(PageletBase):
 	def doProcessRender(self, request):
 		self.setLayout('public/home.html')
 
-		all_mycoplasma = Organism.objects.filter(genus__exact="Mycoplasma").order_by('species')
-
+		allMycoplasma = Organism.objects.filter(genus__exact="Mycoplasma").order_by('species')
+		allGenomes = OrganismWithGenome.objects.filter(genus__exact="Mycoplasma").order_by('species')
+		allImages = OrganismWithImages.objects.filter(genus__exact="Mycoplasma").order_by('species')
+		allTags = OrganismWithTags.objects.filter(genus__exact="Mycoplasma").order_by('species')
+		
 		return {
-			'all_mycoplasma' : all_mycoplasma
+			'all_mycoplasma' : allMycoplasma,
+			'all_genomes' : allGenomes,
+			'all_images' : allImages,
+			'all_tags' : allTags
 		}

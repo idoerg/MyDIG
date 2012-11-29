@@ -91,4 +91,8 @@ def abbreviateCommonName(value):
 
 @register.filter
 def numRange(value):
-    return range(1, value+1)   
+    return range(1, value+1) 
+
+@register.filter
+def inList(value, arg):
+    return value in arg
