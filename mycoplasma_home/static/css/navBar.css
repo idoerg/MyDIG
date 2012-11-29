@@ -190,3 +190,19 @@ li.logged_in_title_left a {
 li.logged_in_title_left a:hover {
 	color: grey;
 }
+
+#helpButton {
+	height: 24px;
+    padding: 3px;
+    position: absolute;
+    right: 0;
+    width: 24px;
+}
+
+#helpButton img {
+	height: 100%;
+}
+
+#helpButton:hover {
+	cursor: pointer;
+}

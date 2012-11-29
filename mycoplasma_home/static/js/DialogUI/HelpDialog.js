@@ -8,7 +8,7 @@ function HelpDialog(pageBlock, pageTitle, contents) {
 	
 	this.title = $('<div />', {
 		'class' : 'dialog-title',
-		'text' : 'Help for ' + pageTitle
+		'text' : 'Information for ' + pageTitle
 	});
 	
 	this.closeButton = $('<span />', {
@@ -30,7 +30,7 @@ function HelpDialog(pageBlock, pageTitle, contents) {
 	this.finalizeBody = $('<div />');
 	
 	this.cancelButton = $('<button />', {
-		'class' : 'dialog-menu-button',
+		'class' : 'dialog-button',
 		'text': 'Close',
 		'style' : 'margin-left: 10px'
 	});
@@ -59,9 +59,26 @@ HelpDialog.prototype.onCancel = function() {
 HelpDialog.prototype.hide = function() {
 	this.block.hide();
 	this.dialog.hide();
+	$(window).off('resize');
 };
 
 HelpDialog.prototype.show = function() {
 	this.block.show();
+	var self = this;
+	$(window).on('resize', function() {
+		self.center($(this).width(), $(this).height());
+	});
+	this.dialog.center($(window).width(), $(window).height());
 	this.dialog.show();
+};
+
+HelpDialog.prototype.center = function(width, height) {
+	if (height > this.dialog.height()) {
+		this.dialog.css('top', (height - this.dialog.height())/2 + 'px');
+	}
+	else {
+		this.dialog.css('top', '0px');
+	}
+	
+	this.dialog.css('left', (width - this.dialog.width())/2 + 'px');
 };
