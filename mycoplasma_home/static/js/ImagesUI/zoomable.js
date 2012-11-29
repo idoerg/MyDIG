@@ -27,7 +27,7 @@
 				var actualImage = new Image();
 				actualImage.onload = function() {
 					private_methods.resetForActualImage(actualImage, $img);
-				});
+				};
 				actualImage.src = options.actualImageSrc;
 			}
 			
@@ -174,9 +174,11 @@
 			return 1 + percent*0.05;
 		},
 		resetForActualImage: function(actualImage, curImage) {
+			while(!$img.data('zoomable')) {}
 			$img.attr('src', actualImage.src);
 			$img.data('originalHeight', $img.height());
 			$img.data('originalWidth', $img.width());
+				
 		}
 	};
 	
