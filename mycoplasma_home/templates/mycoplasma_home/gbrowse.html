@@ -25,7 +25,7 @@
     <div id="body_holder">
         <div id="body_div">
             {% include "mycoplasma_home/navBar.html" %}
-            <iframe src="/gb2/gbrowse/mycoplasma_pneumoniae/" style="border: none; margin: 0 auto;" width="98%" height="100%"></iframe>
+            <iframe src="/gb2/gbrowse/{% if organismId %}organismId{{ organismId }}{% endif %}{% if query %}?name={{ query }}{% endif %}" style="border: none; margin: 0 auto;" width="98%" height="100%"></iframe>
         </div>
     </div>
 </body>

@@ -40,13 +40,13 @@
 			<li class="ui-widget-content" id="{{organism.common_name}}">
 				<span>{{organism.common_name}}</span>
 				{% if organism.pk|inList:all_genomes %}
-				<img class="organismInfoImg" src="{{ STATIC_URL }}images/dnaIcon.png" />
+				<img class="organismInfoImg" style="height:18px" src="{{ STATIC_URL }}images/dnaIcon.png" />
 				{% endif %}
 				{% if organism.pk|inList:all_images %}
 				<img class="organismInfoImg" src="{{ STATIC_URL }}images/imageIcon.png" />
 				{% endif %}
 				{% if organism.pk|inList:all_tags %}
-				<img class="organismInfoImg" src="{{ STATIC_URL }}images/tag.png" />
+				<img class="organismInfoImg" style="height: 25px; margin-left: -5px; vertical-align: bottom;" src="{{ STATIC_URL }}images/tag.png" />
 				{% endif %}
 			</li>
 		{% endfor %}
@@ -76,9 +76,9 @@
 		<br />
 		<div>The letters next to the species' names indicate the following:</div>
 		<br />
-		<div style="padding-left: 10px;">G: Species  / strain has a full or partial genomes</div>
-		<div style="padding-left: 10px;">I: Species / strain has images</div>
-		<div style="padding-left: 10px;">T: Species / strain's images are tagged (visually linked to genes).</div>
+		<div style="padding-left: 10px;"><img class="organismInfoImg" style="height:18px" src="{{ STATIC_URL }}images/dnaIcon.png" />: Species  / strain has a full or partial genomes</div>
+		<div style="padding-left: 10px;"><img class="organismInfoImg" src="{{ STATIC_URL }}images/imageIcon.png" />: Species / strain has images</div>
+		<div style="padding-left: 10px;"><img class="organismInfoImg" style="height: 25px; margin-left: -5px; vertical-align: bottom;" src="{{ STATIC_URL }}images/tag.png" />: Species / strain's images are tagged (visually linked to genes).</div>
 	</div>
 </div>
 <style>

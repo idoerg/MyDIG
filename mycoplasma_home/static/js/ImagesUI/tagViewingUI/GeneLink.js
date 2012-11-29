@@ -11,3 +11,7 @@ GeneLink.prototype.getUniqueName = function() {
 GeneLink.prototype.getName = function() {
 	return this.name;
 };
+
+GeneLink.prototype.getOrganismId = function() {
+	return this.organismId;
+};

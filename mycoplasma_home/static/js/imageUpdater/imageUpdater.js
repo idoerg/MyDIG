@@ -62,7 +62,7 @@
 		**/
 		addNoImagesTemplate : function($self) {
 			$self.append('<div style="margin-bottom: 10px; text-align: center; color: #3366BB;"> \
-				<span> Sorry, no pictures were found.</span> \
+				<span> Sorry, no images were found.</span> \
 			</div>');
 		},
 		/**

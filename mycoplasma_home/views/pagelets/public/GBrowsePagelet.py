@@ -16,4 +16,9 @@ class GBrowsePagelet(PageletBase):
 	'''
 	def doProcessRender(self, request):
 		self.setLayout('public/gbrowse.html')
-		return {}
+		args = {}
+		if (request.REQUEST.has_key('organismId')):
+			args['organismId'] = request.REQUEST['organismId']
+			if (request.REQUEST.has_key('query')):
+				args['query'] = request.REQUEST['query']
+		return args
