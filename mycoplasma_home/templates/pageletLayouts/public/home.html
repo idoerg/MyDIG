@@ -39,13 +39,13 @@
 		{% for organism in all_mycoplasma %}
 			<li class="ui-widget-content" id="{{organism.common_name}}">
 				<span>{{organism.common_name}}</span>
-				{% if organism|inList:all_genomes %}
+				{% if organism.pk|inList:all_genomes %}
 				<img class="organismInfoImg" src="{{ STATIC_SITE }}images/dnaIcon.png" />
 				{% endif %}
-				{% if organism|inList:all_images %}
+				{% if organism.pk|inList:all_images %}
 				<img class="organismInfoImg" src="{{ STATIC_SITE }}images/imageIcon.png" />
 				{% endif %}
-				{% if organism|inList:all_tags %}
+				{% if organism.pk|inList:all_tags %}
 				<img class="organismInfoImg" src="{{ STATIC_SITE }}images/tag.png" />
 				{% endif %}
 			</li>

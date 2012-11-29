@@ -19,9 +19,9 @@ class HomePagelet(PageletBase):
 		self.setLayout('public/home.html')
 
 		allMycoplasma = Organism.objects.filter(genus__exact="Mycoplasma").order_by('species')
-		allGenomes = OrganismWithGenome.objects.filter(genus__exact="Mycoplasma").order_by('species')
-		allImages = OrganismWithImages.objects.filter(genus__exact="Mycoplasma").order_by('species')
-		allTags = OrganismWithTags.objects.filter(genus__exact="Mycoplasma").order_by('species')
+		allGenomes = OrganismWithGenome.objects.values_list('organism_id', flat=True).order_by('organism_id')
+		allImages = OrganismWithImages.objects.values_list('organism_id', flat=True).order_by('organism_id')
+		allTags = OrganismWithTags.objects.values_list('organism_id', flat=True).order_by('organism_id')
 		
 		return {
 			'all_mycoplasma' : allMycoplasma,
