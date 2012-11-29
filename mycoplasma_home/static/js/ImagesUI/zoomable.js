@@ -174,11 +174,9 @@
 			return 1 + percent*0.05;
 		},
 		resetForActualImage: function(actualImage, curImage) {
-			curImage.load(function() {
-				curImage.data('originalHeight', curImage.height());
-				curImage.data('originalWidth', curImage.width());
-			});
 			curImage.attr('src', actualImage.src);
+			curImage.data('originalHeight', actualImage.height);
+			curImage.data('originalWidth', actualImage.width);
 		}
 	};
 	
