@@ -196,13 +196,14 @@ li.logged_in_title_left a:hover {
     padding: 3px;
     position: absolute;
     right: 0;
-    width: 24px;
+    width: 70px;
 }
 
 #helpButton span {
 	font-size: 12px;
     padding-right: 6px;
     vertical-align: super;
+    color: white;
 }
 
 #helpButton img {

@@ -55,3 +55,11 @@
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 	border: 1px solid #777777;
 }
+
+.page-block {
+	background-color: #666;
+	opacity: 0.1;
+	position: fixed;
+	top: 0;
+	z-index: 13000;
+}
