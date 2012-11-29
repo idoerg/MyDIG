@@ -2,7 +2,7 @@ MyDIG
 =====
 
 Instructions for fresh install of Django Based BioDIG Database. The example here is of the MyDIG Mycoplasma database 
-the is constructed using BioDIG tools.
+that is implemented using BioDIG tools.
 
 Prerequisites: (THIS IS THE HARDEST PART)
     Django - Web framework used for website -- https://docs.djangoproject.com/en/1.3/topics/install/
