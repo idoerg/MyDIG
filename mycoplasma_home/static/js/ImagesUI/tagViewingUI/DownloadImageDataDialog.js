@@ -86,11 +86,17 @@ DownloadImageDataDialog.prototype.onCancel = function() {
 
 DownloadImageDataDialog.prototype.hide = function() {
 	this.block.hide();
+	$(window).off('resize');
 	this.dialog.hide();
 };
 
 DownloadImageDataDialog.prototype.show = function() {
 	this.block.show();
+	var self = this;
+	$(window).on('resize', function() {
+		self.center($(this).width(), $(this).height());
+	});
+	this.center($(window).width(), $(window).height());
 	this.dialog.show();
 };
 
@@ -293,4 +299,15 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	});
 	
 	return includedData;
+};
+
+DownloadImageDataDialog.prototype.center = function(width, height) {
+	if (height > this.dialog.height()) {
+		this.dialog.css('top', (height - this.dialog.height())/2 + 'px');
+	}
+	else {
+		this.dialog.css('top', '0px');
+	}
+	
+	this.dialog.css('left', (width - this.dialog.width())/2 + 'px');
 };

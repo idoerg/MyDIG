@@ -166,12 +166,16 @@ TaggerUI.prototype.__renderGeneLinksMenu = function() {
 	
 	this.genomicInfo.html(genomicInfoTitle);
 	
+	var info = $('<div />', {
+		'class' : 'imageInfo'
+	});
+	
 	var speciesInfo = $('<div />', {
 		'class' : 'speciesInfo'
 	});
 	
 	speciesInfo.append(this.__renderSpeciesInfo());
-	this.genomicInfo.append(speciesInfo);
+	info.append(speciesInfo);
 	
 	// adds the geneLinks menu
 	var geneLinksInfo = $('<div />', {
@@ -190,8 +194,9 @@ TaggerUI.prototype.__renderGeneLinksMenu = function() {
 	geneLinksInfo.append(geneLinksTitle);
 	geneLinksInfo.append(geneLinksContainer);
 	
-	this.genomicInfo.append(geneLinksInfo);
+	info.append(geneLinksInfo);
 	
+	this.genomicInfo.append(info);
 	this.genomicInfo.attr('id', id + 'GeneLinkContainer');
 };
 

@@ -142,10 +142,27 @@ ChangeCurrentTagGroupsDialog.prototype.show = function() {
 			contentRow.append(entryClone);
 		}
 		
+		
 		this.block.show();
+		var self = this;
+		$(window).on('resize', function() {
+			self.center($(this).width(), $(this).height());
+		});
+		this.center($(window).width(), $(window).height());
 		this.dialog.show();
 	}
 	else {
 		alert("No tag groups");
 	}
+};
+
+ChangeCurrentTagGroupsDialog.prototype.center = function(width, height) {
+	if (height > this.dialog.height()) {
+		this.dialog.css('top', (height - this.dialog.height())/2 + 'px');
+	}
+	else {
+		this.dialog.css('top', '0px');
+	}
+	
+	this.dialog.css('left', (width - this.dialog.width())/2 + 'px');
 };

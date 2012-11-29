@@ -327,3 +327,7 @@ th {
 	width: 100%;
 	font-size: 12px;
 }
+
+.imageInfo {
+	overflow-y: scroll;
+}

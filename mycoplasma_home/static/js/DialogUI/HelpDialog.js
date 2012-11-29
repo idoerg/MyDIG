@@ -58,8 +58,8 @@ HelpDialog.prototype.onCancel = function() {
 
 HelpDialog.prototype.hide = function() {
 	this.block.hide();
-	this.dialog.hide();
 	$(window).off('resize');
+	this.dialog.hide();
 };
 
 HelpDialog.prototype.show = function() {
