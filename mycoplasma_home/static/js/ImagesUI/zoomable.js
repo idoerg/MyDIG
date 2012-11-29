@@ -174,7 +174,6 @@
 			return 1 + percent*0.05;
 		},
 		resetForActualImage: function(actualImage, curImage) {
-			while(!curImage.data('zoomable')) {}
 			curImage.onload(function() {
 				curImage.data('originalHeight', curImage.height());
 				curImage.data('originalWidth', curImage.width());
