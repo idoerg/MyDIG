@@ -237,7 +237,8 @@ def getGeneLinks(tagKey, user=None, isKey=True):
 			for geneLink in geneLinkResults:
 				geneLinks.append({
 					'uniquename' : geneLink.feature.uniquename,
-					'name' : geneLink.feature.name			
+					'name' : geneLink.feature.name,
+					'organismId' : geneLink.feature.organism.organism_id		
 				})
 		else:
 			errorMessage = INVALID_TAG_KEY
