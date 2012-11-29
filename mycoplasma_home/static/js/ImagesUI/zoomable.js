@@ -174,11 +174,12 @@
 			return 1 + percent*0.05;
 		},
 		resetForActualImage: function(actualImage, curImage) {
-			while(!$img.data('zoomable')) {}
-			$img.attr('src', actualImage.src);
-			$img.data('originalHeight', $img.height());
-			$img.data('originalWidth', $img.width());
-				
+			while(!curImage.data('zoomable')) {}
+			curImage.onload(function() {
+				curImage.data('originalHeight', curImage.height());
+				curImage.data('originalWidth', curImage.width());
+			});
+			curImage.attr('src', actualImage.src);
 		}
 	};
 	
