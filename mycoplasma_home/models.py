@@ -384,17 +384,47 @@ class Organism(models.Model):
     def __unicode__(self):
         return self.common_name
     
-class OrganismWithImages(Organism):
+class OrganismWithImages(models.Model):
+    organism_id = models.IntegerField(primary_key=True)
+    abbreviation = models.CharField(max_length=255)
+    genus = models.CharField(max_length=255)
+    species = models.CharField(max_length=255)
+    common_name = models.CharField(max_length=255)
+    comment = models.TextField()
+    class Meta:
+        db_table = u'organismwithimages'
+    def __unicode__(self):
+        return self.common_name
     # READ ONLY MODEL
     def save(self, **kwargs):
         raise NotImplementedError
     
-class OrganismWithGenome(Organism):
+class OrganismWithGenome(models.Model):
+    organism_id = models.IntegerField(primary_key=True)
+    abbreviation = models.CharField(max_length=255)
+    genus = models.CharField(max_length=255)
+    species = models.CharField(max_length=255)
+    common_name = models.CharField(max_length=255)
+    comment = models.TextField()
+    class Meta:
+        db_table = u'organismwithgenome'
+    def __unicode__(self):
+        return self.common_name
     # READ ONLY MODEL
     def save(self, **kwargs):
         raise NotImplementedError
     
-class OrganismWithTags(Organism):
+class OrganismWithTags(models.Model):
+    organism_id = models.IntegerField(primary_key=True)
+    abbreviation = models.CharField(max_length=255)
+    genus = models.CharField(max_length=255)
+    species = models.CharField(max_length=255)
+    common_name = models.CharField(max_length=255)
+    comment = models.TextField()
+    class Meta:
+        db_table = u'organismwithtags'
+    def __unicode__(self):
+        return self.common_name
     # READ ONLY MODEL
     def save(self, **kwargs):
         raise NotImplementedError
