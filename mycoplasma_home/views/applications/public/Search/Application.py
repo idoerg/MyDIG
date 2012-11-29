@@ -9,6 +9,7 @@ from renderEngine.ApplicationBase import ApplicationBase
 from mycoplasma_home.views.pagelets.public.ImageSearchPagelet import ImageSearchPagelet
 from mycoplasma_home.views.pagelets.public.GBrowseSearchPagelet import GBrowseSearchPagelet
 from mycoplasma_home.views.pagelets.public.NavBarPagelet import NavBarPagelet
+from mycoplasma_home.views.pagelets.public.FooterPagelet import FooterPagelet
 from mycoplasma_home.models import Organism
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
@@ -93,6 +94,8 @@ class Application(ApplicationBase):
 			'numPagelets' : numSearch
 		}
 		self.setApplicationLayout('public/search.html', args)
+		
+		self.addPageletBinding('footer', FooterPagelet())
 
 '''
 	Used for mapping to the url in urls.py

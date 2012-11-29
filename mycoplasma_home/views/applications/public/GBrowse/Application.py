@@ -8,6 +8,7 @@
 from renderEngine.ApplicationBase import ApplicationBase
 from mycoplasma_home.views.pagelets.public.NavBarPagelet import NavBarPagelet
 from mycoplasma_home.views.pagelets.public.GBrowsePagelet import GBrowsePagelet
+from mycoplasma_home.views.pagelets.public.FooterPagelet import FooterPagelet
 
 class Application(ApplicationBase):
 	def doProcessRender(self, request):
@@ -17,6 +18,7 @@ class Application(ApplicationBase):
 		self.setApplicationLayout('public/base.html', args)
 		self.addPageletBinding('navBar', NavBarPagelet())
 		self.addPageletBinding('center-1', GBrowsePagelet())
+		self.addPageletBinding('footer', FooterPagelet())
 
 '''
 	Used for mapping to the url in urls.py
