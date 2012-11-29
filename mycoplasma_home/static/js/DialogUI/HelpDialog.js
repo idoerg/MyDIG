@@ -68,7 +68,7 @@ HelpDialog.prototype.show = function() {
 	$(window).on('resize', function() {
 		self.center($(this).width(), $(this).height());
 	});
-	this.dialog.center($(window).width(), $(window).height());
+	this.center($(window).width(), $(window).height());
 	this.dialog.show();
 };
 
