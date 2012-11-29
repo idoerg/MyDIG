@@ -19,6 +19,7 @@
 			creates the controls for zooming in and out
 		**/
 		createStructure: function(options, $parent, $img) {
+			$img.off('load');
 			// renders the zoomable template, structural
 			var id = $img.attr('id');
 			$parent.append(private_methods.renderTmpl(id)); 
