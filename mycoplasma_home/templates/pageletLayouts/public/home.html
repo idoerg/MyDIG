@@ -22,7 +22,7 @@
 	<link rel="stylesheet" href="{{ STATIC_URL }}css/dialog.css" type="text/css" />
 </head>
 <div class="left_container">
-	<img id="phylogenetic_tree" src="{{ STATIC_URL }}images/mycoplasma_tree.png" alt="Phylogenetic Tree" title="Phylogenetic Tree" />
+	<img id="phylogenetic_tree" src="{{ STATIC_URL }}images/mycoplasma_tree_lowRes.png" alt="Phylogenetic Tree" title="Phylogenetic Tree" />
 </div>
 <div class="right_container">
 	<div id="search_selected">
@@ -130,7 +130,8 @@
     
     $('#phylogenetic_tree').zoomable({
     	originalHeight: 800,
-    	originalWidth: 660
+    	originalWidth: 660,
+    	actualImageSrc: '{{ STATIC_URL }}images/mycoplasma_tree_hiRes.png
     });
     var contents = $('#helpBox');
     var helpDialog = new HelpDialog(new PageBlock(), 'Homepage', contents.show());
