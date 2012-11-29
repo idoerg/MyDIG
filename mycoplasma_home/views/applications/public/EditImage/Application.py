@@ -13,7 +13,7 @@ from mycoplasma_home.views.pagelets.admin.ImageEditorPagelet import ImageEditorP
 class Application(ApplicationBase):
 	def doProcessRender(self, request):
 		args = {}
-		self.addPageletBinding('navBar', NavBarPagelet())
+		self.addPageletBinding('navBar', NavBarPagelet(addHelpButton=True))
 		
 		if (request.user.is_authenticated() and request.user.is_staff):
 			args['title'] = 'Image Editor'
