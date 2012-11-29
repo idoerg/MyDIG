@@ -274,12 +274,12 @@ TagBoard.prototype.boardMouseMove = function(event) {
 							'text' : geneLink.getName(),
 							'style' : 'margin-right: 20px',
 							'href' : this.siteUrl + 'genome_browser?organismId=' + geneLink.getOrganismId()
-								+ '&query=' + geneLink.getName()
+								+ '&name=' + geneLink.getName()
 						});
 						var geneLinkUniqueName = $('<a />', {
 							'text' : geneLink.getUniqueName(),
 							'href' : this.siteUrl + 'genome_browser?organismId=' + geneLink.getOrganismId()
-								+ '&query=' + geneLink.getUniqueName()
+								+ '&uniquename=' + geneLink.getUniqueName()
 						});
 						
 						geneLinkCell.append(geneLinkName);

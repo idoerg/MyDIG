@@ -19,6 +19,8 @@ class GBrowsePagelet(PageletBase):
 		args = {}
 		if (request.REQUEST.has_key('organismId')):
 			args['organismId'] = request.REQUEST['organismId']
-			if (request.REQUEST.has_key('query')):
-				args['query'] = request.REQUEST['query']
+			if (request.REQUEST.has_key('name')):
+				args['name'] = request.REQUEST['name']
+			if (request.REQUEST.has_key('uniquename')):
+				args['uniquename'] = request.REQUEST['uniquename']
 		return args
