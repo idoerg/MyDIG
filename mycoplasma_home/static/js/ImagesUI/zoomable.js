@@ -176,8 +176,6 @@
 		},
 		resetForActualImage: function(actualImage, curImage) {
 			curImage.attr('src', actualImage.src);
-			curImage.data('originalHeight', actualImage.height);
-			curImage.data('originalWidth', actualImage.width);
 		}
 	};
 	
