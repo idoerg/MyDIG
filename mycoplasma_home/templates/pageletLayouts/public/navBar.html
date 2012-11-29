@@ -40,7 +40,10 @@
 	{% endfor %}
 	</ul>
 	{% if addHelpButton %}
-		<div id="helpButton"><img src="{{ STATIC_URL }}images/info.png" /></div>
+		<div id="helpButton">
+			<span>Info</span>
+			<img src="{{ STATIC_URL }}images/info.png" />
+		</div>
 	{% endif %}
 </div>
 <div id="picture_buttons">

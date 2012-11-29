@@ -199,6 +199,12 @@ li.logged_in_title_left a:hover {
     width: 24px;
 }
 
+#helpButton span {
+	font-size: 12px;
+    padding-right: 6px;
+    vertical-align: super;
+}
+
 #helpButton img {
 	height: 100%;
 }

@@ -61,8 +61,9 @@
 		<div style="padding-left: 10px;">2. In the checkboxes on top, check whether you want to view images, genomes or both.</div>
 		<div style="padding-left: 10px;">3. Click “go” when ready </div>
 		<div style="padding-left: 10px;">4. You will be taken to the image & genomes viewer</div>
-
+		<br />
 		<div>The letters next to the species' names indicate the following:</div>
+		<br />
 		<div style="padding-left: 10px;">G: Species  / strain has a full or partial genomes</div>
 		<div style="padding-left: 10px;">I: Species / strain has images</div>
 		<div style="padding-left: 10px;">T: Species / strain's images are tagged (visually linked to genes).</div>
@@ -120,8 +121,7 @@
     	originalWidth: 660
     });
     var contents = $('#helpBox');
-    var pageBlock = new PageBlock();
-    var helpDialog = new HelpDialog(pageBlock, 'Homepage', contents.show());
+    var helpDialog = new HelpDialog(new PageBlock(), 'Homepage', contents.show());
     
     $('#helpButton').click(function() {
     	helpDialog.show();
