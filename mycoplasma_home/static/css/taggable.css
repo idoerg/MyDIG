@@ -329,5 +329,6 @@ th {
 }
 
 .imageInfo {
-	overflow-y: scroll;
+	overflow-y: auto;
+	height: 450px;
 }
