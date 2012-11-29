@@ -30,18 +30,18 @@
 	cursor: pointer;
 }
 
-.tagging-menu-button {
+.tagging-button {
 	border: 1px solid #AAAAAA;
 	background-color: #EEEEEE;
 	vertical-align: top;
 	border-radius: 5px;
 }
 
-.tagging-menu-button img {
+.tagging-button img {
 	height: 23px;
 }
 
-.tagging-menu-button:hover {
+.tagging-button:hover {
 	cursor: pointer;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEEEEE), to(#CCCCCC));
 	background-image: -moz-linear-gradient(top, #EEEEEE, #CCCCCC); /* for firefox 3.6+ */

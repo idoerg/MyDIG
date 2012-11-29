@@ -21,10 +21,10 @@
 			<div id="genome-search-content" class="search-content">
 				{% for candidate in candidateInfo %}
             		<div id="{{candidate.1}}-genome-content" class="contentHolder{% if forloop.counter0|isZero %} activeContent{% endif %}">
-            			{% if candidate.2|isEmptyString %}                
+            			{% if candidate.1|isEmptyString %}                
 		                <div style="margin-top: 50px;"> Sorry there is no genome for this organism </div>
 		                {% else %}
-		                <iframe id="{{candidate.2}}" class="genome_browser" src="/gb2/gbrowse/{{candidate.2}}/" width="100%" height="100%"></iframe>
+		                <iframe id="{{candidate.1}}" class="genome_browser" src="/gb2/gbrowse/organismId{{candidate.1}}/" width="100%" height="100%"></iframe>
 		                {% endif %}
             		</div>
             	{% endfor %} 

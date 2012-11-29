@@ -18,6 +18,9 @@ class Application(AjaxRegisteredApplicationBase):
 				geneName = request.POST['geneName']
 				organismId = request.POST['organismId']
 				tagKeys = request.POST.getlist('tagKeys[]')
+				uniqueName = None
+				if (request.POST.has_key('geneUniqueName') and request.POST['geneUniqueName']):
+					uniqueName = request.POST['geneUniqueName']
 				organism = None
 				feature = None
 				multiFeatures = False
@@ -28,16 +31,19 @@ class Application(AjaxRegisteredApplicationBase):
 					errorMessage = "No organism with the id: " + organismId
 					
 				if (organism != None):
-					features = Feature.objects.filter(organism=organism, name=geneName)
-					if (not features):
-						try:
-							feature = Feature.objects.get(organism=organism, uniquename=geneName)
-						except ObjectDoesNotExist:
-							errorMessage = "No gene, " + str(geneName) + ", exists for the organism " + str(organism.common_name)
-					elif(len(features) == 1):
-						feature = features[0]
+					if (uniqueName):
+						feature = Feature.objects.get(organism=organism, uniquename=uniqueName)
 					else:
-						multiFeatures = True
+						features = Feature.objects.filter(organism=organism, name=geneName)
+						if (not features):
+							try:
+								feature = Feature.objects.get(organism=organism, uniquename=geneName)
+							except ObjectDoesNotExist:
+								errorMessage = "No gene, " + str(geneName) + ", exists for the organism " + str(organism.common_name)
+						elif(len(features) == 1):
+							feature = features[0]
+						else:
+							multiFeatures = True
 					if (feature != None):
 						featureJson = None
 						for tagKey in tagKeys:

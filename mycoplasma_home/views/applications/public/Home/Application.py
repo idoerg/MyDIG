@@ -15,7 +15,7 @@ class Application(ApplicationBase):
 			'title' : 'Homepage'
 		}
 		self.setApplicationLayout('public/base.html', args)
-		self.addPageletBinding('navBar', NavBarPagelet())
+		self.addPageletBinding('navBar', NavBarPagelet(addHelpButton=True))
 		self.addPageletBinding('center-1', HomePagelet())
 
 '''

@@ -34,9 +34,24 @@ function NewGeneLinkDialog(pageBlock, organisms, siteUrl) {
 		'style' : 'margin-right: 10px'
 	});
 	
+	var geneUniqueNameContainer = $('<div />');
+	
+	this.geneUniqueName = $('<input />', {
+		'type' : 'text'
+	});
+	
+	var uniqueNameLabel = $('<span />', {
+		'text' : 'Uniquename (optional)',
+		'style' : 'margin-right: 10px'
+	});
+	
 	geneNameContainer.append(nameLabel);
 	geneNameContainer.append(this.geneName);
 	this.contents.append(geneNameContainer);
+	
+	geneUniqueNameContainer.append(uniqueNameLabel);
+	geneUniqueNameContainer.append(this.geneUniqueName);
+	this.contents.append(geneUniqueNameContainer);
 	
 	var organismContainer = $('<div />');
 	
@@ -103,6 +118,7 @@ function NewGeneLinkDialog(pageBlock, organisms, siteUrl) {
 
 NewGeneLinkDialog.prototype.onSubmit = function() {
 	var geneName = $.trim(this.geneName.val());
+	var uniqueName = $.trim(this.geneUniqueName.val());
 	var organismId = this.organism.val();
 	var tagIds = [];
 	if (geneName && organismId && this.selectedTags) {
@@ -118,7 +134,8 @@ NewGeneLinkDialog.prototype.onSubmit = function() {
 			data : {
 				geneName : geneName,
 				organismId : organismId,
-				tagKeys: tagIds
+				tagKeys: tagIds,
+				geneUniqueName: uniqueName
 			},
 			dataType : 'json',
 			success : function(data, textStatus, jqXHR) {

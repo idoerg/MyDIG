@@ -68,6 +68,13 @@ class Application(ApplicationBase):
 							'error' : True,
 							'subquery' : subquery
 						})
+				else:
+					candidate = Organism.objects.filter(common_name=subquery)
+					candidates.append({
+						'error' : False,
+						'subquery' : subquery,
+						'matches' : candidate
+					})
 			
 			search = {
 				'candidates' : candidates,

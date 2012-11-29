@@ -35,14 +35,9 @@ class GBrowseSearchPagelet(PageletBase):
         for candidate in self.searchParams['candidates']:
             if (not candidate['error']):
                 for match in candidate['matches']:
-                    try:
-                        Landmark.objects.get(organism_id__exact=match.pk)
-                        gbrowseEntry = match.genus.lower() + "_" + match.species.lower()
-                    except(ObjectDoesNotExist):
-                        gbrowseEntry = ""
-                    candidateInfo.append((match.common_name, str(match.pk), gbrowseEntry))
+                    candidateInfo.append((match.common_name, str(match.pk)))
             else:
-                candidateInfo.append(("No entries for " + candidate['subquery'], -1, -1, -1))      
+                candidateInfo.append(("No entries for " + candidate['subquery'], -1, -1))      
             
         return {
             'candidateInfo' : candidateInfo

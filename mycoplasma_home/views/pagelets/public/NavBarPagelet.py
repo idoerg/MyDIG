@@ -8,6 +8,9 @@ from renderEngine.PageletBase import PageletBase
 from mycoplasma_home.models import NavBarOption, PictureType, PictureProp
 
 class NavBarPagelet(PageletBase):
+	def __init__(self, addHelpButton=False):
+		self.addHelpButton = addHelpButton
+	
 	'''
 		Renders the navigation bar for the website		
 	
@@ -31,5 +34,6 @@ class NavBarPagelet(PageletBase):
 		return {
 			'optionsList' : optionsList,
 			'banner_url' : banner_url,
-			'is_admin_page' : is_admin_page
+			'is_admin_page' : is_admin_page,
+			'addHelpButton' : self.addHelpButton
 		}
