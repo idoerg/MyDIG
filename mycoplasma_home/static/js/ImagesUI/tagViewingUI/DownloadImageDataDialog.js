@@ -1,8 +1,11 @@
-function DownloadImageDataDialog(pageBlock, image, siteUrl) {
+function DownloadImageDataDialog(pageBlock, image, siteUrl, imagesUrl) {
 	this.block = pageBlock;
 	this.image = image;
 	this.imageKey = image.attr('id');
 	this.downloadUrl = this.siteUrl + 'images/getImageMetadata';
+	this.imagesUrl = imagesUrl;
+	imagesUrl = imagesUrl.substring(0, str.length - 1);
+	this.staticUrl = imagesUrl.substring(imagesUrl.lastIndexOf('/') + 1);
 	this.dialog = $('<div />', {
 		'class' : 'tagging-dialog',
 	});
@@ -23,12 +26,15 @@ function DownloadImageDataDialog(pageBlock, image, siteUrl) {
 	this.contents = $('<div />', {
 		'class' : 'tagging-dialog-contents'
 	});
-	
+	/*
 	this.dataStoreContent = this.createDataStoreContent();
 	this.includedDataContent = this.createIncludedDataContent();
 	
 	this.contents.append(this.dataStoreContent);
 	this.contents.append(this.includedDataContent);
+	*/
+	
+	this.contents.append("This feature is coming soon!");
 	
 	this.finalizeUI = $('<div />', {
 		'class' : 'tagging-dialog-contents'
@@ -36,7 +42,7 @@ function DownloadImageDataDialog(pageBlock, image, siteUrl) {
 	
 	this.finalizeBody = $('<div />');
 	
-	this.submitTagGroupButton = $('<button />', {
+	this.submitButton = $('<div />', {
 		'class' : 'tagging-menu-button',
 		'text': 'Download'
 	});
@@ -47,7 +53,7 @@ function DownloadImageDataDialog(pageBlock, image, siteUrl) {
 		'style' : 'margin-left: 10px'
 	});
 	
-	this.finalizeBody.append(this.submitTagGroupButton);
+	//this.finalizeBody.append(this.submitButton);
 	this.finalizeBody.append(this.cancelButton);
 	this.finalizeBody.css('border-top', '1px solid #CCC');
 	this.finalizeBody.css('padding-top', '5px');
@@ -60,12 +66,31 @@ function DownloadImageDataDialog(pageBlock, image, siteUrl) {
 	this.dialog.append(this.finalizeUI);
 	
 	this.submitCallback = null;
+	var self = this;
 	
-	this.submitTagGroupButton.on('click', Util.scopeCallback(this, this.onSubmit));
+	this.submitButton.downloadify({
+		filename: function() {
+			return $('');
+		},
+		data: function(){ 
+		    return self.onSubmit();
+		},
+		onComplete: function(){ 
+		    alert('Your File Has Been Saved!'); 
+		},
+		onError: function(){ 
+		    alert('Nothing to save. Please select some options in the dialog provided.'); 
+		},
+		swf: this.staticUrl + 'js/downloadify.swf',
+		downloadImage: this.imagesUrl + 'downloadButton.png',
+		width: 148,
+		height: 21,
+		transparent: true,
+		append: false
+	});
+	
 	this.cancelButton.on('click', Util.scopeCallback(this, this.onCancel));
 	this.closeButton.on('click', Util.scopeCallback(this, this.onCancel));
-	
-	this.dialog.css('left', '28%').css('top', '25%');
 	
 	$('body').append(this.dialog);
 };
@@ -75,9 +100,31 @@ DownloadImageDataDialog.prototype.setTagBoard = function(tagBoard) {
 };
 
 DownloadImageDataDialog.prototype.onSubmit = function() {
-	var dataStore = $('input[type=radio]:checked', this.dataStoreContent).val();
-	
-	this.hide();
+	if (this.tagBoard) {
+		var dataStore = $('input[type=radio]:checked', this.dataStoreContent).val();
+		var includedData = {};
+		$('input[type=checkbox]:checked', this.includedDataContent).each(function(index) {
+			includedData[$(this).val()] = true;
+		});
+		if (dataStore == "cached") {
+			var urlOfImage = includedData.hasOwnProperty('urlOfImage') ? true : false;
+			var imageFile = includedData.hasOwnProperty('imageFile') ? true : false;
+			var uploadDateUser = includedData.hasOwnProperty('uploadDateUser') ? true : false;
+			var tagGroups = includedData.hasOwnProperty('tagGroups') ? true : false;
+			var imageTags = includedData.hasOwnProperty('imageTags') ? true : false;
+			var geneLinks = includedData.hasOwnProperty('geneLinks') ? true : false;
+			var file = this.tagBoard.createFile(
+				urlOfImage, imageFile, uploadDateUser, tagGroups, imageTags, geneLinks
+			);
+			return file;
+		}
+		else {
+			return '';
+		}
+	}
+	else {
+		return '';
+	}
 };
 
 DownloadImageDataDialog.prototype.onCancel = function() {
@@ -190,7 +237,7 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	
 	urlOfImage.append($('<input />', {
 		'type' : 'checkbox',
-		'name' : 'urlOfImage',
+		'value' : 'urlOfImage',
 		'checked' : 'checked'
 	}));
 	
@@ -203,7 +250,7 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	
 	imageFile.append($('<input />', {
 		'type' : 'checkbox',
-		'name' : 'imageFile',
+		'value' : 'imageFile',
 		'class' : '',
 		'checked' : 'checked'
 	}));
@@ -222,7 +269,7 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	
 	uploadDateUser.append($('<input />', {
 		'type' : 'checkbox',
-		'name' : 'uploadDateUser',
+		'value' : 'uploadDateUser',
 		'checked' : 'checked'
 	}));
 	
@@ -235,7 +282,7 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	
 	tagGroups.append($('<input />', {
 		'type' : 'checkbox',
-		'name' : 'tagGroups',
+		'value' : 'tagGroups',
 		'checked' : 'checked'
 	}));
 	
@@ -252,7 +299,7 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	
 	imageTags.append($('<input />', {
 		'type' : 'checkbox',
-		'name' : 'imageTags',
+		'value' : 'imageTags',
 		'checked' : 'checked'
 	}));
 	
@@ -264,7 +311,7 @@ DownloadImageDataDialog.prototype.createIncludedDataContent = function() {
 	
 	geneLinks.append($('<input />', {
 		'type' : 'checkbox',
-		'name' : 'geneLinks',
+		'value' : 'geneLinks',
 		'checked' : 'checked'
 	}));
 	

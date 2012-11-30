@@ -400,3 +400,32 @@ TagBoard.prototype.addNewTagGroup = function(name, callback, errorCallback) {
 TagBoard.prototype.getCurrentTagGroups = function() {
 	return this.currentTagGroups;
 };
+
+TagBoard.prototype.createFile = function(urlOfImage, organisms, uploadDateUser, tagGroups, imageTags, geneLinks) {
+	var file = {
+		'BioDIGImageData' : {}
+	};
+	
+	if (urlOfImage) {
+		file.BioDIGImageData.imageUrl = this.image.attr('src');
+	}
+	
+	if (organisms) {
+		
+	}
+	
+	if (uploadDateUser) {
+		file.BioDIGImageData.uploadedBy = this.imageMetadata.uploadedBy;
+		file.BioDIGImageData.uploadeDate = this.imageMetadata.uploadeDate;
+	}
+	
+	if (tagGroups) {
+		if (imageTags) {
+			if (geneLinks) {
+				
+			}
+		}
+	}
+
+	return file;
+};
