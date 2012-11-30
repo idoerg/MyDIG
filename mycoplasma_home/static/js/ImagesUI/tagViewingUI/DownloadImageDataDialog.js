@@ -1,11 +1,11 @@
-function DownloadImageDataDialog(pageBlock, image, siteUrl, imagesUrl) {
+function DownloadImageDataDialog(pageBlock, image) {
 	this.block = pageBlock;
 	this.image = image;
 	this.imageKey = image.attr('id');
 	this.downloadUrl = this.siteUrl + 'images/getImageMetadata';
-	this.imagesUrl = imagesUrl;
-	imagesUrl = imagesUrl.substring(0, str.length - 1);
-	this.staticUrl = imagesUrl.substring(imagesUrl.lastIndexOf('/') + 1);
+	//this.imagesUrl = imagesUrl;
+	//imagesUrl = imagesUrl.substring(0, str.length - 1);
+	//this.staticUrl = imagesUrl.substring(imagesUrl.lastIndexOf('/') + 1);
 	this.dialog = $('<div />', {
 		'class' : 'tagging-dialog',
 	});
